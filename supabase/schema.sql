@@ -5,6 +5,7 @@
 
 -- ---- Extensions ----
 create extension if not exists "uuid-ossp";
+create extension if not exists "pgcrypto";
 
 -- ---- Drop everything so this script is fully re-runnable ----
 
