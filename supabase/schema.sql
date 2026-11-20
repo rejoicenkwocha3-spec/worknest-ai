@@ -81,16 +81,6 @@ create table if not exists public.workspaces (
 
 alter table public.workspaces enable row level security;
 
-create policy "Workspace members can view workspace"
-  on public.workspaces for select
-  using (
-    owner_id = auth.uid() or
-    exists (
-      select 1 from public.workspace_members
-      where workspace_id = workspaces.id and user_id = auth.uid()
-    )
-  );
-
 create policy "Owner can update workspace"
   on public.workspaces for update using (owner_id = auth.uid());
 
@@ -123,6 +113,17 @@ create policy "Admins can manage members"
       where wm.workspace_id = workspace_members.workspace_id
         and wm.user_id = auth.uid()
         and wm.role in ('owner', 'admin')
+    )
+  );
+
+-- Now safe to add workspaces select policy (workspace_members exists)
+create policy "Workspace members can view workspace"
+  on public.workspaces for select
+  using (
+    owner_id = auth.uid() or
+    exists (
+      select 1 from public.workspace_members
+      where workspace_id = workspaces.id and user_id = auth.uid()
     )
   );
 
