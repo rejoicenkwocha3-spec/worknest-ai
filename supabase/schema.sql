@@ -1,5 +1,5 @@
 -- RemoteSite Database Schema
--- Safe to re-run: uses IF NOT EXISTS and drops existing policies first
+-- Safe to re-run against any existing Supabase project
 
 -- ─────────────────────────────────────────
 -- PROFILES
@@ -11,6 +11,11 @@ create table if not exists public.profiles (
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+alter table public.profiles add column if not exists full_name text;
+alter table public.profiles add column if not exists avatar_url text;
+alter table public.profiles add column if not exists created_at timestamptz default now();
+alter table public.profiles add column if not exists updated_at timestamptz default now();
 
 alter table public.profiles enable row level security;
 
@@ -49,14 +54,25 @@ create table if not exists public.projects (
   name text not null,
   description text,
   location text,
-  status text not null default 'active' check (status in ('active', 'on_track', 'at_risk', 'delayed', 'paused', 'completed')),
-  completion_pct integer not null default 0 check (completion_pct >= 0 and completion_pct <= 100),
+  status text not null default 'active',
+  completion_pct integer not null default 0,
   start_date date,
   end_date date,
   budget numeric(12,2),
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+alter table public.projects add column if not exists user_id uuid references auth.users on delete cascade;
+alter table public.projects add column if not exists description text;
+alter table public.projects add column if not exists location text;
+alter table public.projects add column if not exists status text not null default 'active';
+alter table public.projects add column if not exists completion_pct integer not null default 0;
+alter table public.projects add column if not exists start_date date;
+alter table public.projects add column if not exists end_date date;
+alter table public.projects add column if not exists budget numeric(12,2);
+alter table public.projects add column if not exists created_at timestamptz default now();
+alter table public.projects add column if not exists updated_at timestamptz default now();
 
 alter table public.projects enable row level security;
 
@@ -82,12 +98,20 @@ create table if not exists public.milestones (
   project_id uuid references public.projects on delete cascade not null,
   title text not null,
   description text,
-  status text not null default 'pending' check (status in ('pending', 'in_progress', 'completed', 'delayed')),
-  completion_pct integer not null default 0 check (completion_pct >= 0 and completion_pct <= 100),
+  status text not null default 'pending',
+  completion_pct integer not null default 0,
   planned_date date,
   actual_date date,
   created_at timestamptz default now()
 );
+
+alter table public.milestones add column if not exists project_id uuid references public.projects on delete cascade;
+alter table public.milestones add column if not exists description text;
+alter table public.milestones add column if not exists status text not null default 'pending';
+alter table public.milestones add column if not exists completion_pct integer not null default 0;
+alter table public.milestones add column if not exists planned_date date;
+alter table public.milestones add column if not exists actual_date date;
+alter table public.milestones add column if not exists created_at timestamptz default now();
 
 alter table public.milestones enable row level security;
 
@@ -96,7 +120,11 @@ drop policy if exists "Users can manage own milestones" on public.milestones;
 create policy "Users can manage own milestones"
   on public.milestones for all
   using (
-    exists (select 1 from public.projects where id = milestones.project_id and user_id = auth.uid())
+    exists (
+      select 1 from public.projects p
+      where p.id = milestones.project_id
+        and p.user_id = auth.uid()
+    )
   );
 
 -- ─────────────────────────────────────────
@@ -108,9 +136,15 @@ create table if not exists public.site_media (
   user_id uuid references auth.users on delete cascade not null,
   url text not null,
   description text,
-  media_type text not null default 'photo' check (media_type in ('photo', 'video')),
+  media_type text not null default 'photo',
   uploaded_at timestamptz default now()
 );
+
+alter table public.site_media add column if not exists project_id uuid references public.projects on delete cascade;
+alter table public.site_media add column if not exists user_id uuid references auth.users on delete cascade;
+alter table public.site_media add column if not exists description text;
+alter table public.site_media add column if not exists media_type text not null default 'photo';
+alter table public.site_media add column if not exists uploaded_at timestamptz default now();
 
 alter table public.site_media enable row level security;
 
@@ -128,14 +162,25 @@ create table if not exists public.issues (
   user_id uuid references auth.users on delete cascade not null,
   title text not null,
   description text,
-  priority text not null default 'medium' check (priority in ('critical', 'high', 'medium', 'low')),
-  status text not null default 'open' check (status in ('open', 'in_progress', 'resolved', 'closed')),
+  priority text not null default 'medium',
+  status text not null default 'open',
   assigned_to uuid references auth.users,
   due_date date,
   photo_url text,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
+
+alter table public.issues add column if not exists project_id uuid references public.projects on delete cascade;
+alter table public.issues add column if not exists user_id uuid references auth.users on delete cascade;
+alter table public.issues add column if not exists description text;
+alter table public.issues add column if not exists priority text not null default 'medium';
+alter table public.issues add column if not exists status text not null default 'open';
+alter table public.issues add column if not exists assigned_to uuid references auth.users;
+alter table public.issues add column if not exists due_date date;
+alter table public.issues add column if not exists photo_url text;
+alter table public.issues add column if not exists created_at timestamptz default now();
+alter table public.issues add column if not exists updated_at timestamptz default now();
 
 alter table public.issues enable row level security;
 
@@ -155,6 +200,11 @@ create table if not exists public.reports (
   content text,
   created_at timestamptz default now()
 );
+
+alter table public.reports add column if not exists project_id uuid references public.projects on delete set null;
+alter table public.reports add column if not exists user_id uuid references auth.users on delete cascade;
+alter table public.reports add column if not exists content text;
+alter table public.reports add column if not exists created_at timestamptz default now();
 
 alter table public.reports enable row level security;
 
@@ -177,6 +227,12 @@ create table if not exists public.documents (
   uploaded_at timestamptz default now()
 );
 
+alter table public.documents add column if not exists project_id uuid references public.projects on delete set null;
+alter table public.documents add column if not exists user_id uuid references auth.users on delete cascade;
+alter table public.documents add column if not exists file_type text;
+alter table public.documents add column if not exists size_bytes bigint;
+alter table public.documents add column if not exists uploaded_at timestamptz default now();
+
 alter table public.documents enable row level security;
 
 drop policy if exists "Users can manage own documents" on public.documents;
@@ -192,10 +248,16 @@ create table if not exists public.team_members (
   invited_by uuid references auth.users on delete cascade not null,
   email text not null,
   full_name text,
-  role text not null default 'viewer' check (role in ('admin', 'project_manager', 'engineer', 'contractor', 'viewer')),
-  status text not null default 'invited' check (status in ('invited', 'active', 'inactive')),
+  role text not null default 'viewer',
+  status text not null default 'invited',
   invited_at timestamptz default now()
 );
+
+alter table public.team_members add column if not exists invited_by uuid references auth.users on delete cascade;
+alter table public.team_members add column if not exists full_name text;
+alter table public.team_members add column if not exists role text not null default 'viewer';
+alter table public.team_members add column if not exists status text not null default 'invited';
+alter table public.team_members add column if not exists invited_at timestamptz default now();
 
 alter table public.team_members enable row level security;
 
@@ -213,10 +275,17 @@ create table if not exists public.notifications (
   project_id uuid references public.projects on delete set null,
   title text not null,
   body text,
-  type text not null default 'info' check (type in ('info', 'warning', 'success', 'error')),
+  type text not null default 'info',
   read boolean not null default false,
   created_at timestamptz default now()
 );
+
+alter table public.notifications add column if not exists user_id uuid references auth.users on delete cascade;
+alter table public.notifications add column if not exists project_id uuid references public.projects on delete set null;
+alter table public.notifications add column if not exists body text;
+alter table public.notifications add column if not exists type text not null default 'info';
+alter table public.notifications add column if not exists read boolean not null default false;
+alter table public.notifications add column if not exists created_at timestamptz default now();
 
 alter table public.notifications enable row level security;
 
