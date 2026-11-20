@@ -1,10 +1,23 @@
 -- =============================================================
 -- DataTalk AI: Complete Database Schema
--- Run this entire file in your Supabase SQL Editor.
+-- Safe to run multiple times. Drops existing policies first.
 -- =============================================================
 
 -- ---- Extensions ----
 create extension if not exists "uuid-ossp";
+
+-- ---- Drop existing policies so this script is re-runnable ----
+do $$ declare
+  r record;
+begin
+  for r in (
+    select policyname, tablename
+    from pg_policies
+    where schemaname = 'public'
+  ) loop
+    execute format('drop policy if exists %I on public.%I', r.policyname, r.tablename);
+  end loop;
+end $$;
 
 -- ============================================================
 -- PROFILES
