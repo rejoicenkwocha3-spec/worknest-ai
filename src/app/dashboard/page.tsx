@@ -1,158 +1,205 @@
 export const dynamic = "force-dynamic";
 
 import { createClient } from "@/lib/supabase/server";
-import { Brain, FolderKanban, CheckSquare, Zap, ArrowRight, Clock } from "lucide-react";
-import Link from "next/link";
+import {
+  TrendingUp,
+  TrendingDown,
+  Brain,
+  AlertTriangle,
+  Zap,
+  BarChart3,
+  ArrowUpRight,
+  RefreshCw,
+} from "lucide-react";
 
-const demoStats = [
-  { label: "Active Projects", value: "6", change: "2 updated today", icon: FolderKanban, color: "text-[#1677E8]", bg: "bg-[#EAF3FF]" },
-  { label: "My Tasks", value: "14", change: "3 due this week", icon: CheckSquare, color: "text-[#9652E8]", bg: "bg-[#F0E2FF]" },
-  { label: "AI Agent Chats", value: "28", change: "This month", icon: Brain, color: "text-green-600", bg: "bg-green-50" },
-  { label: "Automations Run", value: "47", change: "This week", icon: Zap, color: "text-orange-600", bg: "bg-orange-50" },
+const kpis = [
+  { label: "Revenue YTD", value: "$4.2M", change: "+12.4%", positive: true, sub: "vs $3.7M last year" },
+  { label: "Gross Margin", value: "68.3%", change: "+2.1pp", positive: true, sub: "vs 66.2% plan" },
+  { label: "Operating Costs", value: "$1.4M", change: "+4.8%", positive: false, sub: "vs $1.3M budget" },
+  { label: "Net Profit", value: "$890K", change: "+18.2%", positive: true, sub: "vs $753K last year" },
 ];
 
-const recentActivity = [
-  { text: "Task 'Write product brief' completed", user: "Sarah Chen", time: "1 hour ago", type: "task" },
-  { text: "Project 'Q4 Marketing Campaign' updated", user: "James Okoye", time: "2 hours ago", type: "project" },
-  { text: "Q&A Agent answered 5 questions", user: "AI Agent", time: "3 hours ago", type: "agent" },
-  { text: "New document 'Onboarding Guide v2' created", user: "Maria Silva", time: "Yesterday", type: "doc" },
-  { text: "Automation 'Weekly Report' executed successfully", user: "System", time: "Yesterday", type: "automation" },
+const salesPerf = [
+  { region: "Northeast", attainment: 108, revenue: "$1.1M" },
+  { region: "Southeast", attainment: 94, revenue: "$890K" },
+  { region: "Midwest", attainment: 102, revenue: "$740K" },
+  { region: "West", attainment: 87, revenue: "$610K" },
 ];
 
-const myTasks = [
-  { title: "Review Q3 analytics report", project: "Analytics", priority: "high", due: "Today" },
-  { title: "Prepare team standup notes", project: "Operations", priority: "medium", due: "Tomorrow" },
-  { title: "Update knowledge base procedures", project: "HR", priority: "low", due: "This week" },
+const aiInsights = [
+  { icon: TrendingUp, text: "Northeast demand up 18% above forecast. Consider increasing Q4 inventory allocation.", color: "#2ECC71", type: "Opportunity" },
+  { icon: AlertTriangle, text: "Three supplier delivery risks detected. Potential 5 day lead time extension on SKUs 1042, 1087, 2341.", color: "#FFBE2E", type: "Risk" },
+  { icon: TrendingUp, text: "Marketing channel ROI exceeded target by 2.3x. Email and content channels driving strongest conversion.", color: "#2D7EFF", type: "Performance" },
+  { icon: TrendingDown, text: "West region sales attainment tracking at 87%. Recommend pipeline review this week.", color: "#FF6B6B", type: "Alert" },
+  { icon: Zap, text: "Inventory turnover rate improved 14% quarter on quarter. AI demand matching performing above baseline.", color: "#0ECFCF", type: "AI Update" },
 ];
 
-const priorityColors: Record<string, string> = {
-  high: "bg-red-100 text-red-700",
-  medium: "bg-yellow-100 text-yellow-700",
-  low: "bg-green-100 text-green-700",
-};
-
-export default async function DashboardOverview() {
+export default async function DashboardPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  const userName = user?.user_metadata?.full_name?.split(" ")[0] || "there";
 
-  const firstName = user?.user_metadata?.full_name?.split(" ")[0] || "there";
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl">
+    <div className="p-6 max-w-7xl mx-auto space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-start justify-between flex-wrap gap-4">
         <div>
-          <h1 className="font-manrope font-bold text-2xl text-[#171717]">Good morning, {firstName}</h1>
-          <p className="font-inter text-sm text-[#777777] mt-1">
-            Here is a summary of your workspace activity.
+          <h1 className="font-manrope font-extrabold text-2xl text-white mb-1">
+            {greeting}, {userName}
+          </h1>
+          <p className="text-[#777777] font-inter text-sm">
+            Business overview for November 2026 — Demo data shown for illustration
           </p>
         </div>
-        <Link
-          href="/dashboard/projects"
-          className="hidden sm:inline-flex items-center gap-2 bg-[#1677E8] text-white font-inter font-medium text-sm px-4 py-2.5 rounded-lg hover:bg-[#1265CC] transition-colors"
-        >
-          New Project <ArrowRight size={14} />
-        </Link>
+        <div className="flex items-center gap-2 text-[#777777] font-inter text-xs">
+          <RefreshCw size={12} />
+          <span>Updated just now</span>
+        </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {demoStats.map((stat) => (
-          <div key={stat.label} className="bg-white rounded-2xl p-5 border border-[#E8E8E8]">
-            <div className={`w-10 h-10 ${stat.bg} rounded-xl flex items-center justify-center mb-3`}>
-              <stat.icon size={18} className={stat.color} />
+      {/* KPI cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {kpis.map((kpi) => (
+          <div key={kpi.label} className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-5">
+            <p className="text-[#777777] font-inter text-xs mb-2">{kpi.label}</p>
+            <p className="font-manrope font-bold text-white text-2xl mb-1">{kpi.value}</p>
+            <div className="flex items-center gap-1.5">
+              {kpi.positive
+                ? <TrendingUp size={12} className="text-[#2ECC71]" />
+                : <TrendingDown size={12} className="text-[#FF6B6B]" />
+              }
+              <span className={`font-inter text-xs font-semibold ${kpi.positive ? 'text-[#2ECC71]' : 'text-[#FF6B6B]'}`}>{kpi.change}</span>
+              <span className="text-[#555555] font-inter text-xs">{kpi.sub}</span>
             </div>
-            <p className="font-manrope font-bold text-2xl text-[#171717]">{stat.value}</p>
-            <p className="font-inter text-xs text-[#777777] mt-0.5">{stat.label}</p>
-            <p className="font-inter text-xs text-[#777777] mt-1 opacity-70">{stat.change}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* My Tasks */}
-        <div className="lg:col-span-1 bg-white rounded-2xl border border-[#E8E8E8] p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-manrope font-semibold text-[#171717]">My Tasks</h2>
-            <Link href="/dashboard/tasks" className="text-xs text-[#1677E8] font-inter hover:underline">View all</Link>
+      {/* Charts row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Revenue chart */}
+        <div className="lg:col-span-2 bg-[#111111] border border-[#2A2A2A] rounded-xl p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <p className="text-white font-manrope font-semibold text-sm">Revenue Performance</p>
+              <p className="text-[#777777] font-inter text-xs mt-0.5">Monthly actual vs forecast</p>
+            </div>
+            <div className="flex gap-3">
+              <span className="flex items-center gap-1.5 text-xs text-[#777777] font-inter"><span className="w-3 h-1.5 rounded bg-[#2D7EFF] block" />Actual</span>
+              <span className="flex items-center gap-1.5 text-xs text-[#777777] font-inter"><span className="w-3 h-1.5 rounded bg-[#0ECFCF] block opacity-60" />Forecast</span>
+            </div>
           </div>
-          <div className="space-y-3">
-            {myTasks.map((task) => (
-              <div key={task.title} className="bg-[#FAFAFA] rounded-xl p-3 border border-[#E8E8E8]">
-                <p className="font-inter text-sm text-[#171717] mb-2">{task.title}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-inter text-[#777777]">{task.project}</span>
-                  <div className="flex items-center gap-2">
-                    <span className={`text-xs font-inter px-2 py-0.5 rounded-full ${priorityColors[task.priority]}`}>
-                      {task.priority}
-                    </span>
-                    <span className="text-xs font-inter text-[#777777] flex items-center gap-1">
-                      <Clock size={10} /> {task.due}
-                    </span>
+          <div className="flex items-end gap-2 h-32">
+            {[
+              { a: 72, f: 70 }, { a: 68, f: 72 }, { a: 80, f: 75 }, { a: 76, f: 78 },
+              { a: 88, f: 82 }, { a: 85, f: 88 }, { a: 92, f: 90 }, { a: 90, f: 92 },
+              { a: 96, f: 94 }, { a: 94, f: 96 }, { a: null, f: 98 }, { a: null, f: 100 },
+            ].map((m, i) => (
+              <div key={i} className="flex-1 flex items-end gap-0.5">
+                {m.a !== null && (
+                  <div className="flex-1 rounded-t-sm bg-[#2D7EFF] opacity-90" style={{ height: `${m.a}%` }} />
+                )}
+                <div className="flex-1 rounded-t-sm bg-[#0ECFCF] opacity-50" style={{ height: `${m.f}%` }} />
+              </div>
+            ))}
+          </div>
+          <div className="flex justify-between mt-3">
+            {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((m) => (
+              <span key={m} className="text-[#444444] font-inter text-xs">{m}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* Sales by region */}
+        <div className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-6">
+          <p className="text-white font-manrope font-semibold text-sm mb-1">Sales Attainment</p>
+          <p className="text-[#777777] font-inter text-xs mb-5">By region, vs target</p>
+          <div className="space-y-5">
+            {salesPerf.map((s) => {
+              const color = s.attainment >= 100 ? '#2ECC71' : s.attainment >= 90 ? '#2D7EFF' : '#FFBE2E';
+              return (
+                <div key={s.region}>
+                  <div className="flex justify-between mb-1.5">
+                    <span className="text-[#BDBDBD] font-inter text-sm">{s.region}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#777777] font-inter text-xs">{s.revenue}</span>
+                      <span className="font-manrope font-semibold text-sm" style={{ color }}>{s.attainment}%</span>
+                    </div>
+                  </div>
+                  <div className="w-full h-1.5 bg-[#2A2A2A] rounded-full overflow-hidden">
+                    <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(s.attainment, 100)}%`, background: color }} />
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
-          <Link href="/dashboard/tasks" className="mt-4 flex items-center justify-center gap-1.5 w-full py-2 text-xs font-inter text-[#1677E8] border border-[#E8E8E8] rounded-lg hover:bg-[#EAF3FF] transition-colors">
-            View all tasks <ArrowRight size={12} />
-          </Link>
+          <div className="mt-5 pt-4 border-t border-[#2A2A2A]">
+            <div className="flex justify-between">
+              <span className="text-[#777777] font-inter text-xs">Overall attainment</span>
+              <span className="text-white font-manrope font-semibold text-sm">98.2%</span>
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Recent Activity */}
-        <div className="lg:col-span-1 bg-white rounded-2xl border border-[#E8E8E8] p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-manrope font-semibold text-[#171717]">Recent Activity</h2>
+      {/* AI insights */}
+      <div className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-6">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-[#2D7EFF]/15 flex items-center justify-center">
+            <Brain size={16} className="text-[#2D7EFF]" />
           </div>
-          <div className="space-y-4">
-            {recentActivity.map((item, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${
-                  item.type === "task" ? "bg-[#1677E8]" :
-                  item.type === "agent" ? "bg-[#9652E8]" :
-                  item.type === "automation" ? "bg-orange-500" :
-                  "bg-green-500"
-                }`}></div>
-                <div>
-                  <p className="font-inter text-sm text-[#171717] leading-tight">{item.text}</p>
-                  <p className="font-inter text-xs text-[#777777] mt-0.5">{item.user} · {item.time}</p>
+          <div>
+            <p className="text-white font-manrope font-semibold text-sm">AI Intelligence Summary</p>
+            <p className="text-[#777777] font-inter text-xs">5 insights identified this week</p>
+          </div>
+          <div className="ml-auto bg-[#2D7EFF]/10 border border-[#2D7EFF]/20 rounded-full px-3 py-1">
+            <span className="text-[#2D7EFF] font-inter text-xs font-semibold">Demo data</span>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {aiInsights.map((insight, i) => {
+            const Icon = insight.icon;
+            return (
+              <div key={i} className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-lg p-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Icon size={14} style={{ color: insight.color }} />
+                  <span className="font-inter text-xs font-semibold" style={{ color: insight.color }}>{insight.type}</span>
                 </div>
+                <p className="text-[#BDBDBD] font-inter text-xs leading-relaxed">{insight.text}</p>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
+      </div>
 
-        {/* AI Agents Quick Access */}
-        <div className="lg:col-span-1 bg-white rounded-2xl border border-[#E8E8E8] p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-manrope font-semibold text-[#171717]">AI Agents</h2>
-            <Link href="/dashboard/agents" className="text-xs text-[#1677E8] font-inter hover:underline">Manage</Link>
-          </div>
-          <div className="space-y-3">
-            {[
-              { name: "Q&A Agent", status: "Active", desc: "Answer team questions", color: "bg-[#9652E8]", href: "/dashboard/agents/qa" },
-              { name: "Task Routing", status: "Active", desc: "Organize incoming work", color: "bg-[#1677E8]", href: "/dashboard/agents/task-routing" },
-              { name: "Reporting Agent", status: "Active", desc: "Generate reports", color: "bg-green-500", href: "/dashboard/agents/reporting" },
-            ].map((agent) => (
-              <Link key={agent.name} href={agent.href} className="flex items-center gap-3 p-3 rounded-xl border border-[#E8E8E8] hover:border-[#1677E8]/30 transition-colors">
-                <div className={`w-8 h-8 ${agent.color} rounded-lg flex items-center justify-center`}>
-                  <Brain size={14} className="text-white" />
+      {/* Quick links */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {[
+          { label: "Financial Planning", href: "/dashboard/financial", icon: BarChart3, color: "#2D7EFF" },
+          { label: "AI Insights", href: "/dashboard/ai-insights", icon: Brain, color: "#0ECFCF" },
+          { label: "Sales Planning", href: "/dashboard/sales", icon: TrendingUp, color: "#2ECC71" },
+          { label: "Reports", href: "/dashboard/reports", icon: Zap, color: "#A78BFA" },
+        ].map((link) => {
+          const Icon = link.icon;
+          return (
+            <a
+              key={link.label}
+              href={link.href}
+              className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-5 hover:border-[#2D7EFF]/40 transition-colors group flex items-center justify-between"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${link.color}18` }}>
+                  <Icon size={16} style={{ color: link.color }} />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="font-inter font-medium text-sm text-[#171717]">{agent.name}</p>
-                  <p className="font-inter text-xs text-[#777777]">{agent.desc}</p>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                  <span className="text-xs font-inter text-green-600">{agent.status}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-          <Link href="/dashboard/agents" className="mt-4 flex items-center justify-center gap-1.5 w-full py-2 text-xs font-inter text-[#9652E8] border border-[#E8E8E8] rounded-lg hover:bg-[#F0E2FF] transition-colors">
-            All AI Agents <ArrowRight size={12} />
-          </Link>
-        </div>
+                <span className="font-manrope font-semibold text-[#BDBDBD] text-sm group-hover:text-white transition-colors">{link.label}</span>
+              </div>
+              <ArrowUpRight size={14} className="text-[#444444] group-hover:text-[#2D7EFF] transition-colors" />
+            </a>
+          );
+        })}
       </div>
     </div>
   );

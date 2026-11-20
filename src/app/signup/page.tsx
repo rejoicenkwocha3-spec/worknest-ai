@@ -1,17 +1,18 @@
 "use client";
+export const dynamic = "force-dynamic";
 
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Eye, EyeOff, CheckCircle } from "lucide-react";
-import WorkNestLogo from "@/components/WorkNestLogo";
+import { Eye, EyeOff, ArrowRight, CheckCircle2 } from "lucide-react";
+import Plan9Logo from "@/components/Plan9Logo";
 
 export default function SignupPage() {
   const router = useRouter();
   const supabase = createClient();
 
-  const [fullName, setFullName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPw, setShowPw] = useState(false);
@@ -34,7 +35,7 @@ export default function SignupPage() {
       email,
       password,
       options: {
-        data: { full_name: fullName },
+        data: { full_name: name },
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
@@ -48,147 +49,149 @@ export default function SignupPage() {
     }
   }
 
-  return (
-    <div className="min-h-screen bg-[#FAFAFA] flex">
-      {/* Left Panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-[#171717] flex-col justify-between p-12">
-        <Link href="/" className="flex items-center gap-2.5">
-          <WorkNestLogo size={36} />
-          <span className="font-manrope font-bold text-white text-xl">WorkNest AI</span>
-        </Link>
-
-        <div>
-          <h2 className="font-manrope font-bold text-4xl text-white mb-6">
-            Your intelligent workspace<br />starts here.
-          </h2>
-          <div className="space-y-4">
-            {[
-              "Set up your workspace in minutes",
-              "Invite your team and assign roles",
-              "Deploy your first AI agent immediately",
-              "Connect your company knowledge",
-            ].map((item) => (
-              <div key={item} className="flex items-center gap-3">
-                <CheckCircle size={16} className="text-[#1677E8] flex-shrink-0" />
-                <span className="font-inter text-white/70 text-sm">{item}</span>
-              </div>
-            ))}
+  if (success) {
+    return (
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center px-4">
+        <div className="max-w-md w-full text-center">
+          <div className="w-16 h-16 rounded-full bg-[#2ECC71]/15 flex items-center justify-center mx-auto mb-6">
+            <CheckCircle2 size={32} className="text-[#2ECC71]" />
           </div>
+          <h2 className="font-manrope font-extrabold text-3xl text-white mb-3">Check your inbox</h2>
+          <p className="text-[#BDBDBD] font-inter text-base leading-relaxed mb-6">
+            A confirmation email has been sent to <span className="text-white font-semibold">{email}</span>. Click the link to verify your account and access PLAN9 AI.
+          </p>
+          <Link href="/login" className="text-[#2D7EFF] font-manrope font-semibold text-sm hover:text-[#0ECFCF] transition-colors">
+            Return to login
+          </Link>
         </div>
+      </div>
+    );
+  }
 
-        <p className="font-inter text-white/30 text-xs">&copy; 2026 WorkNest AI</p>
+  return (
+    <div className="min-h-screen bg-[#050505] flex">
+      {/* Left branding panel */}
+      <div className="hidden lg:flex lg:w-1/2 bg-[#0D0D0D] border-r border-[#2A2A2A] flex-col justify-between p-12 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-[#0ECFCF]/4 rounded-full blur-3xl" />
+        </div>
+        <div className="relative">
+          <Link href="/" className="flex items-center gap-2.5">
+            <Plan9Logo size={36} />
+            <span className="font-manrope font-bold text-white text-xl tracking-tight">PLAN9 AI</span>
+          </Link>
+        </div>
+        <div className="relative">
+          <h2 className="font-manrope font-extrabold text-4xl text-white leading-tight mb-4">
+            Start making smarter business decisions today.
+          </h2>
+          <p className="text-[#BDBDBD] font-inter text-base leading-relaxed mb-10">
+            Join businesses that have moved from disconnected data to confident, AI powered planning with PLAN9 AI.
+          </p>
+          <ul className="space-y-4">
+            {[
+              "AI powered business intelligence platform",
+              "Financial, sales and operational planning in one place",
+              "Intelligent forecasting and scenario modelling",
+              "Real time performance monitoring and reporting",
+            ].map((point) => (
+              <li key={point} className="flex items-center gap-3">
+                <CheckCircle2 size={16} className="text-[#2ECC71] flex-shrink-0" />
+                <span className="text-[#BDBDBD] font-inter text-sm">{point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="relative">
+          <p className="text-[#777777] font-inter text-xs">© 2026 PLAN9 AI</p>
+        </div>
       </div>
 
-      {/* Right Panel */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
-          <div className="lg:hidden mb-8 text-center">
-            <Link href="/" className="inline-flex items-center gap-2.5">
-              <WorkNestLogo size={32} />
-              <span className="font-manrope font-bold text-[#171717] text-xl">WorkNest AI</span>
+      {/* Right signup form */}
+      <div className="flex-1 flex flex-col justify-center px-6 sm:px-12 lg:px-16 py-12">
+        <div className="max-w-md w-full mx-auto">
+          <div className="lg:hidden mb-10">
+            <Link href="/" className="flex items-center gap-2.5">
+              <Plan9Logo size={32} />
+              <span className="font-manrope font-bold text-white text-lg">PLAN9 AI</span>
             </Link>
           </div>
+          <div className="mb-10">
+            <h1 className="font-manrope font-extrabold text-3xl text-white mb-2">Create your account</h1>
+            <p className="text-[#BDBDBD] font-inter text-sm">Get started with PLAN9 AI in minutes</p>
+          </div>
 
-          {success ? (
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E8E8E8] text-center">
-              <div className="w-14 h-14 bg-[#EAF3FF] rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle size={24} className="text-[#1677E8]" />
+          <form onSubmit={handleSignup} className="space-y-5">
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/30 text-red-400 font-inter text-sm px-4 py-3 rounded-lg">
+                {error}
               </div>
-              <h2 className="font-manrope font-bold text-2xl text-[#171717] mb-3">Check your email</h2>
-              <p className="font-inter text-[#777777] text-sm leading-relaxed mb-6">
-                We sent a confirmation link to <strong>{email}</strong>. Click the link to activate your account and access your WorkNest AI workspace.
-              </p>
-              <Link href="/login" className="font-inter text-[#1677E8] text-sm font-medium hover:underline">
-                Back to login
-              </Link>
+            )}
+            <div>
+              <label className="block text-[#BDBDBD] font-inter text-sm mb-2">Full name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                placeholder="Your full name"
+                className="w-full bg-[#1C1C1C] border border-[#2A2A2A] text-white font-inter text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-[#2D7EFF] placeholder:text-[#555555] transition-colors"
+              />
             </div>
-          ) : (
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E8E8E8]">
-              <h1 className="font-manrope font-bold text-2xl text-[#171717] mb-2">Create your account</h1>
-              <p className="font-inter text-[#777777] text-sm mb-8">
-                Start your WorkNest AI workspace today
-              </p>
-
-              {error && (
-                <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
-                  <p className="font-inter text-red-700 text-sm">{error}</p>
-                </div>
-              )}
-
-              <form onSubmit={handleSignup} className="space-y-5">
-                <div>
-                  <label className="block font-inter font-medium text-sm text-[#171717] mb-2">
-                    Full name
-                  </label>
-                  <input
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 border border-[#E8E8E8] rounded-xl font-inter text-sm focus:outline-none focus:ring-2 focus:ring-[#1677E8]/20 focus:border-[#1677E8] transition-colors"
-                    placeholder="Your full name"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-inter font-medium text-sm text-[#171717] mb-2">
-                    Work email
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="w-full px-4 py-3 border border-[#E8E8E8] rounded-xl font-inter text-sm focus:outline-none focus:ring-2 focus:ring-[#1677E8]/20 focus:border-[#1677E8] transition-colors"
-                    placeholder="you@company.com"
-                  />
-                </div>
-
-                <div>
-                  <label className="block font-inter font-medium text-sm text-[#171717] mb-2">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <input
-                      type={showPw ? "text" : "password"}
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      minLength={8}
-                      className="w-full px-4 py-3 border border-[#E8E8E8] rounded-xl font-inter text-sm focus:outline-none focus:ring-2 focus:ring-[#1677E8]/20 focus:border-[#1677E8] transition-colors pr-12"
-                      placeholder="At least 8 characters"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPw(!showPw)}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#777777] hover:text-[#171717]"
-                    >
-                      {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
-                  </div>
-                </div>
-
+            <div>
+              <label className="block text-[#BDBDBD] font-inter text-sm mb-2">Work email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="you@company.com"
+                className="w-full bg-[#1C1C1C] border border-[#2A2A2A] text-white font-inter text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-[#2D7EFF] placeholder:text-[#555555] transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-[#BDBDBD] font-inter text-sm mb-2">Password</label>
+              <div className="relative">
+                <input
+                  type={showPw ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="Minimum 8 characters"
+                  className="w-full bg-[#1C1C1C] border border-[#2A2A2A] text-white font-inter text-sm px-4 py-3 pr-12 rounded-lg focus:outline-none focus:border-[#2D7EFF] placeholder:text-[#555555] transition-colors"
+                />
                 <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-[#1677E8] text-white font-manrope font-semibold py-3 rounded-xl hover:bg-[#1265CC] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                  type="button"
+                  onClick={() => setShowPw(!showPw)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#777777] hover:text-white transition-colors"
                 >
-                  {loading ? "Creating account..." : "Create Account"}
+                  {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
-              </form>
-
-              <p className="text-center font-inter text-xs text-[#777777] mt-5 leading-relaxed">
-                By creating an account, you agree to our Terms of Service and Privacy Policy.
-              </p>
-
-              <p className="text-center font-inter text-sm text-[#777777] mt-4">
-                Already have an account?{" "}
-                <Link href="/login" className="text-[#1677E8] font-medium hover:underline">
-                  Log in
-                </Link>
-              </p>
+              </div>
             </div>
-          )}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#2D7EFF] text-white font-manrope font-semibold text-sm px-6 py-3.5 rounded-lg hover:bg-[#1A6AE8] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
+            >
+              {loading ? "Creating account..." : (
+                <>
+                  Create Account
+                  <ArrowRight size={16} />
+                </>
+              )}
+            </button>
+            <p className="text-[#777777] font-inter text-xs text-center leading-relaxed">
+              By creating an account you agree to the PLAN9 AI terms of service and privacy policy.
+            </p>
+          </form>
+
+          <p className="mt-8 text-center text-[#777777] font-inter text-sm">
+            Already have an account?{" "}
+            <Link href="/login" className="text-[#2D7EFF] hover:text-[#0ECFCF] transition-colors font-semibold">
+              Sign in
+            </Link>
+          </p>
         </div>
       </div>
     </div>

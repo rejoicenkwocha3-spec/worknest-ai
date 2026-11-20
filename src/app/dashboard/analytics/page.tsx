@@ -1,117 +1,105 @@
 export const dynamic = "force-dynamic";
 
-import { BarChart3, TrendingUp, CheckCircle, Users, FolderKanban, Zap } from "lucide-react";
+import { BarChart3, TrendingUp, PieChart, Activity } from "lucide-react";
 
-const stats = [
-  { label: "Tasks Completed This Month", value: "47", trend: "+12% vs last month", icon: CheckCircle, color: "text-green-600", bg: "bg-green-50" },
-  { label: "Active Team Members", value: "12", trend: "2 joined recently", icon: Users, color: "text-[#1677E8]", bg: "bg-[#EAF3FF]" },
-  { label: "Projects In Progress", value: "5", trend: "1 completed this month", icon: FolderKanban, color: "text-[#9652E8]", bg: "bg-[#F0E2FF]" },
-  { label: "Automations Triggered", value: "184", trend: "+28% vs last month", icon: Zap, color: "text-orange-600", bg: "bg-orange-50" },
+const metrics = [
+  { label: "Avg Revenue per Account", value: "$42,800", change: "+8.3%", positive: true },
+  { label: "Customer Acquisition Cost", value: "$1,240", change: "-12.1%", positive: true },
+  { label: "Sales Cycle Length", value: "24 days", change: "-3 days", positive: true },
+  { label: "Win Rate", value: "38.4%", change: "+4.2pp", positive: true },
 ];
 
-const projectProgress = [
-  { name: "Q4 Marketing Campaign", pct: 65, tasks: 12, completed: 8, color: "bg-[#1677E8]" },
-  { name: "Product Roadmap 2026", pct: 40, tasks: 20, completed: 8, color: "bg-[#9652E8]" },
-  { name: "Customer Onboarding Flow", pct: 85, tasks: 7, completed: 6, color: "bg-green-500" },
-  { name: "Team Knowledge Base", pct: 20, tasks: 15, completed: 3, color: "bg-orange-500" },
-  { name: "Sales Pipeline Optimization", pct: 11, tasks: 9, completed: 1, color: "bg-pink-500" },
-];
-
-const teamActivity = [
-  { name: "Sarah Chen", tasks: 14, completed: 11, role: "Product Manager" },
-  { name: "James Okoye", tasks: 9, completed: 7, role: "Engineer" },
-  { name: "Maria Silva", tasks: 12, completed: 8, role: "Designer" },
-  { name: "Alex Torres", tasks: 7, completed: 5, role: "Marketing" },
-  { name: "Priya Nair", tasks: 5, completed: 3, role: "Sales" },
+const channelPerf = [
+  { channel: "Direct Sales", revenue: "$1.8M", share: 43, color: "#2D7EFF" },
+  { channel: "Partner Network", revenue: "$1.1M", share: 26, color: "#0ECFCF" },
+  { channel: "Online", revenue: "$780K", share: 19, color: "#2ECC71" },
+  { channel: "Enterprise", revenue: "$520K", share: 12, color: "#A78BFA" },
 ];
 
 export default function AnalyticsPage() {
   return (
-    <div className="p-6 lg:p-8">
-      <div className="mb-8">
-        <h1 className="font-manrope font-bold text-2xl text-[#171717]">Analytics</h1>
-        <p className="font-inter text-sm text-[#777777] mt-1">Workspace performance and team activity overview</p>
+    <div className="p-6 max-w-7xl mx-auto space-y-6">
+      <div>
+        <h1 className="font-manrope font-extrabold text-2xl text-white mb-1">Analytics</h1>
+        <p className="text-[#777777] font-inter text-sm">Business performance intelligence — Demo data shown for illustration</p>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        {stats.map((s) => (
-          <div key={s.label} className="bg-white rounded-2xl border border-[#E8E8E8] p-5">
-            <div className={`w-10 h-10 ${s.bg} rounded-xl flex items-center justify-center mb-3`}>
-              <s.icon size={18} className={s.color} />
-            </div>
-            <p className="font-manrope font-bold text-2xl text-[#171717]">{s.value}</p>
-            <p className="font-inter text-xs text-[#777777] mt-0.5">{s.label}</p>
-            <p className="font-inter text-xs text-green-600 mt-1">{s.trend}</p>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {metrics.map((m) => (
+          <div key={m.label} className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-5">
+            <p className="text-[#777777] font-inter text-xs mb-2">{m.label}</p>
+            <p className="font-manrope font-bold text-white text-xl mb-1">{m.value}</p>
+            <span className={`font-inter text-xs font-semibold ${m.positive ? 'text-[#2ECC71]' : 'text-[#FF6B6B]'}`}>{m.change}</span>
           </div>
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6 mb-6">
-        {/* Project Progress */}
-        <div className="bg-white rounded-2xl border border-[#E8E8E8] p-5">
-          <h2 className="font-manrope font-semibold text-[#171717] mb-5">Project Progress</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-6">
+          <div className="flex items-center gap-2 mb-5">
+            <BarChart3 size={16} className="text-[#2D7EFF]" />
+            <p className="text-white font-manrope font-semibold text-sm">Revenue by Channel</p>
+          </div>
           <div className="space-y-5">
-            {projectProgress.map((p) => (
-              <div key={p.name}>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="font-inter text-sm text-[#171717]">{p.name}</span>
-                  <span className="font-inter text-xs text-[#777777]">{p.completed}/{p.tasks} tasks</span>
+            {channelPerf.map((c) => (
+              <div key={c.channel}>
+                <div className="flex justify-between mb-1.5">
+                  <span className="text-[#BDBDBD] font-inter text-sm">{c.channel}</span>
+                  <div className="flex items-center gap-3">
+                    <span className="text-[#777777] font-inter text-xs">{c.revenue}</span>
+                    <span className="font-manrope font-semibold text-sm" style={{ color: c.color }}>{c.share}%</span>
+                  </div>
                 </div>
-                <div className="h-2 bg-[#FAFAFA] rounded-full">
-                  <div className={`h-2 ${p.color} rounded-full`} style={{ width: `${p.pct}%` }}></div>
+                <div className="w-full h-2 bg-[#2A2A2A] rounded-full overflow-hidden">
+                  <div className="h-full rounded-full" style={{ width: `${c.share * 2}%`, background: c.color }} />
                 </div>
-                <p className="font-inter text-xs text-[#777777] mt-1">{p.pct}% complete</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Team Activity */}
-        <div className="bg-white rounded-2xl border border-[#E8E8E8] p-5">
-          <h2 className="font-manrope font-semibold text-[#171717] mb-5">Team Activity</h2>
-          <div className="space-y-3">
-            {teamActivity.map((m) => (
-              <div key={m.name} className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-[#EAF3FF] rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="font-manrope font-semibold text-[#1677E8] text-xs">{m.name[0]}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="font-inter text-sm text-[#171717]">{m.name}</p>
-                    <p className="font-inter text-xs text-[#777777]">{m.completed}/{m.tasks}</p>
-                  </div>
-                  <div className="h-1.5 bg-[#FAFAFA] rounded-full">
-                    <div
-                      className="h-1.5 bg-[#1677E8] rounded-full"
-                      style={{ width: `${Math.round((m.completed / m.tasks) * 100)}%` }}
-                    ></div>
-                  </div>
-                </div>
+        <div className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-6">
+          <div className="flex items-center gap-2 mb-5">
+            <Activity size={16} className="text-[#0ECFCF]" />
+            <p className="text-white font-manrope font-semibold text-sm">Monthly Performance Trend</p>
+          </div>
+          <div className="flex items-end gap-1.5 h-36">
+            {[55, 62, 58, 70, 66, 78, 74, 82, 79, 88, 85, 92].map((v, i) => (
+              <div key={i} className="flex-1 flex flex-col items-center gap-0.5">
+                <div
+                  className="w-full rounded-t-sm"
+                  style={{
+                    height: `${v}%`,
+                    background: i === 11 ? '#0ECFCF' : '#2D7EFF',
+                    opacity: 0.85
+                  }}
+                />
               </div>
+            ))}
+          </div>
+          <div className="flex justify-between mt-2">
+            {['J','F','M','A','M','J','J','A','S','O','N','D'].map((m) => (
+              <span key={m} className="text-[#444444] font-inter text-xs">{m}</span>
             ))}
           </div>
         </div>
       </div>
 
-      {/* Activity Over Time (simple bar representation) */}
-      <div className="bg-white rounded-2xl border border-[#E8E8E8] p-5">
-        <h2 className="font-manrope font-semibold text-[#171717] mb-5">Tasks Completed: Last 7 Days</h2>
-        <div className="flex items-end gap-3 h-32">
+      <div className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-6">
+        <div className="flex items-center gap-2 mb-2">
+          <PieChart size={16} className="text-[#2ECC71]" />
+          <p className="text-white font-manrope font-semibold text-sm">AI Analytics Intelligence</p>
+        </div>
+        <p className="text-[#777777] font-inter text-xs mb-5">Key findings from automated analysis</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {[
-            { day: "Mon", tasks: 8 },
-            { day: "Tue", tasks: 12 },
-            { day: "Wed", tasks: 6 },
-            { day: "Thu", tasks: 15 },
-            { day: "Fri", tasks: 10 },
-            { day: "Sat", tasks: 3 },
-            { day: "Sun", tasks: 2 },
-          ].map((d) => (
-            <div key={d.day} className="flex-1 flex flex-col items-center gap-1">
-              <div
-                className="w-full bg-[#1677E8] rounded-t-lg"
-                style={{ height: `${(d.tasks / 15) * 100}%` }}
-              ></div>
-              <span className="font-inter text-xs text-[#777777]">{d.day}</span>
+            { title: "Strongest growth driver", value: "Direct sales channel showing 23% YoY growth outperforming all other channels." },
+            { title: "Cost efficiency opportunity", value: "CAC reduction of 12% achieved this quarter. Continued optimisation possible in partner channel." },
+            { title: "Risk to monitor", value: "Win rate variance between regions suggests training or competitive pricing review needed in West." },
+          ].map((finding) => (
+            <div key={finding.title} className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-lg p-4">
+              <p className="font-manrope font-semibold text-white text-sm mb-2">{finding.title}</p>
+              <p className="text-[#BDBDBD] font-inter text-xs leading-relaxed">{finding.value}</p>
             </div>
           ))}
         </div>

@@ -1,17 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  --color-brand-blue: #1677E8;
-  --color-brand-blue-hover: #1265CC;
-  --color-soft-blue: #EAF3FF;
-  --color-brand-purple: #9652E8;
-  --color-soft-purple: #F0E2FF;
-  --color-charcoal: #171717;
-  --color-mid-grey: #777777;
-  --color-border-grey: #E8E8E8;
-  --color-light-bg: #FAFAFA;
+  --color-plan9-black: #050505;
+  --color-plan9-charcoal: #1C1C1C;
+  --color-plan9-card: #111111;
+  --color-plan9-border: #2A2A2A;
+  --color-plan9-white: #FFFFFF;
+  --color-plan9-grey: #BDBDBD;
+  --color-plan9-muted: #777777;
+  --color-plan9-blue: #2D7EFF;
+  --color-plan9-blue-hover: #1A6AE8;
+  --color-plan9-teal: #0ECFCF;
+  --color-plan9-green: #2ECC71;
+  --color-plan9-accent: #1E3A5F;
 
   --font-manrope: 'Manrope', sans-serif;
   --font-inter: 'Inter', sans-serif;
@@ -24,11 +27,71 @@
 
   body {
     font-family: var(--font-inter);
-    color: #171717;
-    background: #ffffff;
+    color: #FFFFFF;
+    background: #050505;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-manrope);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer utilities {
+  .font-manrope {
+    font-family: var(--font-manrope);
+  }
+
+  .font-inter {
+    font-family: var(--font-inter);
+  }
+
+  .text-plan9-grey {
+    color: #BDBDBD;
+  }
+
+  .text-plan9-muted {
+    color: #777777;
+  }
+
+  .bg-plan9-black {
+    background-color: #050505;
+  }
+
+  .bg-plan9-charcoal {
+    background-color: #1C1C1C;
+  }
+
+  .bg-plan9-card {
+    background-color: #111111;
+  }
+
+  .border-plan9 {
+    border-color: #2A2A2A;
+  }
+
+  .gradient-blue-teal {
+    background: linear-gradient(135deg, #2D7EFF 0%, #0ECFCF 100%);
+  }
+
+  .text-gradient-blue {
+    background: linear-gradient(135deg, #2D7EFF 0%, #0ECFCF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .card-glow {
+    box-shadow: 0 0 40px rgba(45, 126, 255, 0.08);
+  }
+
+  .section-white {
+    background-color: #FFFFFF;
+    color: #050505;
   }
 }

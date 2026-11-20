@@ -1,153 +1,251 @@
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Link from "next/link";
-import { Brain, FolderKanban, BookOpen, Users, Zap, BarChart3, MessageSquare, Search, Shield, Bell, CalendarDays, FileText, Settings, ArrowRight } from "lucide-react";
+import {
+  Brain,
+  BarChart3,
+  Layers,
+  FileText,
+  TrendingUp,
+  Landmark,
+  Zap,
+  Activity,
+  PieChart,
+  Target,
+  Users,
+  Shield,
+  ArrowRight,
+  CheckCircle2,
+} from "lucide-react";
 
-const featureGroups = [
+const features = [
   {
-    category: "AI Workspace",
-    color: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
-    features: [
-      { icon: Brain, title: "AI Agents", desc: "Deploy configurable AI agents connected to your company knowledge. Each agent has a purpose, defined knowledge sources and an activity history." },
-      { icon: MessageSquare, title: "AI Chat Interface", desc: "Interact with AI agents through a natural conversational interface. Ask questions, request summaries and receive accurate answers from your documents." },
-      { icon: Search, title: "AI-Powered Search", desc: "Search across all workspace content including documents, tasks and knowledge base entries using semantic understanding, not just keyword matching." },
+    icon: Brain,
+    title: "AI Business Assistant",
+    value: "An intelligent assistant that understands the full context of your business, answers complex questions in plain language and delivers prioritised recommendations without requiring manual analysis.",
+    details: [
+      "Natural language query interface for business data",
+      "Contextual recommendations based on your business patterns",
+      "Proactive alerts when attention is needed",
+      "Executive summary generation on demand",
     ],
+    color: "#2D7EFF",
   },
   {
-    category: "AI Agents",
-    color: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
-    features: [
-      { icon: Brain, title: "Task Routing Agent", desc: "Automatically organizes incoming tasks and routes work to the appropriate team member based on role, capacity and project context." },
-      { icon: Brain, title: "Q&A Agent", desc: "Answers questions from your team using the documents and knowledge stored in your workspace. Accurate, sourced responses every time." },
-      { icon: Brain, title: "Reporting Agent", desc: "Generates structured summaries of project progress, team activity and business performance on request or on a configured schedule." },
-      { icon: Brain, title: "IT Help Desk Agent", desc: "Answers common internal IT questions using your documented procedures and reduces the volume of repetitive support requests." },
-      { icon: Brain, title: "Onboarding Agent", desc: "Guides new employees through company processes, documentation and responsibilities using your existing knowledge base content." },
+    icon: BarChart3,
+    title: "Intelligent Analytics",
+    value: "Transform your raw business data into clear, structured intelligence. PLAN9 AI automatically identifies what matters, surfaces emerging trends and translates complex data relationships into understandable insights.",
+    details: [
+      "Automated trend detection across all business data",
+      "Comparative analysis across time periods and dimensions",
+      "Anomaly identification with root cause suggestions",
+      "Cross department correlation analysis",
     ],
+    color: "#0ECFCF",
   },
   {
-    category: "Project Management",
-    color: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
-    features: [
-      { icon: FolderKanban, title: "Kanban Boards", desc: "Visualize project work across To Do, In Progress, In Review and Completed columns. Drag and drop tasks as work advances." },
-      { icon: FileText, title: "List View", desc: "View all tasks in a structured list with sortable columns for status, assignee, priority and due date." },
-      { icon: CalendarDays, title: "Calendar View", desc: "See tasks and deadlines on a calendar. Understand workload and upcoming commitments at a glance." },
-      { icon: FolderKanban, title: "Project Tracking", desc: "Monitor project progress, task completion rates and upcoming deadlines across all active projects." },
+    icon: Layers,
+    title: "Customisable Dashboards",
+    value: "Every role in your organisation has different information needs. PLAN9 AI provides fully customisable dashboards that give each user the view that matters most to their responsibilities.",
+    details: [
+      "Role and function based dashboard templates",
+      "Drag and drop layout customisation",
+      "Shared and private dashboard configurations",
+      "Mobile optimised dashboard views",
     ],
+    color: "#2ECC71",
   },
   {
-    category: "Smart Task Management",
-    color: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
-    features: [
-      { icon: Bell, title: "Task Assignments", desc: "Assign tasks to team members with due dates, priorities and descriptions. Everyone knows what they own." },
-      { icon: MessageSquare, title: "Task Comments", desc: "Discuss work directly on the task. Keep conversations attached to context rather than scattered across messages." },
-      { icon: Settings, title: "Priority Levels", desc: "Set task priority as urgent, high, medium or low. Focus team attention on the work that matters most." },
+    icon: FileText,
+    title: "Automated Reporting",
+    value: "Eliminate the time spent producing manual reports. PLAN9 AI generates, schedules and distributes professional performance reports automatically, so your teams can focus on responding to insights rather than producing them.",
+    details: [
+      "Scheduled report generation and distribution",
+      "Custom report templates by function and audience",
+      "Automated narrative generation with key highlights",
+      "Export to PDF and standard business formats",
     ],
+    color: "#F59E0B",
   },
   {
-    category: "Documents and Knowledge Base",
-    color: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
-    features: [
-      { icon: BookOpen, title: "Document Editor", desc: "Create and edit rich text documents within WorkNest AI. No third-party editor required." },
-      { icon: FileText, title: "File Uploads", desc: "Upload existing documents, spreadsheets and presentations. Store everything in one organized location." },
-      { icon: Search, title: "Full-Text Search", desc: "Search the entire knowledge base instantly. Find the document or information you need in seconds." },
-      { icon: BookOpen, title: "Folder Organization", desc: "Organize documents into folders by department, project or topic. Maintain a clean, navigable structure." },
+    icon: TrendingUp,
+    title: "Revenue Forecasting",
+    value: "AI driven revenue forecasting that learns from your historical performance, pipeline data and market signals. Forecasts update automatically as new information arrives, giving you the most current view of expected revenue at all times.",
+    details: [
+      "Driver based revenue model construction",
+      "Pipeline weighted and statistical forecast methods",
+      "Multi horizon forecasting: weekly, monthly, quarterly",
+      "Forecast accuracy tracking and model performance reporting",
     ],
+    color: "#2D7EFF",
   },
   {
-    category: "Team Collaboration",
-    color: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
-    features: [
-      { icon: Users, title: "Teamspaces", desc: "Create dedicated spaces for teams, departments or projects. Control access and visibility within each space." },
-      { icon: Users, title: "Member Management", desc: "Invite team members, assign roles and manage workspace access from a central administration panel." },
-      { icon: Shield, title: "Role-Based Permissions", desc: "Define what each team member can view, edit and manage. Protect sensitive information while enabling collaboration." },
-      { icon: Bell, title: "Activity Tracking", desc: "Monitor all workspace activity in a structured audit trail. See who changed what and when." },
+    icon: Landmark,
+    title: "Financial Performance Monitoring",
+    value: "A consolidated, real time view of financial performance across the organisation. Budget versus actual, revenue tracking, cost management and profitability all accessible in a single connected environment.",
+    details: [
+      "Budget versus actual reporting across all cost centres",
+      "Real time P and L visibility at company and department level",
+      "Margin analysis by product, channel and region",
+      "Cash flow monitoring and working capital tracking",
     ],
+    color: "#0ECFCF",
   },
   {
-    category: "Workflow Automation",
-    color: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
-    features: [
-      { icon: Zap, title: "Automation Builder", desc: "Create trigger-based automations without code. Set conditions and define the actions WorkNest AI takes automatically." },
-      { icon: CalendarDays, title: "Scheduled Automations", desc: "Run workflows on a schedule. Generate weekly reports, send recurring reminders and create recurring tasks automatically." },
-      { icon: Bell, title: "Event Notifications", desc: "Automatically notify team members when tasks are assigned, deadlines approach or projects change status." },
-      { icon: Settings, title: "Automation History", desc: "Review the full history of automation executions including successes, errors and triggered actions." },
+    icon: Zap,
+    title: "Predictive Insights",
+    value: "PLAN9 AI does not wait for problems to appear in reports. Predictive models continuously scan your business data for early warning signals, surfacing issues and opportunities before they become visible in standard reporting cycles.",
+    details: [
+      "Early warning system for financial and operational KPIs",
+      "Demand signal detection from multiple data inputs",
+      "Churn and revenue risk identification",
+      "Growth opportunity scoring and prioritisation",
     ],
+    color: "#2ECC71",
   },
   {
-    category: "Analytics",
-    color: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
-    features: [
-      { icon: BarChart3, title: "Team Analytics", desc: "Understand team activity, task completion rates and workload distribution across projects and members." },
-      { icon: BarChart3, title: "Project Reports", desc: "Track project health, milestone progress and delivery performance for every active initiative." },
-      { icon: Brain, title: "AI-Generated Reports", desc: "Request or schedule written summaries of project and team performance generated by the Reporting Agent." },
+    icon: Activity,
+    title: "Scenario Modelling",
+    value: "Model multiple possible business futures before making decisions. Define scenarios based on any combination of business variables, compare outcomes side by side and understand the risk profile of each option.",
+    details: [
+      "Unlimited scenario creation and version management",
+      "What if analysis across financial and operational variables",
+      "Probability weighted scenario outcomes",
+      "Scenario impact on KPIs and financial performance",
     ],
+    color: "#A78BFA",
+  },
+  {
+    icon: PieChart,
+    title: "Data Visualisation",
+    value: "Professional business charts and visualisations that communicate performance clearly. PLAN9 AI automatically selects the most appropriate chart type for every data set and maintains a consistent visual standard across the platform.",
+    details: [
+      "Automatic chart type selection based on data characteristics",
+      "Interactive drill down across all visualisations",
+      "Geographic performance mapping",
+      "Time series, distribution and correlation views",
+    ],
+    color: "#2D7EFF",
+  },
+  {
+    icon: Target,
+    title: "Business KPI Tracking",
+    value: "Define, monitor and track every KPI that matters to your organisation. Connect targets to actual performance and understand at a glance whether the business is on track, behind plan or ahead of expectations.",
+    details: [
+      "Company wide and departmental KPI configuration",
+      "Target setting at company, team and individual level",
+      "Traffic light and progress indicator views",
+      "Historical KPI performance trending",
+    ],
+    color: "#0ECFCF",
+  },
+  {
+    icon: Users,
+    title: "Multi Department Collaboration",
+    value: "PLAN9 AI is a shared intelligence layer for your entire organisation. Finance, sales, supply chain and operations teams work from the same data foundation, reducing miscommunication and improving cross functional alignment.",
+    details: [
+      "Shared planning workspaces by function and project",
+      "Comment and annotation tools on any data view",
+      "Task and action assignment from insights",
+      "Cross department scenario review workflows",
+    ],
+    color: "#2ECC71",
+  },
+  {
+    icon: Shield,
+    title: "Secure User Management",
+    value: "Enterprise grade security with granular access controls. Every user sees exactly the data their role requires, with comprehensive audit trails and compliance controls built into the platform architecture.",
+    details: [
+      "Role based access control at data and feature level",
+      "Single sign on and enterprise identity provider support",
+      "Full audit trail of all data access and changes",
+      "Data residency and compliance configuration",
+    ],
+    color: "#F59E0B",
   },
 ];
 
 export default function FeaturesPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#050505]">
       <Navbar />
 
-      <section className="pt-32 pb-20 bg-[#FAFAFA] px-4 sm:px-6 lg:px-8">
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <p className="text-[#1677E8] font-inter font-medium text-sm uppercase tracking-widest mb-4">Features</p>
-          <h1 className="font-manrope font-bold text-5xl lg:text-6xl text-[#171717] mb-6">
-            Everything in one platform
+          <div className="inline-flex items-center gap-2 bg-[#1C1C1C] border border-[#2A2A2A] rounded-full px-4 py-1.5 mb-8">
+            <Zap size={12} className="text-[#2D7EFF]" />
+            <span className="text-[#BDBDBD] text-xs font-inter">Platform Features</span>
+          </div>
+          <h1 className="font-manrope font-extrabold text-5xl sm:text-6xl text-white leading-tight mb-6 max-w-4xl mx-auto">
+            Every feature your business intelligence platform needs
           </h1>
-          <p className="font-inter text-[#777777] text-xl max-w-2xl mx-auto leading-relaxed">
-            WorkNest AI combines the capabilities modern teams need into a single coherent product, without the complexity of integrating multiple tools.
+          <p className="text-[#BDBDBD] font-inter text-xl leading-relaxed max-w-3xl mx-auto">
+            Twelve core capabilities built for the demands of modern business planning. Each one designed to deliver measurable value from day one.
           </p>
         </div>
       </section>
 
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
-          {featureGroups.map((group) => (
-            <div key={group.category}>
-              <div className="flex items-center gap-3 mb-8">
-                <div className={`h-px flex-1 bg-[#E8E8E8]`}></div>
-                <span className={`font-manrope font-semibold text-sm uppercase tracking-widest ${group.color}`}>{group.category}</span>
-                <div className={`h-px flex-1 bg-[#E8E8E8]`}></div>
+      <section className="pb-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+          {features.map(({ icon: Icon, title, value, details, color }) => (
+            <div key={title} className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-7 hover:border-[#2D7EFF]/30 transition-colors">
+              <div className="flex items-start gap-4 mb-5">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${color}18` }}>
+                  <Icon size={20} style={{ color }} />
+                </div>
+                <div>
+                  <h3 className="font-manrope font-bold text-white text-xl mb-1">{title}</h3>
+                </div>
               </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {group.features.map((feat) => (
-                  <div key={feat.title} className="bg-[#FAFAFA] rounded-2xl p-6 border border-[#E8E8E8]">
-                    <div className={`w-10 h-10 ${group.bg} rounded-xl flex items-center justify-center mb-4`}>
-                      <feat.icon size={18} className={group.color} />
-                    </div>
-                    <h3 className="font-manrope font-semibold text-[#171717] mb-2">{feat.title}</h3>
-                    <p className="font-inter text-[#777777] text-sm leading-relaxed">{feat.desc}</p>
-                  </div>
+              <p className="text-[#BDBDBD] font-inter text-sm leading-relaxed mb-5">{value}</p>
+              <ul className="space-y-2.5">
+                {details.map((d) => (
+                  <li key={d} className="flex items-start gap-2.5">
+                    <CheckCircle2 size={14} className="flex-shrink-0 mt-0.5" style={{ color }} />
+                    <p className="text-[#777777] font-inter text-sm leading-relaxed">{d}</p>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="py-20 bg-[#171717]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-manrope font-bold text-4xl text-white mb-6">Start using all of these features today</h2>
-          <p className="font-inter text-white/60 text-lg mb-10">
-            Every WorkNest AI plan includes access to the full platform. Choose the tier that fits your team.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/signup" className="inline-flex items-center gap-2 bg-[#1677E8] text-white font-manrope font-semibold px-8 py-4 rounded-lg hover:bg-[#1265CC] transition-colors">
-              Get Started <ArrowRight size={18} />
-            </Link>
-            <Link href="/pricing" className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/20 font-manrope font-semibold px-8 py-4 rounded-lg hover:bg-white/20 transition-colors">
-              View Pricing <ArrowRight size={18} />
-            </Link>
+      {/* Summary stats */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { value: "12", label: "Core Features" },
+              { value: "8", label: "Business Solutions" },
+              { value: "1", label: "Connected Platform" },
+              { value: "AI", label: "Powered Intelligence" },
+            ].map((stat) => (
+              <div key={stat.label}>
+                <p className="font-manrope font-extrabold text-5xl text-[#2D7EFF] mb-2">{stat.value}</p>
+                <p className="font-inter text-sm text-[#555555]">{stat.label}</p>
+              </div>
+            ))}
           </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 bg-[#050505] px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="font-manrope font-extrabold text-4xl sm:text-5xl text-white leading-tight mb-5">
+            All twelve features. One platform. Included from day one.
+          </h2>
+          <p className="text-[#BDBDBD] font-inter text-lg mb-10">
+            There are no feature paywalls in PLAN9 AI. Every capability is available from your first day on the platform.
+          </p>
+          <Link
+            href="/pricing"
+            className="bg-[#2D7EFF] text-white font-manrope font-semibold text-base px-8 py-4 rounded-lg hover:bg-[#1A6AE8] transition-colors inline-flex items-center gap-2"
+          >
+            See Pricing
+            <ArrowRight size={18} />
+          </Link>
         </div>
       </section>
 

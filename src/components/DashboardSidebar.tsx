@@ -5,85 +5,71 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
-  Home,
   LayoutDashboard,
-  FolderKanban,
-  CheckSquare,
-  Calendar,
-  BookOpen,
-  FileText,
-  Brain,
-  Zap,
+  TrendingUp,
+  Landmark,
+  Target,
+  Truck,
+  Package,
   BarChart3,
-  Users,
+  Activity,
+  Brain,
   Settings,
   LogOut,
-  ChevronDown,
-  ChevronRight,
   Menu,
   X,
-  CreditCard,
-  History,
-  Layers,
-  ClipboardList,
+  FileText,
 } from "lucide-react";
-import WorkNestLogo from "./WorkNestLogo";
+import Plan9Logo from "./Plan9Logo";
 
-type NavItem = { href: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; exact?: boolean };
-type NavSection = { label: string | null; items: NavItem[] };
+type NavItem = {
+  href: string;
+  label: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  exact?: boolean;
+};
+
+type NavSection = {
+  label: string | null;
+  items: NavItem[];
+};
 
 const navSections: NavSection[] = [
   {
     label: null,
     items: [
-      { href: "/dashboard", label: "Home", icon: Home, exact: true },
+      { href: "/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
     ],
   },
   {
-    label: "WORKSPACE",
+    label: "BUSINESS PLANNING",
     items: [
-      { href: "/dashboard/workspace", label: "My Workspace", icon: LayoutDashboard },
-      { href: "/dashboard/documents", label: "Documents", icon: FileText },
-      { href: "/dashboard/knowledge-base", label: "Knowledge Base", icon: BookOpen },
+      { href: "/dashboard/financial", label: "Financial Planning", icon: Landmark },
+      { href: "/dashboard/sales", label: "Sales Planning", icon: Target },
+      { href: "/dashboard/demand", label: "Demand Planning", icon: TrendingUp },
+      { href: "/dashboard/supply-chain", label: "Supply Chain", icon: Truck },
+      { href: "/dashboard/inventory", label: "Inventory", icon: Package },
     ],
   },
   {
-    label: "WORK MANAGEMENT",
-    items: [
-      { href: "/dashboard/projects", label: "Projects", icon: FolderKanban },
-      { href: "/dashboard/tasks", label: "My Tasks", icon: CheckSquare },
-      { href: "/dashboard/team-tasks", label: "Team Tasks", icon: ClipboardList },
-      { href: "/dashboard/calendar", label: "Calendar", icon: Calendar },
-    ],
-  },
-  {
-    label: "AI AGENTS",
-    items: [
-      { href: "/dashboard/agents", label: "All Agents", icon: Brain },
-      { href: "/dashboard/agents/task-routing", label: "Task Routing", icon: Layers },
-      { href: "/dashboard/agents/qa", label: "Q&A Agent", icon: Brain },
-      { href: "/dashboard/agents/reporting", label: "Reporting Agent", icon: BarChart3 },
-    ],
-  },
-  {
-    label: "AUTOMATION",
-    items: [
-      { href: "/dashboard/automation", label: "Workflows", icon: Zap },
-      { href: "/dashboard/automation/history", label: "History", icon: History },
-    ],
-  },
-  {
-    label: "INSIGHTS",
+    label: "INTELLIGENCE",
     items: [
       { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
+      { href: "/dashboard/forecasting", label: "Forecasting", icon: Activity },
+      { href: "/dashboard/ai-insights", label: "AI Insights", icon: Brain },
+      { href: "/dashboard/scenarios", label: "Scenarios", icon: Activity },
     ],
   },
   {
-    label: "SETTINGS",
+    label: "REPORTING",
     items: [
-      { href: "/dashboard/team", label: "Team Members", icon: Users },
-      { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
-      { href: "/dashboard/settings", label: "Account Settings", icon: Settings },
+      { href: "/dashboard/reports", label: "Reports", icon: FileText },
+    ],
+  },
+  {
+    label: "ACCOUNT",
+    items: [
+      { href: "/dashboard/settings", label: "Settings", icon: Settings },
     ],
   },
 ];
@@ -94,88 +80,92 @@ export default function DashboardSidebar() {
   const supabase = createClient();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const isActive = (href: string, exact?: boolean) => {
+    if (exact) return pathname === href;
+    return pathname === href || pathname.startsWith(href + "/");
+  };
+
   async function handleLogout() {
     await supabase.auth.signOut();
     router.push("/");
     router.refresh();
   }
 
-  function isActive(href: string, exact?: boolean) {
-    if (exact) return pathname === href;
-    return pathname === href || pathname.startsWith(href + "/");
-  }
-
   const SidebarContent = () => (
-    <aside className="w-60 bg-white border-r border-[#E8E8E8] min-h-screen flex flex-col flex-shrink-0">
-      <div className="p-4 border-b border-[#E8E8E8]">
-        <Link href="/" className="flex items-center gap-2.5" onClick={() => setMobileOpen(false)}>
-          <WorkNestLogo size={30} />
-          <span className="font-manrope font-bold text-[#171717] text-base">WorkNest AI</span>
+    <div className="flex flex-col h-full bg-[#0D0D0D] border-r border-[#2A2A2A]">
+      <div className="p-5 border-b border-[#2A2A2A]">
+        <Link href="/" className="flex items-center gap-2.5">
+          <Plan9Logo size={30} />
+          <span className="font-manrope font-bold text-white text-base tracking-tight">PLAN9 AI</span>
         </Link>
       </div>
-
-      <nav className="flex-1 py-3 overflow-y-auto">
-        {navSections.map((section) => (
-          <div key={section.label ?? "home"} className="mb-1">
+      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
+        {navSections.map((section, si) => (
+          <div key={si}>
             {section.label && (
-              <p className="px-4 py-1.5 text-[10px] font-inter font-semibold text-[#777777] uppercase tracking-widest">
-                {section.label}
-              </p>
+              <p className="text-[#444444] font-inter text-xs tracking-widest uppercase px-3 mb-2">{section.label}</p>
             )}
-            {section.items.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-2.5 px-4 py-2 text-sm font-inter mx-2 rounded-lg transition-colors ${
-                  isActive(item.href, item.exact)
-                    ? "bg-[#EAF3FF] text-[#1677E8] font-medium"
-                    : "text-[#777777] hover:bg-[#FAFAFA] hover:text-[#171717]"
-                }`}
-              >
-                <item.icon size={16} />
-                {item.label}
-              </Link>
-            ))}
+            <div className="space-y-0.5">
+              {section.items.map((item) => {
+                const Icon = item.icon;
+                const active = isActive(item.href, item.exact);
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-inter transition-colors ${
+                      active
+                        ? 'bg-[#2D7EFF]/10 text-[#2D7EFF]'
+                        : 'text-[#777777] hover:text-white hover:bg-[#1C1C1C]'
+                    }`}
+                  >
+                    <Icon size={16} className={active ? 'text-[#2D7EFF]' : ''} />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         ))}
       </nav>
-
-      <div className="p-4 border-t border-[#E8E8E8]">
+      <div className="p-3 border-t border-[#2A2A2A]">
         <button
           onClick={handleLogout}
-          className="flex items-center gap-2.5 w-full px-3 py-2 text-sm font-inter text-[#777777] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+          className="flex items-center gap-3 px-3 py-2.5 w-full rounded-lg text-[#777777] hover:text-white hover:bg-[#1C1C1C] font-inter text-sm transition-colors"
         >
           <LogOut size={16} />
-          Log Out
+          Sign Out
         </button>
       </div>
-    </aside>
+    </div>
   );
 
   return (
     <>
       {/* Desktop sidebar */}
-      <div className="hidden lg:block">
+      <div className="hidden lg:flex lg:w-60 lg:flex-col lg:fixed lg:inset-y-0 z-30">
         <SidebarContent />
       </div>
 
-      {/* Mobile toggle */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E8E8E8] flex items-center px-4 h-14">
-        <button onClick={() => setMobileOpen(!mobileOpen)} className="text-[#171717]">
+      {/* Mobile header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 bg-[#0D0D0D] border-b border-[#2A2A2A] h-14 flex items-center px-4 justify-between">
+        <Link href="/" className="flex items-center gap-2">
+          <Plan9Logo size={28} />
+          <span className="font-manrope font-bold text-white text-base">PLAN9 AI</span>
+        </Link>
+        <button onClick={() => setMobileOpen(!mobileOpen)} className="text-white p-1">
           {mobileOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
-        <Link href="/" className="flex items-center gap-2 ml-3">
-          <WorkNestLogo size={28} />
-          <span className="font-manrope font-bold text-[#171717] text-base">WorkNest AI</span>
-        </Link>
       </div>
 
       {/* Mobile drawer */}
       {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 flex">
-          <div className="flex-1 bg-black/40" onClick={() => setMobileOpen(false)} />
-          <SidebarContent />
+        <div className="lg:hidden fixed inset-0 z-20 pt-14">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setMobileOpen(false)} />
+          <div className="relative w-60 h-full">
+            <SidebarContent />
+          </div>
         </div>
       )}
     </>
