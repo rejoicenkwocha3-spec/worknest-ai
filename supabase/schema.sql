@@ -1,5 +1,5 @@
 -- RemoteSite Database Schema
--- Run in Supabase SQL Editor
+-- Safe to re-run: uses IF NOT EXISTS and drops existing policies first
 
 -- ─────────────────────────────────────────
 -- PROFILES
@@ -14,12 +14,14 @@ create table if not exists public.profiles (
 
 alter table public.profiles enable row level security;
 
+drop policy if exists "Users can view own profile" on public.profiles;
+drop policy if exists "Users can update own profile" on public.profiles;
+drop policy if exists "Users can insert own profile" on public.profiles;
+
 create policy "Users can view own profile"
   on public.profiles for select using (auth.uid() = id);
-
 create policy "Users can update own profile"
   on public.profiles for update using (auth.uid() = id);
-
 create policy "Users can insert own profile"
   on public.profiles for insert with check (auth.uid() = id);
 
@@ -27,7 +29,8 @@ create or replace function public.handle_new_user()
 returns trigger as $$
 begin
   insert into public.profiles (id, full_name)
-  values (new.id, new.raw_user_meta_data->>'full_name');
+  values (new.id, new.raw_user_meta_data->>'full_name')
+  on conflict (id) do nothing;
   return new;
 end;
 $$ language plpgsql security definer;
@@ -57,15 +60,17 @@ create table if not exists public.projects (
 
 alter table public.projects enable row level security;
 
+drop policy if exists "Users can view own projects" on public.projects;
+drop policy if exists "Users can insert own projects" on public.projects;
+drop policy if exists "Users can update own projects" on public.projects;
+drop policy if exists "Users can delete own projects" on public.projects;
+
 create policy "Users can view own projects"
   on public.projects for select using (auth.uid() = user_id);
-
 create policy "Users can insert own projects"
   on public.projects for insert with check (auth.uid() = user_id);
-
 create policy "Users can update own projects"
   on public.projects for update using (auth.uid() = user_id);
-
 create policy "Users can delete own projects"
   on public.projects for delete using (auth.uid() = user_id);
 
@@ -85,6 +90,8 @@ create table if not exists public.milestones (
 );
 
 alter table public.milestones enable row level security;
+
+drop policy if exists "Users can manage own milestones" on public.milestones;
 
 create policy "Users can manage own milestones"
   on public.milestones for all
@@ -107,9 +114,10 @@ create table if not exists public.site_media (
 
 alter table public.site_media enable row level security;
 
+drop policy if exists "Users can manage own site media" on public.site_media;
+
 create policy "Users can manage own site media"
-  on public.site_media for all
-  using (auth.uid() = user_id);
+  on public.site_media for all using (auth.uid() = user_id);
 
 -- ─────────────────────────────────────────
 -- ISSUES
@@ -131,9 +139,10 @@ create table if not exists public.issues (
 
 alter table public.issues enable row level security;
 
+drop policy if exists "Users can manage own issues" on public.issues;
+
 create policy "Users can manage own issues"
-  on public.issues for all
-  using (auth.uid() = user_id);
+  on public.issues for all using (auth.uid() = user_id);
 
 -- ─────────────────────────────────────────
 -- REPORTS
@@ -148,6 +157,8 @@ create table if not exists public.reports (
 );
 
 alter table public.reports enable row level security;
+
+drop policy if exists "Users can manage own reports" on public.reports;
 
 create policy "Users can manage own reports"
   on public.reports for all using (auth.uid() = user_id);
@@ -168,6 +179,8 @@ create table if not exists public.documents (
 
 alter table public.documents enable row level security;
 
+drop policy if exists "Users can manage own documents" on public.documents;
+
 create policy "Users can manage own documents"
   on public.documents for all using (auth.uid() = user_id);
 
@@ -185,6 +198,8 @@ create table if not exists public.team_members (
 );
 
 alter table public.team_members enable row level security;
+
+drop policy if exists "Users can manage their team members" on public.team_members;
 
 create policy "Users can manage their team members"
   on public.team_members for all using (auth.uid() = invited_by);
@@ -205,15 +220,10 @@ create table if not exists public.notifications (
 
 alter table public.notifications enable row level security;
 
+drop policy if exists "Users can view own notifications" on public.notifications;
+drop policy if exists "Users can update own notifications" on public.notifications;
+
 create policy "Users can view own notifications"
   on public.notifications for select using (auth.uid() = user_id);
-
 create policy "Users can update own notifications"
   on public.notifications for update using (auth.uid() = user_id);
-
--- ─────────────────────────────────────────
--- STORAGE BUCKETS
--- ─────────────────────────────────────────
--- Run these in the Supabase Storage settings or via API:
--- 1. Create bucket: site-media (public: true)
--- 2. Create bucket: documents (public: false)
