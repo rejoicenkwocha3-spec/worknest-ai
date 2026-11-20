@@ -1,34 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  --color-brand-blue: #1677E8;
-  --color-brand-blue-hover: #1265CC;
-  --color-soft-blue: #EAF3FF;
-  --color-brand-purple: #9652E8;
-  --color-soft-purple: #F0E2FF;
-  --color-charcoal: #171717;
-  --color-mid-grey: #777777;
-  --color-border-grey: #E8E8E8;
-  --color-light-bg: #FAFAFA;
+  --color-dt-bg:        #070A27;
+  --color-dt-bg2:       #0B1035;
+  --color-dt-card:      #101A42;
+  --color-dt-cyan:      #00D4FF;
+  --color-dt-blue:      #087BFF;
+  --color-dt-cyan-lt:   #8DEBFF;
+  --color-dt-text:      #FFFFFF;
+  --color-dt-muted:     #A7B2CC;
+  --color-dt-border:    rgba(0,212,255,0.22);
 
-  --font-manrope: 'Manrope', sans-serif;
-  --font-inter: 'Inter', sans-serif;
+  --font-space:   'Space Grotesk', sans-serif;
+  --font-inter:   'Inter', sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
 }
 
 @layer base {
-  html {
-    scroll-behavior: smooth;
-  }
+  html { scroll-behavior: smooth; }
 
   body {
     font-family: var(--font-inter);
-    color: #171717;
-    background: #ffffff;
+    background: #070A27;
+    color: #FFFFFF;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-manrope);
+  * { box-sizing: border-box; }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #00D4FF 0%, #087BFF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
+
+  .glow-cyan {
+    box-shadow: 0 0 24px rgba(0,212,255,0.18);
+  }
+
+  .border-cyan {
+    border-color: rgba(0,212,255,0.22);
+  }
+
+  .card-bg {
+    background: #101A42;
+    border: 1px solid rgba(0,212,255,0.14);
+  }
+
+  .font-space { font-family: var(--font-space); }
+  .font-mono  { font-family: var(--font-mono); }
 }

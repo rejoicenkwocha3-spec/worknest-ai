@@ -1,183 +1,64 @@
 "use client";
 
-import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { usePathname } from "next/navigation";
+import DataTalkLogo from "./DataTalkLogo";
 import {
-  Home,
-  LayoutDashboard,
-  FolderKanban,
-  CheckSquare,
-  Calendar,
-  BookOpen,
-  FileText,
-  Brain,
-  Zap,
-  BarChart3,
-  Users,
-  Settings,
-  LogOut,
-  ChevronDown,
-  ChevronRight,
-  Menu,
-  X,
-  CreditCard,
-  History,
-  Layers,
-  ClipboardList,
+  LayoutDashboard, MessageSquare, Database, BarChart3,
+  FileText, Bookmark, History, Users, Settings, CreditCard,
 } from "lucide-react";
-import WorkNestLogo from "./WorkNestLogo";
 
-type NavItem = { href: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; exact?: boolean };
-type NavSection = { label: string | null; items: NavItem[] };
-
-const navSections: NavSection[] = [
-  {
-    label: null,
-    items: [
-      { href: "/dashboard", label: "Home", icon: Home, exact: true },
-    ],
-  },
-  {
-    label: "WORKSPACE",
-    items: [
-      { href: "/dashboard/workspace", label: "My Workspace", icon: LayoutDashboard },
-      { href: "/dashboard/documents", label: "Documents", icon: FileText },
-      { href: "/dashboard/knowledge-base", label: "Knowledge Base", icon: BookOpen },
-    ],
-  },
-  {
-    label: "WORK MANAGEMENT",
-    items: [
-      { href: "/dashboard/projects", label: "Projects", icon: FolderKanban },
-      { href: "/dashboard/tasks", label: "My Tasks", icon: CheckSquare },
-      { href: "/dashboard/team-tasks", label: "Team Tasks", icon: ClipboardList },
-      { href: "/dashboard/calendar", label: "Calendar", icon: Calendar },
-    ],
-  },
-  {
-    label: "AI AGENTS",
-    items: [
-      { href: "/dashboard/agents", label: "All Agents", icon: Brain },
-      { href: "/dashboard/agents/task-routing", label: "Task Routing", icon: Layers },
-      { href: "/dashboard/agents/qa", label: "Q&A Agent", icon: Brain },
-      { href: "/dashboard/agents/reporting", label: "Reporting Agent", icon: BarChart3 },
-    ],
-  },
-  {
-    label: "AUTOMATION",
-    items: [
-      { href: "/dashboard/automation", label: "Workflows", icon: Zap },
-      { href: "/dashboard/automation/history", label: "History", icon: History },
-    ],
-  },
-  {
-    label: "INSIGHTS",
-    items: [
-      { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
-    ],
-  },
-  {
-    label: "SETTINGS",
-    items: [
-      { href: "/dashboard/team", label: "Team Members", icon: Users },
-      { href: "/dashboard/billing", label: "Billing", icon: CreditCard },
-      { href: "/dashboard/settings", label: "Account Settings", icon: Settings },
-    ],
-  },
+const nav = [
+  { label: "Overview",       href: "/dashboard",                  icon: LayoutDashboard },
+  { label: "AI Analyst",     href: "/dashboard/ai-analyst",       icon: MessageSquare },
+  { label: "Data Sources",   href: "/dashboard/data-sources",     icon: Database },
+  { label: "Dashboards",     href: "/dashboard/dashboards",       icon: BarChart3 },
+  { label: "Reports",        href: "/dashboard/reports",          icon: FileText },
+  { label: "Saved Insights", href: "/dashboard/saved-insights",   icon: Bookmark },
+  { label: "Conversations",  href: "/dashboard/conversations",    icon: History },
+  { label: "Team",           href: "/dashboard/team",             icon: Users },
+  { label: "Settings",       href: "/dashboard/settings",         icon: Settings },
+  { label: "Billing",        href: "/dashboard/billing",          icon: CreditCard },
 ];
 
 export default function DashboardSidebar() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const supabase = createClient();
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
-  }
-
-  function isActive(href: string, exact?: boolean) {
-    if (exact) return pathname === href;
-    return pathname === href || pathname.startsWith(href + "/");
-  }
-
-  const SidebarContent = () => (
-    <aside className="w-60 bg-white border-r border-[#E8E8E8] min-h-screen flex flex-col flex-shrink-0">
-      <div className="p-4 border-b border-[#E8E8E8]">
-        <Link href="/" className="flex items-center gap-2.5" onClick={() => setMobileOpen(false)}>
-          <WorkNestLogo size={30} />
-          <span className="font-manrope font-bold text-[#171717] text-base">WorkNest AI</span>
-        </Link>
-      </div>
-
-      <nav className="flex-1 py-3 overflow-y-auto">
-        {navSections.map((section) => (
-          <div key={section.label ?? "home"} className="mb-1">
-            {section.label && (
-              <p className="px-4 py-1.5 text-[10px] font-inter font-semibold text-[#777777] uppercase tracking-widest">
-                {section.label}
-              </p>
-            )}
-            {section.items.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-2.5 px-4 py-2 text-sm font-inter mx-2 rounded-lg transition-colors ${
-                  isActive(item.href, item.exact)
-                    ? "bg-[#EAF3FF] text-[#1677E8] font-medium"
-                    : "text-[#777777] hover:bg-[#FAFAFA] hover:text-[#171717]"
-                }`}
-              >
-                <item.icon size={16} />
-                {item.label}
-              </Link>
-            ))}
-          </div>
-        ))}
-      </nav>
-
-      <div className="p-4 border-t border-[#E8E8E8]">
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-2.5 w-full px-3 py-2 text-sm font-inter text-[#777777] hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-        >
-          <LogOut size={16} />
-          Log Out
-        </button>
-      </div>
-    </aside>
-  );
+  const path = usePathname();
 
   return (
-    <>
-      {/* Desktop sidebar */}
-      <div className="hidden lg:block">
-        <SidebarContent />
-      </div>
-
-      {/* Mobile toggle */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white border-b border-[#E8E8E8] flex items-center px-4 h-14">
-        <button onClick={() => setMobileOpen(!mobileOpen)} className="text-[#171717]">
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
-        <Link href="/" className="flex items-center gap-2 ml-3">
-          <WorkNestLogo size={28} />
-          <span className="font-manrope font-bold text-[#171717] text-base">WorkNest AI</span>
+    <aside className="w-56 bg-[#0B1035] border-r border-[rgba(0,212,255,0.14)] flex flex-col min-h-screen">
+      <div className="p-5 border-b border-[rgba(0,212,255,0.14)]">
+        <Link href="/" className="flex items-center gap-2">
+          <DataTalkLogo size={28} />
+          <span className="font-space font-bold text-white text-sm">DataTalk AI</span>
         </Link>
       </div>
 
-      {/* Mobile drawer */}
-      {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 flex">
-          <div className="flex-1 bg-black/40" onClick={() => setMobileOpen(false)} />
-          <SidebarContent />
+      <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
+        {nav.map((item) => {
+          const active = path === item.href || (item.href !== "/dashboard" && path.startsWith(item.href));
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-inter transition-colors ${
+                active
+                  ? "bg-[#087BFF]/20 text-[#00D4FF]"
+                  : "text-[#A7B2CC] hover:bg-[#101A42] hover:text-white"
+              }`}
+            >
+              <item.icon size={16} className="flex-shrink-0" />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="p-4 border-t border-[rgba(0,212,255,0.14)]">
+        <div className="bg-[#101A42] rounded-xl p-3">
+          <p className="text-[#A7B2CC] text-xs font-inter mb-1">Demo Workspace</p>
+          <p className="text-white text-xs font-space font-medium">Acme Corporation</p>
         </div>
-      )}
-    </>
+      </div>
+    </aside>
   );
 }

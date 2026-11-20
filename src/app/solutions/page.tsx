@@ -1,148 +1,110 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle, TrendingUp, Users, DollarSign, BarChart3, ShoppingCart, Settings, Briefcase } from "lucide-react";
 
 const solutions = [
   {
-    segment: "Startups",
-    headline: "Move fast with structure from the start",
-    desc: "Early-stage companies need to build good habits before scaling. WorkNest AI helps founding teams organize knowledge, manage work and deploy AI agents without the overhead of enterprise tools.",
-    items: [
-      "Centralize company knowledge before it becomes tribal",
-      "Manage product, sales and operations in one workspace",
-      "Use AI agents to handle repetitive work with a small team",
-      "Build scalable processes from day one",
-    ],
+    icon: Briefcase,
+    title: "For Business Owners",
+    desc: "Understand exactly how your business is performing at any moment. Ask questions about revenue, customers and operations without waiting for a report from your team.",
+    cases: ["Track overall business performance in one place", "Understand what is driving revenue growth or decline", "Monitor customer and operational health simultaneously", "Make faster decisions with accurate, current information"],
+    cta: "Get started",
   },
   {
-    segment: "Small and Medium Businesses",
-    headline: "Operate like a larger organization",
-    desc: "SMBs benefit from enterprise-grade workspace capabilities without enterprise complexity. WorkNest AI scales with your business and grows as your team expands.",
-    items: [
-      "Replace scattered tools with one organized workspace",
-      "Automate recurring administrative work",
-      "Give every department its own teamspace",
-      "Use AI agents to extend your team's capacity",
-    ],
+    icon: TrendingUp,
+    title: "For Executives",
+    desc: "Access the business intelligence you need to lead effectively. DataTalk AI provides clean, accurate summaries of organizational performance without requiring you to dig through raw data.",
+    cases: ["Executive dashboards with the metrics that matter", "Automated briefing reports delivered on schedule", "Cross-departmental performance comparison", "Trend identification and early warning signals"],
+    cta: "Get started",
   },
   {
-    segment: "Marketing Teams",
-    headline: "Plan, produce and report with less friction",
-    desc: "Marketing teams manage campaigns, assets, copy, approvals and performance reporting simultaneously. WorkNest AI brings all of that into one place and uses AI to accelerate the operational side.",
-    items: [
-      "Track campaigns from brief to launch with Kanban boards",
-      "Store brand assets, guidelines and copy libraries in the knowledge base",
-      "Use AI agents to draft reports and summarize campaign performance",
-      "Automate recurring review and approval notifications",
-    ],
+    icon: ShoppingCart,
+    title: "For Sales Teams",
+    desc: "Understand your revenue, pipeline and customer behavior without waiting for a weekly sales report. Ask DataTalk AI about deal progress, forecasts and team performance in real time.",
+    cases: ["Revenue performance by product, region and rep", "Pipeline analysis and forecast accuracy", "Customer acquisition and retention trends", "Top performer identification and benchmarking"],
+    cta: "Get started",
   },
   {
-    segment: "Sales Teams",
-    headline: "Keep deals moving and knowledge accessible",
-    desc: "Sales teams need fast access to information and clear visibility into what needs to happen next. WorkNest AI organizes account work, surfaces relevant knowledge and reduces admin overhead.",
-    items: [
-      "Track follow-up tasks and pipeline activities",
-      "Store proposal templates, case studies and battle cards",
-      "Use AI agents to prepare meeting summaries and briefings",
-      "Automate CRM-adjacent task reminders",
-    ],
+    icon: BarChart3,
+    title: "For Marketing Teams",
+    desc: "Analyze campaign results, customer acquisition costs and channel performance clearly. Understand what is working, what is not and where to direct your next investment.",
+    cases: ["Campaign performance analysis across channels", "Customer acquisition cost and lifetime value", "Attribution modeling and channel comparison", "Audience segmentation and behavioral insights"],
+    cta: "Get started",
   },
   {
-    segment: "Operations Teams",
-    headline: "Document, automate and scale your processes",
-    desc: "Operations teams are responsible for the systems that allow a business to run. WorkNest AI becomes the platform where those systems are documented, tracked and improved.",
-    items: [
-      "Document standard operating procedures in the knowledge base",
-      "Automate routine administrative workflows",
-      "Track operational initiatives and improvement projects",
-      "Deploy AI agents to handle internal request routing",
-    ],
+    icon: DollarSign,
+    title: "For Finance Teams",
+    desc: "Monitor financial performance, understand cost structures and track business metrics with accuracy. DataTalk AI provides clear answers to financial questions without manual spreadsheet work.",
+    cases: ["Revenue and margin trend analysis", "Cost center performance monitoring", "Budget versus actual comparisons", "Cash flow and financial forecasting support"],
+    cta: "Get started",
   },
   {
-    segment: "Customer Support Teams",
-    headline: "Resolve more with less manual effort",
-    desc: "Customer support teams handle repetitive questions, complex escalations and ongoing knowledge management. WorkNest AI helps teams respond faster and work more consistently.",
-    items: [
-      "Build an internal knowledge base for agents to reference",
-      "Use AI agents to draft responses to common questions",
-      "Track support tasks and escalations with structured boards",
-      "Automate assignment and follow-up reminders",
-    ],
+    icon: Settings,
+    title: "For Operations Teams",
+    desc: "Track operational performance, identify inefficiencies and monitor the health of your core business processes. DataTalk AI surfaces operational issues before they become serious problems.",
+    cases: ["Process efficiency monitoring", "Operational bottleneck identification", "Resource utilization analysis", "Service level performance tracking"],
+    cta: "Get started",
   },
   {
-    segment: "Software Development Teams",
-    headline: "Manage sprints, decisions and documentation together",
-    desc: "Development teams produce code and decisions simultaneously. WorkNest AI keeps technical documentation, project planning and team communication in a single connected workspace.",
-    items: [
-      "Manage sprints and backlogs with Kanban and list views",
-      "Document architecture decisions and technical specifications",
-      "Use AI agents to answer questions about internal systems",
-      "Track bugs, features and improvement requests",
-    ],
-  },
-  {
-    segment: "Enterprise Organizations",
-    headline: "Connect distributed teams with consistent structure",
-    desc: "Large organizations deal with fragmented knowledge, inconsistent processes and high coordination overhead. WorkNest AI provides the structure for enterprise teams to work coherently at scale.",
-    items: [
-      "Create organized teamspaces for every department and function",
-      "Establish consistent project and task management across the company",
-      "Deploy multiple AI agents for different business functions",
-      "Role-based permissions and administrative controls",
-    ],
+    icon: Users,
+    title: "For Data Analysts",
+    desc: "Accelerate your analytical work. Use DataTalk AI to explore data quickly, generate initial insights and handle repetitive analytical requests from colleagues so you can focus on deeper work.",
+    cases: ["Natural language data exploration", "Automated answers to repetitive business questions", "Faster initial analysis and hypothesis testing", "Collaborative insight sharing with business teams"],
+    cta: "Get started",
   },
 ];
 
 export default function SolutionsPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#070A27]">
       <Navbar />
 
-      <section className="pt-32 pb-20 bg-[#FAFAFA] px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-[#1677E8] font-inter font-medium text-sm uppercase tracking-widest mb-4">Solutions</p>
-          <h1 className="font-manrope font-bold text-5xl lg:text-6xl text-[#171717] mb-6">
-            WorkNest AI for every team
-          </h1>
-          <p className="font-inter text-[#777777] text-xl max-w-2xl mx-auto leading-relaxed">
-            Whether you are a ten-person startup or a hundred-person enterprise, WorkNest AI adapts to how your team works.
+      <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-[#00D4FF] font-inter font-medium text-sm uppercase tracking-widest mb-4">Solutions</p>
+          <h1 className="font-space font-bold text-5xl text-white mb-6">Built for every team in your business.</h1>
+          <p className="font-inter text-[#A7B2CC] text-xl leading-relaxed">
+            DataTalk AI adapts to how each part of your organization works with data. From the executive suite to the operations floor, every team gets the intelligence they need.
           </p>
         </div>
       </section>
 
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-8">
-            {solutions.map((s) => (
-              <div key={s.segment} className="bg-[#FAFAFA] rounded-2xl border border-[#E8E8E8] p-8">
-                <div className="inline-flex items-center bg-[#EAF3FF] text-[#1677E8] text-xs font-inter font-medium px-3 py-1 rounded-full mb-4">
-                  {s.segment}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 space-y-6">
+        {solutions.map((s) => (
+          <div key={s.title} className="bg-[#0B1035] border border-[rgba(0,212,255,0.14)] rounded-2xl p-8">
+            <div className="grid lg:grid-cols-3 gap-8 items-start">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-[#087BFF]/20 border border-[#087BFF]/30 flex items-center justify-center mb-4">
+                  <s.icon size={22} className="text-[#00D4FF]" />
                 </div>
-                <h2 className="font-manrope font-bold text-xl text-[#171717] mb-3">{s.headline}</h2>
-                <p className="font-inter text-[#777777] text-sm leading-relaxed mb-5">{s.desc}</p>
-                <ul className="space-y-2">
-                  {s.items.map((item) => (
-                    <li key={item} className="flex items-start gap-2.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#1677E8] flex-shrink-0 mt-1.5"></span>
-                      <span className="font-inter text-[#171717] text-sm">{item}</span>
+                <h2 className="font-space font-bold text-2xl text-white mb-3">{s.title}</h2>
+                <p className="font-inter text-[#A7B2CC] text-sm leading-relaxed">{s.desc}</p>
+              </div>
+              <div className="lg:col-span-2">
+                <ul className="grid sm:grid-cols-2 gap-3 mb-6">
+                  {s.cases.map((c) => (
+                    <li key={c} className="flex items-start gap-2.5">
+                      <CheckCircle size={15} className="text-[#00D4FF] flex-shrink-0 mt-0.5" />
+                      <span className="font-inter text-[#A7B2CC] text-sm">{c}</span>
                     </li>
                   ))}
                 </ul>
+                <Link href="/signup" className="inline-flex items-center gap-2 text-[#00D4FF] font-space font-semibold text-sm hover:gap-3 transition-all">
+                  {s.cta} <ArrowRight size={16} />
+                </Link>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
-      </section>
+        ))}
+      </div>
 
-      <section className="py-20 bg-[#171717]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-manrope font-bold text-4xl text-white mb-6">Your team, your workspace</h2>
-          <p className="font-inter text-white/60 text-lg mb-10">
-            Start building your WorkNest AI workspace today. No setup complexity, no long commitments.
-          </p>
-          <Link href="/signup" className="inline-flex items-center gap-2 bg-[#1677E8] text-white font-manrope font-semibold px-8 py-4 rounded-lg hover:bg-[#1265CC] transition-colors">
-            Get Started <ArrowRight size={18} />
+      <section className="py-20 bg-[#0B1035] px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="font-space font-bold text-3xl text-white mb-4">Not sure where to start?</h2>
+          <p className="font-inter text-[#A7B2CC] mb-8">Connect your first data source and ask DataTalk AI your most important business question.</p>
+          <Link href="/signup" className="inline-flex items-center gap-2 bg-[#087BFF] hover:bg-[#0668d6] text-white font-space font-semibold px-8 py-4 rounded-lg transition-colors">
+            Start for Free <ArrowRight size={18} />
           </Link>
         </div>
       </section>

@@ -2,104 +2,87 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
-import { CheckCircle } from "lucide-react";
-import WorkNestLogo from "@/components/WorkNestLogo";
+import DataTalkLogo from "@/components/DataTalkLogo";
+import { Loader2, ArrowRight } from "lucide-react";
 
 export default function ForgotPasswordPage() {
-  const supabase = createClient();
-
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
-  async function handleReset(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setError("");
-
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback?next=/dashboard/settings`,
-    });
-
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-    } else {
+    setLoading(true);
+    try {
+      const { createClient } = await import("@supabase/supabase-js");
+      const supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      );
+      const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (err) { setError(err.message); setLoading(false); return; }
       setSent(true);
+    } catch {
+      setError("Authentication is not configured. Please add Supabase credentials.");
       setLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center p-8">
+    <div className="min-h-screen bg-[#070A27] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-2.5">
-            <WorkNestLogo size={36} />
-            <span className="font-manrope font-bold text-[#171717] text-xl">WorkNest AI</span>
+          <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
+            <DataTalkLogo size={36} />
+            <span className="font-space font-bold text-white text-xl">DataTalk AI</span>
           </Link>
+          <h1 className="font-space font-bold text-2xl text-white mb-2">Reset your password</h1>
+          <p className="font-inter text-[#A7B2CC] text-sm">Enter your email and we will send you a reset link.</p>
         </div>
 
-        {sent ? (
-          <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E8E8E8] text-center">
-            <div className="w-14 h-14 bg-[#EAF3FF] rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle size={24} className="text-[#1677E8]" />
+        <div className="bg-[#0B1035] border border-[rgba(0,212,255,0.22)] rounded-2xl p-8">
+          {sent ? (
+            <div className="text-center">
+              <div className="w-14 h-14 bg-[#00D4FF]/20 border border-[#00D4FF]/40 rounded-full flex items-center justify-center mx-auto mb-4">
+                <ArrowRight size={24} className="text-[#00D4FF]" />
+              </div>
+              <p className="font-inter text-white text-sm mb-4">Reset link sent to <strong>{email}</strong>.</p>
+              <Link href="/login" className="text-[#00D4FF] font-inter text-sm hover:text-[#8DEBFF]">Back to sign in</Link>
             </div>
-            <h2 className="font-manrope font-bold text-2xl text-[#171717] mb-3">Reset link sent</h2>
-            <p className="font-inter text-[#777777] text-sm leading-relaxed mb-6">
-              We sent a password reset link to <strong>{email}</strong>. Check your inbox and follow the link to set a new password.
-            </p>
-            <Link href="/login" className="font-inter text-[#1677E8] text-sm font-medium hover:underline">
-              Back to login
-            </Link>
-          </div>
-        ) : (
-          <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#E8E8E8]">
-            <h1 className="font-manrope font-bold text-2xl text-[#171717] mb-2">Reset your password</h1>
-            <p className="font-inter text-[#777777] text-sm mb-8">
-              Enter your email address and we will send you a link to reset your password.
-            </p>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
-                <p className="font-inter text-red-700 text-sm">{error}</p>
-              </div>
-            )}
-
-            <form onSubmit={handleReset} className="space-y-5">
-              <div>
-                <label className="block font-inter font-medium text-sm text-[#171717] mb-2">
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="w-full px-4 py-3 border border-[#E8E8E8] rounded-xl font-inter text-sm focus:outline-none focus:ring-2 focus:ring-[#1677E8]/20 focus:border-[#1677E8] transition-colors"
-                  placeholder="you@company.com"
-                />
-              </div>
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-[#1677E8] text-white font-manrope font-semibold py-3 rounded-xl hover:bg-[#1265CC] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {loading ? "Sending..." : "Send Reset Link"}
-              </button>
-            </form>
-
-            <p className="text-center font-inter text-sm text-[#777777] mt-6">
-              Remembered your password?{" "}
-              <Link href="/login" className="text-[#1677E8] font-medium hover:underline">
-                Log in
-              </Link>
-            </p>
-          </div>
-        )}
+          ) : (
+            <>
+              {error && (
+                <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 mb-5">
+                  <p className="text-red-400 text-sm font-inter">{error}</p>
+                </div>
+              )}
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label className="block font-inter text-sm text-[#A7B2CC] mb-2">Email address</label>
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-[#070A27] border border-[rgba(0,212,255,0.22)] rounded-lg px-4 py-3 text-white font-inter text-sm outline-none focus:border-[#00D4FF]/60"
+                    placeholder="you@company.com"
+                  />
+                </div>
+                <button type="submit" disabled={loading} className="w-full bg-[#087BFF] hover:bg-[#0668d6] disabled:opacity-60 text-white font-space font-semibold py-3.5 rounded-lg transition-colors flex items-center justify-center gap-2">
+                  {loading ? <Loader2 size={18} className="animate-spin" /> : null}
+                  Send Reset Link
+                </button>
+              </form>
+              <p className="text-center font-inter text-sm text-[#A7B2CC] mt-6">
+                <Link href="/login" className="text-[#00D4FF] hover:text-[#8DEBFF]">Back to sign in</Link>
+              </p>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
