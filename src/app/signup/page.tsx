@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import DataTalkLogo from "@/components/DataTalkLogo";
 import { Eye, EyeOff, Loader2, CheckCircle } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -16,26 +17,44 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  const hasSupabase = !!(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
     if (password.length < 8) { setError("Password must be at least 8 characters."); return; }
+
+    if (!hasSupabase) {
+      setError("Supabase is not configured. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your environment variables.");
+      return;
+    }
+
     setLoading(true);
     try {
-      const { createClient } = await import("@supabase/supabase-js");
-      const supabase = createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      );
-      const { error: err } = await supabase.auth.signUp({
+      const supabase = createClient();
+      const { data, error: err } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { full_name: name } },
+        options: {
+          data: { full_name: name },
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
+        },
       });
+
       if (err) { setError(err.message); setLoading(false); return; }
+
+      // If email confirmation is disabled in Supabase, session is created immediately
+      if (data.session) {
+        router.push("/onboarding");
+        return;
+      }
+
       setSuccess(true);
     } catch {
-      setError("Authentication is not configured. Please add Supabase credentials.");
+      setError("Sign up failed. Please try again.");
       setLoading(false);
     }
   }
@@ -49,7 +68,7 @@ export default function SignupPage() {
           </div>
           <h1 className="font-space font-bold text-2xl text-white mb-3">Check your inbox</h1>
           <p className="font-inter text-[#A7B2CC] text-sm leading-relaxed mb-6">
-            We sent a confirmation link to <strong className="text-white">{email}</strong>. Click it to activate your DataTalk AI account.
+            We sent a confirmation link to <strong className="text-white">{email}</strong>. Click it to activate your account and complete setup.
           </p>
           <Link href="/login" className="inline-flex items-center justify-center gap-2 bg-[#087BFF] hover:bg-[#0668d6] text-white font-space font-semibold px-8 py-3.5 rounded-lg transition-colors">
             Back to sign in
@@ -72,6 +91,14 @@ export default function SignupPage() {
         </div>
 
         <div className="bg-[#0B1035] border border-[rgba(0,212,255,0.22)] rounded-2xl p-8">
+          {!hasSupabase && (
+            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg px-4 py-3 mb-5">
+              <p className="text-yellow-400 text-sm font-inter">
+                Authentication is not configured. Add Supabase credentials to your environment to enable sign up.
+              </p>
+            </div>
+          )}
+
           {error && (
             <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 mb-5">
               <p className="text-red-400 text-sm font-inter">{error}</p>
