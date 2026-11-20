@@ -6,18 +6,30 @@
 -- ---- Extensions ----
 create extension if not exists "uuid-ossp";
 
--- ---- Drop existing policies so this script is re-runnable ----
-do $$ declare
-  r record;
-begin
-  for r in (
-    select policyname, tablename
-    from pg_policies
-    where schemaname = 'public'
-  ) loop
-    execute format('drop policy if exists %I on public.%I', r.policyname, r.tablename);
-  end loop;
-end $$;
+-- ---- Drop everything so this script is fully re-runnable ----
+
+-- Drop triggers first
+drop trigger if exists on_auth_user_created on auth.users;
+
+-- Drop tables in reverse dependency order
+drop table if exists public.notification_preferences cascade;
+drop table if exists public.activity_logs cascade;
+drop table if exists public.invitations cascade;
+drop table if exists public.saved_insights cascade;
+drop table if exists public.dashboard_widgets cascade;
+drop table if exists public.dashboards cascade;
+drop table if exists public.reports cascade;
+drop table if exists public.messages cascade;
+drop table if exists public.conversations cascade;
+drop table if exists public.data_sources cascade;
+drop table if exists public.payment_events cascade;
+drop table if exists public.subscriptions cascade;
+drop table if exists public.workspace_members cascade;
+drop table if exists public.workspaces cascade;
+drop table if exists public.profiles cascade;
+
+-- Drop functions
+drop function if exists public.handle_new_user() cascade;
 
 -- ============================================================
 -- PROFILES
