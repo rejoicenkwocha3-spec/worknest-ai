@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import DataTalkLogo from "./DataTalkLogo";
 
 const navLinks = [
   { label: "Platform", href: "/platform" },
@@ -20,7 +20,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2.5">
-            <DataTalkLogo size={34} />
+            <Image src="/logo.jpg" alt="DataTalk AI" width={36} height={36} className="rounded-lg" />
             <span className="font-space font-bold text-white text-lg">DataTalk AI</span>
           </Link>
 

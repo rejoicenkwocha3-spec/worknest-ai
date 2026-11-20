@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import DataTalkLogo from "./DataTalkLogo";
+import Image from "next/image";
 import {
   LayoutDashboard, MessageSquare, Database, BarChart3,
   FileText, Bookmark, History, Users, Settings, CreditCard,
@@ -28,7 +28,7 @@ export default function DashboardSidebar() {
     <aside className="w-56 bg-[#0B1035] border-r border-[rgba(0,212,255,0.14)] flex flex-col min-h-screen">
       <div className="p-5 border-b border-[rgba(0,212,255,0.14)]">
         <Link href="/" className="flex items-center gap-2">
-          <DataTalkLogo size={28} />
+          <Image src="/logo.jpg" alt="DataTalk AI" width={30} height={30} className="rounded-md" />
           <span className="font-space font-bold text-white text-sm">DataTalk AI</span>
         </Link>
       </div>

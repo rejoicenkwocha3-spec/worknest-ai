@@ -3,7 +3,7 @@
 import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import DataTalkLogo from "@/components/DataTalkLogo";
+import Image from "next/image";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
@@ -51,7 +51,7 @@ function LoginForm() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2.5 mb-6">
-            <DataTalkLogo size={36} />
+            <Image src="/logo.jpg" alt="DataTalk AI" width={40} height={40} className="rounded-lg" />
             <span className="font-space font-bold text-white text-xl">DataTalk AI</span>
           </Link>
           <h1 className="font-space font-bold text-2xl text-white mb-2">Welcome back</h1>
