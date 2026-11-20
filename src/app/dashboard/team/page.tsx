@@ -1,89 +1,84 @@
-export const dynamic = "force-dynamic";
+"use client";
+import { useState } from "react";
+import { Users, Plus, Mail, Shield } from "lucide-react";
 
-import { createClient } from "@/lib/supabase/server";
-import { Users, Mail, Shield } from "lucide-react";
-
-const demoMembers = [
-  { name: "Sarah Chen", email: "sarah@company.com", role: "Admin", joined: "Jan 2026", status: "active" },
-  { name: "James Okoye", email: "james@company.com", role: "Member", joined: "Mar 2026", status: "active" },
-  { name: "Maria Silva", email: "maria@company.com", role: "Member", joined: "Apr 2026", status: "active" },
-  { name: "Alex Torres", email: "alex@company.com", role: "Member", joined: "Jun 2026", status: "active" },
-  { name: "Priya Nair", email: "priya@company.com", role: "Viewer", joined: "Sep 2026", status: "active" },
+const members = [
+  { name: "Alex Morgan", email: "alex@example.com", role: "admin", status: "Active", joined: "Nov 1, 2026" },
+  { name: "Sarah Chen", email: "sarah@example.com", role: "analyst", status: "Active", joined: "Nov 3, 2026" },
+  { name: "Mark Johnson", email: "mark@example.com", role: "analyst", status: "Active", joined: "Nov 5, 2026" },
+  { name: "Lisa Park", email: "lisa@example.com", role: "viewer", status: "Invited", joined: "Pending" },
 ];
 
 const roleColors: Record<string, string> = {
-  Admin: "bg-[#F0E2FF] text-[#9652E8]",
-  Member: "bg-[#EAF3FF] text-[#1677E8]",
-  Viewer: "bg-[#FAFAFA] text-[#777777]",
+  admin: "text-[#D7FF00]",
+  analyst: "text-[#00E5FF]",
+  viewer: "text-[#929292]",
 };
 
-export default async function TeamPage() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+export default function TeamPage() {
+  const [showInvite, setShowInvite] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
 
   return (
     <div className="p-6 lg:p-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="font-manrope font-bold text-2xl text-[#171717]">Team Members</h1>
-          <p className="font-inter text-sm text-[#777777] mt-1">Manage workspace members and their permissions</p>
+          <h1 className="font-sora font-bold text-2xl text-white mb-1">Team Management</h1>
+          <p className="text-[#929292] text-sm font-inter">Manage team members, roles and access permissions</p>
         </div>
-        <button className="flex items-center gap-2 bg-[#1677E8] text-white font-inter font-medium text-sm px-4 py-2.5 rounded-lg hover:bg-[#1265CC] transition-colors">
-          <Mail size={16} /> Invite Member
+        <button
+          onClick={() => setShowInvite(true)}
+          className="flex items-center gap-2 bg-[#D7FF00] text-black font-sora font-semibold px-4 py-2.5 rounded-lg hover:bg-[#c8f000] transition-colors text-sm"
+        >
+          <Plus size={16} /> Invite Member
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        {[
-          { label: "Total Members", value: demoMembers.length, icon: Users, bg: "bg-[#EAF3FF]", color: "text-[#1677E8]" },
-          { label: "Admins", value: demoMembers.filter(m => m.role === "Admin").length, icon: Shield, bg: "bg-[#F0E2FF]", color: "text-[#9652E8]" },
-          { label: "Active Today", value: 3, icon: Users, bg: "bg-green-50", color: "text-green-600" },
-        ].map(s => (
-          <div key={s.label} className="bg-white rounded-2xl border border-[#E8E8E8] p-4">
-            <div className={`w-9 h-9 ${s.bg} rounded-xl flex items-center justify-center mb-2`}>
-              <s.icon size={16} className={s.color} />
-            </div>
-            <p className="font-manrope font-bold text-xl text-[#171717]">{s.value}</p>
-            <p className="font-inter text-xs text-[#777777]">{s.label}</p>
+      {showInvite && (
+        <div className="rounded-xl border border-[#D7FF00]/30 bg-[#111111] p-6 mb-6">
+          <h2 className="font-sora font-semibold text-white mb-4">Invite Team Member</h2>
+          <div className="flex gap-3">
+            <input
+              type="email"
+              value={inviteEmail}
+              onChange={e => setInviteEmail(e.target.value)}
+              placeholder="colleague@company.com"
+              className="flex-1 bg-[#050505] border border-[#292929] rounded-lg px-4 py-2.5 text-white text-sm font-inter focus:outline-none focus:border-[#D7FF00]/50"
+            />
+            <button onClick={() => setShowInvite(false)} className="bg-[#D7FF00] text-black font-sora font-semibold px-4 py-2 rounded-lg text-sm">Send Invite</button>
+            <button onClick={() => setShowInvite(false)} className="text-[#929292] hover:text-white text-sm font-inter px-3">Cancel</button>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
 
-      <div className="bg-white rounded-2xl border border-[#E8E8E8] overflow-hidden">
-        <table className="w-full">
-          <thead>
-            <tr className="border-b border-[#E8E8E8] bg-[#FAFAFA]">
-              {["Member", "Email", "Role", "Joined", "Status"].map(h => (
-                <th key={h} className="text-left px-5 py-3 text-xs font-inter font-medium text-[#777777] uppercase tracking-wide">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {demoMembers.map((member) => (
-              <tr key={member.email} className="border-b border-[#E8E8E8] last:border-0 hover:bg-[#FAFAFA]">
-                <td className="px-5 py-3.5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 bg-[#EAF3FF] rounded-full flex items-center justify-center">
-                      <span className="font-manrope font-semibold text-[#1677E8] text-xs">{member.name[0]}</span>
-                    </div>
-                    <span className="font-inter text-sm text-[#171717]">{member.name}</span>
-                  </div>
-                </td>
-                <td className="px-5 py-3.5 font-inter text-sm text-[#777777]">{member.email}</td>
-                <td className="px-5 py-3.5">
-                  <span className={`text-xs font-inter px-2.5 py-1 rounded-full ${roleColors[member.role]}`}>{member.role}</span>
-                </td>
-                <td className="px-5 py-3.5 font-inter text-sm text-[#777777]">{member.joined}</td>
-                <td className="px-5 py-3.5">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                    <span className="font-inter text-xs text-green-600">Active</span>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="rounded-xl border border-[#292929] bg-[#111111]">
+        <div className="flex items-center gap-3 p-5 border-b border-[#292929]">
+          <Users size={18} className="text-[#D7FF00]" />
+          <h2 className="font-sora font-semibold text-white">Team Members</h2>
+          <span className="text-[#929292] text-xs font-inter ml-auto">{members.length} members</span>
+        </div>
+        <div className="divide-y divide-[#292929]">
+          {members.map((m) => (
+            <div key={m.email} className="flex items-center gap-4 p-5 hover:bg-[#050505]">
+              <div className="w-9 h-9 bg-[#D7FF00]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="font-sora font-bold text-[#D7FF00] text-xs">{m.name[0]}</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-inter font-medium text-white text-sm">{m.name}</p>
+                <p className="text-[#929292] text-xs font-inter flex items-center gap-1">
+                  <Mail size={11} /> {m.email}
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className={`text-xs font-inter capitalize font-medium flex items-center gap-1 ${roleColors[m.role]}`}>
+                  <Shield size={11} /> {m.role}
+                </span>
+                <span className={`text-xs font-inter ${m.status === "Active" ? "text-[#D7FF00]" : "text-[#929292]"}`}>{m.status}</span>
+                <span className="text-[#929292] text-xs font-inter hidden md:block">Joined {m.joined}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

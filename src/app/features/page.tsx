@@ -1,151 +1,156 @@
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Link from "next/link";
-import { Brain, FolderKanban, BookOpen, Users, Zap, BarChart3, MessageSquare, Search, Shield, Bell, CalendarDays, FileText, Settings, ArrowRight } from "lucide-react";
+import {
+  Brain, Eye, Mail, Shield, User, Cpu, BarChart3, Zap,
+  FileText, Settings, Users, AlertTriangle, ArrowRight
+} from "lucide-react";
 
-const featureGroups = [
+const features = [
   {
-    category: "AI Workspace",
-    color: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
-    features: [
-      { icon: Brain, title: "AI Agents", desc: "Deploy configurable AI agents connected to your company knowledge. Each agent has a purpose, defined knowledge sources and an activity history." },
-      { icon: MessageSquare, title: "AI Chat Interface", desc: "Interact with AI agents through a natural conversational interface. Ask questions, request summaries and receive accurate answers from your documents." },
-      { icon: Search, title: "AI-Powered Search", desc: "Search across all workspace content including documents, tasks and knowledge base entries using semantic understanding, not just keyword matching." },
-    ],
+    icon: Brain,
+    title: "AI Behavioral Analysis",
+    color: "text-[#D7FF00]",
+    bg: "bg-[#D7FF00]/10",
+    border: "border-[#D7FF00]/20",
+    desc: "Shield Pro AI continuously learns the normal behavior patterns of your users, devices and systems. By establishing behavioral baselines, the platform can identify when activity deviates from expected patterns, even when no known threat signature exists.",
   },
   {
-    category: "AI Agents",
-    color: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
-    features: [
-      { icon: Brain, title: "Task Routing Agent", desc: "Automatically organizes incoming tasks and routes work to the appropriate team member based on role, capacity and project context." },
-      { icon: Brain, title: "Q&A Agent", desc: "Answers questions from your team using the documents and knowledge stored in your workspace. Accurate, sourced responses every time." },
-      { icon: Brain, title: "Reporting Agent", desc: "Generates structured summaries of project progress, team activity and business performance on request or on a configured schedule." },
-      { icon: Brain, title: "IT Help Desk Agent", desc: "Answers common internal IT questions using your documented procedures and reduces the volume of repetitive support requests." },
-      { icon: Brain, title: "Onboarding Agent", desc: "Guides new employees through company processes, documentation and responsibilities using your existing knowledge base content." },
-    ],
+    icon: Eye,
+    title: "Real-Time Threat Monitoring",
+    color: "text-[#00E5FF]",
+    bg: "bg-[#00E5FF]/10",
+    border: "border-[#00E5FF]/20",
+    desc: "Monitor threats as they emerge across your organization. The Shield Pro AI security operations dashboard presents live threat activity, severity classification, detection timestamps and investigation status in one unified view.",
   },
   {
-    category: "Project Management",
-    color: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
-    features: [
-      { icon: FolderKanban, title: "Kanban Boards", desc: "Visualize project work across To Do, In Progress, In Review and Completed columns. Drag and drop tasks as work advances." },
-      { icon: FileText, title: "List View", desc: "View all tasks in a structured list with sortable columns for status, assignee, priority and due date." },
-      { icon: CalendarDays, title: "Calendar View", desc: "See tasks and deadlines on a calendar. Understand workload and upcoming commitments at a glance." },
-      { icon: FolderKanban, title: "Project Tracking", desc: "Monitor project progress, task completion rates and upcoming deadlines across all active projects." },
-    ],
+    icon: Mail,
+    title: "Phishing Detection",
+    color: "text-[#FF3155]",
+    bg: "bg-[#FF3155]/10",
+    border: "border-[#FF3155]/20",
+    desc: "Detect phishing attempts, spear phishing campaigns and fraudulent communications using contextual analysis. Shield Pro AI evaluates message content, sender behavior and communication patterns to identify threats that bypass traditional filters.",
   },
   {
-    category: "Smart Task Management",
-    color: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
-    features: [
-      { icon: Bell, title: "Task Assignments", desc: "Assign tasks to team members with due dates, priorities and descriptions. Everyone knows what they own." },
-      { icon: MessageSquare, title: "Task Comments", desc: "Discuss work directly on the task. Keep conversations attached to context rather than scattered across messages." },
-      { icon: Settings, title: "Priority Levels", desc: "Set task priority as urgent, high, medium or low. Focus team attention on the work that matters most." },
-    ],
+    icon: Shield,
+    title: "Suspicious Login Detection",
+    color: "text-[#1769FF]",
+    bg: "bg-[#1769FF]/10",
+    border: "border-[#1769FF]/20",
+    desc: "Identify risky authentication events including logins from unusual locations, impossible travel patterns, unfamiliar devices and credential stuffing attempts. Each event is contextualized against the user's established authentication behavior.",
   },
   {
-    category: "Documents and Knowledge Base",
-    color: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
-    features: [
-      { icon: BookOpen, title: "Document Editor", desc: "Create and edit rich text documents within WorkNest AI. No third-party editor required." },
-      { icon: FileText, title: "File Uploads", desc: "Upload existing documents, spreadsheets and presentations. Store everything in one organized location." },
-      { icon: Search, title: "Full-Text Search", desc: "Search the entire knowledge base instantly. Find the document or information you need in seconds." },
-      { icon: BookOpen, title: "Folder Organization", desc: "Organize documents into folders by department, project or topic. Maintain a clean, navigable structure." },
-    ],
+    icon: User,
+    title: "Account Takeover Monitoring",
+    color: "text-[#FF36A6]",
+    bg: "bg-[#FF36A6]/10",
+    border: "border-[#FF36A6]/20",
+    desc: "Detect the behavioral indicators of account compromise including permission escalation, unusual data access, forwarding rule changes and anomalous communication patterns. Shield Pro AI monitors the full chain of account behavior, not just individual events.",
   },
   {
-    category: "Team Collaboration",
-    color: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
-    features: [
-      { icon: Users, title: "Teamspaces", desc: "Create dedicated spaces for teams, departments or projects. Control access and visibility within each space." },
-      { icon: Users, title: "Member Management", desc: "Invite team members, assign roles and manage workspace access from a central administration panel." },
-      { icon: Shield, title: "Role-Based Permissions", desc: "Define what each team member can view, edit and manage. Protect sensitive information while enabling collaboration." },
-      { icon: Bell, title: "Activity Tracking", desc: "Monitor all workspace activity in a structured audit trail. See who changed what and when." },
-    ],
+    icon: AlertTriangle,
+    title: "Threat Intelligence",
+    color: "text-[#D7FF00]",
+    bg: "bg-[#D7FF00]/10",
+    border: "border-[#D7FF00]/20",
+    desc: "Every detected threat is enriched with contextual intelligence including attack classification, risk scoring and investigation context. Security teams can understand the nature of a threat quickly and take informed action.",
   },
   {
-    category: "Workflow Automation",
-    color: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
-    features: [
-      { icon: Zap, title: "Automation Builder", desc: "Create trigger-based automations without code. Set conditions and define the actions WorkNest AI takes automatically." },
-      { icon: CalendarDays, title: "Scheduled Automations", desc: "Run workflows on a schedule. Generate weekly reports, send recurring reminders and create recurring tasks automatically." },
-      { icon: Bell, title: "Event Notifications", desc: "Automatically notify team members when tasks are assigned, deadlines approach or projects change status." },
-      { icon: Settings, title: "Automation History", desc: "Review the full history of automation executions including successes, errors and triggered actions." },
-    ],
+    icon: FileText,
+    title: "Security Incident Investigation",
+    color: "text-[#00E5FF]",
+    bg: "bg-[#00E5FF]/10",
+    border: "border-[#00E5FF]/20",
+    desc: "Create, assign and track security incidents from detection through resolution. Shield Pro AI provides structured investigation workflows, timeline reconstruction and AI-assisted analysis to help teams investigate faster.",
   },
   {
-    category: "Analytics",
-    color: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
-    features: [
-      { icon: BarChart3, title: "Team Analytics", desc: "Understand team activity, task completion rates and workload distribution across projects and members." },
-      { icon: BarChart3, title: "Project Reports", desc: "Track project health, milestone progress and delivery performance for every active initiative." },
-      { icon: Brain, title: "AI-Generated Reports", desc: "Request or schedule written summaries of project and team performance generated by the Reporting Agent." },
-    ],
+    icon: Zap,
+    title: "Automated Security Workflows",
+    color: "text-[#D7FF00]",
+    bg: "bg-[#D7FF00]/10",
+    border: "border-[#D7FF00]/20",
+    desc: "Configure automated response playbooks that trigger when specific threat conditions are met. Reduce manual triage effort and ensure consistent, repeatable response procedures across your security team.",
+  },
+  {
+    icon: BarChart3,
+    title: "Security Analytics",
+    color: "text-[#1769FF]",
+    bg: "bg-[#1769FF]/10",
+    border: "border-[#1769FF]/20",
+    desc: "Understand your security posture through visual dashboards showing threat trends, activity baselines, detection volumes and resolution rates. Analytics help security leaders make data-driven decisions and report on security outcomes.",
+  },
+  {
+    icon: Eye,
+    title: "Centralized Security Management",
+    color: "text-[#FF36A6]",
+    bg: "bg-[#FF36A6]/10",
+    border: "border-[#FF36A6]/20",
+    desc: "Manage all security modules, alerts, incidents and configurations from a single platform. Shield Pro AI eliminates the fragmentation of managing multiple point solutions by providing one centralized security operations environment.",
+  },
+  {
+    icon: Users,
+    title: "Team Access Controls",
+    color: "text-[#00E5FF]",
+    bg: "bg-[#00E5FF]/10",
+    border: "border-[#00E5FF]/20",
+    desc: "Define roles, assign permissions and control what each team member can see and action within the platform. Role-based access ensures that sensitive security data is accessible only to authorized personnel.",
+  },
+  {
+    icon: FileText,
+    title: "Security Reporting",
+    color: "text-[#D7FF00]",
+    bg: "bg-[#D7FF00]/10",
+    border: "border-[#D7FF00]/20",
+    desc: "Generate structured security reports covering threat summaries, incident histories, detection volumes and security posture trends. Reports can be downloaded and shared with leadership, board members or external stakeholders.",
   },
 ];
 
 export default function FeaturesPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#050505]">
       <Navbar />
 
-      <section className="pt-32 pb-20 bg-[#FAFAFA] px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-[#1677E8] font-inter font-medium text-sm uppercase tracking-widest mb-4">Features</p>
-          <h1 className="font-manrope font-bold text-5xl lg:text-6xl text-[#171717] mb-6">
-            Everything in one platform
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 grid-bg relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[#FF36A6]/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <p className="text-[#FF36A6] font-inter font-medium text-sm uppercase tracking-widest mb-4">Features</p>
+          <h1 className="font-sora font-bold text-5xl lg:text-6xl text-white leading-tight mb-6">
+            Every Capability Your<br />Security Team Needs
           </h1>
-          <p className="font-inter text-[#777777] text-xl max-w-2xl mx-auto leading-relaxed">
-            WorkNest AI combines the capabilities modern teams need into a single coherent product, without the complexity of integrating multiple tools.
+          <p className="font-inter text-[#929292] text-xl leading-relaxed max-w-2xl mx-auto">
+            Shield Pro AI is built with the features modern security teams depend on, designed to work together as an integrated intelligence platform.
           </p>
         </div>
       </section>
 
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
-          {featureGroups.map((group) => (
-            <div key={group.category}>
-              <div className="flex items-center gap-3 mb-8">
-                <div className={`h-px flex-1 bg-[#E8E8E8]`}></div>
-                <span className={`font-manrope font-semibold text-sm uppercase tracking-widest ${group.color}`}>{group.category}</span>
-                <div className={`h-px flex-1 bg-[#E8E8E8]`}></div>
+      <section className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((f) => (
+              <div key={f.title} className={`rounded-2xl p-7 border ${f.border} bg-[#111111] hover:bg-[#111111]/80 transition-colors`}>
+                <div className={`w-12 h-12 ${f.bg} rounded-xl flex items-center justify-center mb-5`}>
+                  <f.icon size={22} className={f.color} />
+                </div>
+                <h3 className="font-sora font-semibold text-white text-lg mb-3">{f.title}</h3>
+                <p className="font-inter text-[#929292] text-sm leading-relaxed">{f.desc}</p>
               </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {group.features.map((feat) => (
-                  <div key={feat.title} className="bg-[#FAFAFA] rounded-2xl p-6 border border-[#E8E8E8]">
-                    <div className={`w-10 h-10 ${group.bg} rounded-xl flex items-center justify-center mb-4`}>
-                      <feat.icon size={18} className={group.color} />
-                    </div>
-                    <h3 className="font-manrope font-semibold text-[#171717] mb-2">{feat.title}</h3>
-                    <p className="font-inter text-[#777777] text-sm leading-relaxed">{feat.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="py-20 bg-[#171717]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-manrope font-bold text-4xl text-white mb-6">Start using all of these features today</h2>
-          <p className="font-inter text-white/60 text-lg mb-10">
-            Every WorkNest AI plan includes access to the full platform. Choose the tier that fits your team.
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#111111]">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="font-sora font-bold text-4xl text-white mb-6">See Every Feature in Action</h2>
+          <p className="font-inter text-[#929292] text-lg mb-8">
+            Request a demo and explore how Shield Pro AI works inside a live security environment.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/signup" className="inline-flex items-center gap-2 bg-[#1677E8] text-white font-manrope font-semibold px-8 py-4 rounded-lg hover:bg-[#1265CC] transition-colors">
-              Get Started <ArrowRight size={18} />
+            <Link href="/signup" className="bg-[#D7FF00] text-black font-sora font-semibold px-8 py-4 rounded-lg hover:bg-[#c8f000] transition-colors inline-flex items-center justify-center gap-2">
+              Start for Free <ArrowRight size={18} />
             </Link>
-            <Link href="/pricing" className="inline-flex items-center gap-2 bg-white/10 text-white border border-white/20 font-manrope font-semibold px-8 py-4 rounded-lg hover:bg-white/20 transition-colors">
-              View Pricing <ArrowRight size={18} />
+            <Link href="/contact" className="border border-[#292929] text-white font-sora font-semibold px-8 py-4 rounded-lg hover:border-[#D7FF00]/40 transition-colors text-center">
+              Request a Demo
             </Link>
           </div>
         </div>

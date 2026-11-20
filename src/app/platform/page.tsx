@@ -1,122 +1,204 @@
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import Link from "next/link";
-import { Brain, FolderKanban, BookOpen, Users, Zap, BarChart3, ArrowRight, CheckCircle } from "lucide-react";
+import { Mail, User, Cpu, Shield, BarChart3, Zap, ArrowRight, CheckCircle } from "lucide-react";
 
-const pillars = [
+const modules = [
   {
-    icon: Users,
-    title: "Team Collaboration",
-    desc: "WorkNest AI brings your entire team into a shared workspace. Create teamspaces for departments, invite members, assign roles and ensure everyone works with the right level of access. Comments, mentions and activity tracking keep conversations connected to the work.",
-    items: ["Teamspaces for departments and projects", "Role-based access and permissions", "Comments and mentions on tasks and documents", "Real-time activity feeds"],
-    accent: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
+    id: "email-security",
+    icon: Mail,
+    title: "Email Security",
+    color: "text-[#00E5FF]",
+    bg: "bg-[#00E5FF]/10",
+    border: "border-[#00E5FF]/20",
+    headline: "Protect business communications from advanced email threats.",
+    desc: "Identify phishing, impersonation, fraudulent requests and suspicious attachments before they reach your users. Shield Pro AI analyzes the content, context and behavioral patterns of every incoming message.",
+    features: [
+      "Phishing and spear-phishing detection",
+      "Business email compromise identification",
+      "Impersonation and spoofing alerts",
+      "Suspicious attachment analysis",
+      "Fraudulent payment request detection",
+      "Email threat history and investigation",
+    ],
   },
   {
-    icon: FolderKanban,
-    title: "Project Management",
-    desc: "Every project in WorkNest AI gets its own space with tasks, timelines, assignees and progress tracking. Visualize your work in Kanban, list or calendar view and move tasks through structured stages as work progresses.",
-    items: ["Kanban, list and calendar views", "Task assignments with deadlines and priorities", "Project progress tracking", "Multi-project portfolio view"],
-    accent: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
+    id: "identity-security",
+    icon: User,
+    title: "Identity Security",
+    color: "text-[#D7FF00]",
+    bg: "bg-[#D7FF00]/10",
+    border: "border-[#D7FF00]/20",
+    headline: "Identify compromised accounts and suspicious identity behavior.",
+    desc: "Shield Pro AI monitors identity behavior across your organization, detecting unusual access patterns, risky authentication events and potential account compromise before damage is done.",
+    features: [
+      "Suspicious login detection",
+      "Unusual access pattern identification",
+      "Account takeover monitoring",
+      "Risky authentication event alerting",
+      "Identity risk scoring",
+      "Lateral movement detection",
+    ],
   },
   {
-    icon: Brain,
-    title: "AI Agents",
-    desc: "WorkNest AI agents are connected to your company knowledge and workspace. They answer team questions accurately, help onboard new employees, generate reports, route incoming work and handle repetitive tasks that consume your team's time.",
-    items: ["Agents trained on your company documents", "Q&A, Routing, Reporting and Help Desk agents", "Configurable agent permissions and knowledge sources", "Full activity and conversation history"],
-    accent: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
+    id: "ai-security",
+    icon: Cpu,
+    title: "AI Security",
+    color: "text-[#FF36A6]",
+    bg: "bg-[#FF36A6]/10",
+    border: "border-[#FF36A6]/20",
+    headline: "Monitor AI environments and maintain governance over AI activity.",
+    desc: "As organizations adopt AI tools and models, new security risks emerge. Shield Pro AI helps you inventory your AI applications, monitor access and usage, and identify governance risks before they escalate.",
+    features: [
+      "AI application inventory and cataloging",
+      "AI activity monitoring and alerting",
+      "Unauthorized AI usage detection",
+      "Data exposure risk identification",
+      "AI governance insight reporting",
+      "Shadow AI discovery",
+    ],
   },
   {
-    icon: BookOpen,
-    title: "Company Knowledge",
-    desc: "Store your company's procedures, templates, meeting notes, onboarding materials and institutional knowledge in a searchable, organized knowledge base. AI-powered search means your team finds answers without digging through folders.",
-    items: ["Organized document library with folders", "Full-text and AI-powered semantic search", "Document sharing with permission controls", "File uploads and version awareness"],
-    accent: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
+    id: "threat-intelligence",
+    icon: Shield,
+    title: "Threat Intelligence",
+    color: "text-[#1769FF]",
+    bg: "bg-[#1769FF]/10",
+    border: "border-[#1769FF]/20",
+    headline: "Contextual threat intelligence to support rapid investigation.",
+    desc: "Shield Pro AI provides contextual information about detected threats, classifies risk levels and surfaces investigation intelligence so your security team can act quickly and confidently.",
+    features: [
+      "Threat context and classification",
+      "Risk level scoring",
+      "Investigation timeline reconstruction",
+      "Threat actor behavior analysis",
+      "Attack vector identification",
+      "Threat correlation across incidents",
+    ],
   },
   {
-    icon: Zap,
-    title: "Workflow Automation",
-    desc: "Replace manual hand-offs and routine reminders with structured automated workflows. Set triggers and define actions. WorkNest AI handles the operational overhead so your team focuses on high-value work.",
-    items: ["Trigger-based workflow builder", "Automated task notifications and assignments", "Scheduled reports and recurring tasks", "Full automation execution history"],
-    accent: "text-[#1677E8]",
-    bg: "bg-[#EAF3FF]",
-  },
-  {
+    id: "security-analytics",
     icon: BarChart3,
-    title: "Business Reporting",
-    desc: "WorkNest AI surfaces activity data, project health metrics and team performance in structured dashboards. The Reporting Agent can generate written summaries of project progress on request or on a schedule.",
-    items: ["Team and project performance dashboards", "AI-generated progress reports", "Activity tracking across workspace", "Export and share report capabilities"],
-    accent: "text-[#9652E8]",
-    bg: "bg-[#F0E2FF]",
+    title: "Security Analytics",
+    color: "text-[#00E5FF]",
+    bg: "bg-[#00E5FF]/10",
+    border: "border-[#00E5FF]/20",
+    headline: "Visual security insights across your entire environment.",
+    desc: "Understand your security posture through visual dashboards, activity trend charts and automated reporting. Shield Pro AI surfaces the insights your team needs to make informed security decisions.",
+    features: [
+      "Security posture dashboards",
+      "Threat trend visualization",
+      "Activity baseline charts",
+      "Team performance metrics",
+      "Automated security summaries",
+      "Exportable security reports",
+    ],
+  },
+  {
+    id: "automated-response",
+    icon: Zap,
+    title: "Automated Response",
+    color: "text-[#D7FF00]",
+    bg: "bg-[#D7FF00]/10",
+    border: "border-[#D7FF00]/20",
+    headline: "Accelerate investigation and response with configurable automation.",
+    desc: "Shield Pro AI helps security teams investigate and respond to incidents faster through configurable automation workflows. Reduce manual effort and ensure consistent response procedures.",
+    features: [
+      "Configurable response playbooks",
+      "Automated alert triage",
+      "Incident escalation workflows",
+      "Notification routing",
+      "Response action logging",
+      "Post-incident audit trails",
+    ],
   },
 ];
 
 export default function PlatformPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#050505]">
       <Navbar />
 
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-[#FAFAFA]">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-[#1677E8] font-inter font-medium text-sm uppercase tracking-widest mb-4">The Platform</p>
-          <h1 className="font-manrope font-bold text-5xl lg:text-6xl text-[#171717] mb-6">
-            One workspace. Every capability<br />your team needs.
+      {/* Hero */}
+      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 grid-bg relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#00E5FF]/5 rounded-full blur-[120px] pointer-events-none" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <p className="text-[#00E5FF] font-inter font-medium text-sm uppercase tracking-widest mb-4">Platform</p>
+          <h1 className="font-sora font-bold text-5xl lg:text-6xl text-white leading-tight mb-6">
+            An Intelligent Defense System<br />for the Modern Enterprise.
           </h1>
-          <p className="font-inter text-[#777777] text-xl max-w-2xl mx-auto leading-relaxed">
-            WorkNest AI connects collaboration, project management, company knowledge, AI agents, automation and reporting into a single cohesive environment.
+          <p className="font-inter text-[#929292] text-xl leading-relaxed max-w-2xl mx-auto mb-8">
+            Shield Pro AI unifies email security, identity protection, AI governance, threat intelligence and automated response in a single platform built for enterprise security operations.
           </p>
+          <Link href="/signup" className="inline-flex items-center gap-2 bg-[#D7FF00] text-black font-sora font-semibold px-8 py-4 rounded-lg hover:bg-[#c8f000] transition-colors">
+            Start for Free <ArrowRight size={18} />
+          </Link>
         </div>
       </section>
 
-      {/* Platform Pillars */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-20">
-            {pillars.map((pillar, i) => (
-              <div key={pillar.title} className={`grid lg:grid-cols-2 gap-16 items-center ${i % 2 === 1 ? "lg:grid-flow-col-dense" : ""}`}>
-                <div className={i % 2 === 1 ? "lg:col-start-2" : ""}>
-                  <div className={`w-12 h-12 ${pillar.bg} rounded-xl flex items-center justify-center mb-5`}>
-                    <pillar.icon size={22} className={pillar.accent} />
-                  </div>
-                  <h2 className="font-manrope font-bold text-3xl text-[#171717] mb-4">{pillar.title}</h2>
-                  <p className="font-inter text-[#777777] text-lg leading-relaxed mb-6">{pillar.desc}</p>
-                  <div className="space-y-3">
-                    {pillar.items.map((item) => (
-                      <div key={item} className="flex items-start gap-3">
-                        <CheckCircle size={16} className={`${pillar.accent} flex-shrink-0 mt-0.5`} />
-                        <span className="font-inter text-[#171717] text-sm">{item}</span>
-                      </div>
-                    ))}
-                  </div>
+      {/* Platform modules */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto space-y-16">
+          {modules.map((mod, i) => (
+            <div
+              key={mod.id}
+              id={mod.id}
+              className={`grid lg:grid-cols-2 gap-12 items-center ${i % 2 !== 0 ? "lg:flex-row-reverse" : ""}`}
+            >
+              <div className={i % 2 !== 0 ? "lg:order-2" : ""}>
+                <div className={`w-12 h-12 ${mod.bg} rounded-xl flex items-center justify-center mb-5`}>
+                  <mod.icon size={22} className={mod.color} />
                 </div>
-                <div className={`bg-[#FAFAFA] rounded-2xl border border-[#E8E8E8] p-8 h-64 flex items-center justify-center ${i % 2 === 1 ? "lg:col-start-1" : ""}`}>
-                  <div className="text-center">
-                    <div className={`w-16 h-16 ${pillar.bg} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
-                      <pillar.icon size={28} className={pillar.accent} />
+                <p className={`text-sm font-inter font-medium uppercase tracking-widest ${mod.color} mb-3`}>{mod.title}</p>
+                <h2 className="font-sora font-bold text-3xl text-white mb-4">{mod.headline}</h2>
+                <p className="font-inter text-[#929292] text-base leading-relaxed mb-6">{mod.desc}</p>
+                <div className="space-y-3">
+                  {mod.features.map((f) => (
+                    <div key={f} className="flex items-start gap-3">
+                      <CheckCircle size={16} className={`${mod.color} flex-shrink-0 mt-0.5`} />
+                      <span className="font-inter text-[#F5F5F0] text-sm">{f}</span>
                     </div>
-                    <p className="font-manrope font-semibold text-[#171717]">{pillar.title}</p>
-                    <p className="font-inter text-[#777777] text-sm mt-1">WorkNest AI Platform</p>
-                  </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
+              <div className={`rounded-2xl border ${mod.border} bg-[#111111] p-6 ${i % 2 !== 0 ? "lg:order-1" : ""}`}>
+                <div className="flex items-center gap-3 mb-5">
+                  <div className={`w-8 h-8 ${mod.bg} rounded-lg flex items-center justify-center`}>
+                    <mod.icon size={16} className={mod.color} />
+                  </div>
+                  <span className="font-sora font-semibold text-white text-sm">{mod.title} Module</span>
+                  <div className="ml-auto flex items-center gap-1.5">
+                    <div className={`w-2 h-2 rounded-full animate-pulse-glow ${mod.color.replace("text-", "bg-")}`} />
+                    <span className={`text-xs font-inter ${mod.color}`}>Active</span>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {mod.features.slice(0, 4).map((f, j) => (
+                    <div key={j} className={`flex items-center justify-between py-2.5 px-4 rounded-lg border ${mod.border} bg-[#050505]`}>
+                      <span className="text-[#929292] text-xs font-inter">{f}</span>
+                      <span className={`text-xs font-inter ${mod.color} font-medium`}>Enabled</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-[#171717]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-manrope font-bold text-4xl text-white mb-6">Start using WorkNest AI today</h2>
-          <p className="font-inter text-white/60 text-lg mb-10">
-            Set up your workspace, invite your team and deploy your first AI agent in minutes.
-          </p>
-          <Link href="/signup" className="inline-flex items-center gap-2 bg-[#1677E8] text-white font-manrope font-semibold px-8 py-4 rounded-lg hover:bg-[#1265CC] transition-colors">
-            Get Started <ArrowRight size={18} />
-          </Link>
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-[#111111]">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="font-sora font-bold text-4xl text-white mb-6">Start Protecting Your Organization Today</h2>
+          <p className="font-inter text-[#929292] text-lg mb-8">Join security teams worldwide who trust Shield Pro AI to protect their environments.</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/signup" className="bg-[#D7FF00] text-black font-sora font-semibold px-8 py-4 rounded-lg hover:bg-[#c8f000] transition-colors inline-flex items-center justify-center gap-2">
+              Get Started <ArrowRight size={18} />
+            </Link>
+            <Link href="/pricing" className="border border-[#292929] text-white font-sora font-semibold px-8 py-4 rounded-lg hover:border-[#D7FF00]/40 transition-colors text-center">
+              View Pricing
+            </Link>
+          </div>
         </div>
       </section>
 

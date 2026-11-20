@@ -1,75 +1,78 @@
-import { CreditCard, CheckCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { CreditCard, ArrowRight, CheckCircle, AlertCircle } from "lucide-react";
+
+const plans = [
+  { id: "starter", name: "Starter", href: "https://selar.com/47plan?currency=USD", color: "text-[#00E5FF]", border: "border-[#292929]" },
+  { id: "professional", name: "Professional", href: "https://selar.com/57plan?currency=USD", color: "text-[#D7FF00]", border: "border-[#D7FF00]/30", popular: true },
+  { id: "enterprise", name: "Enterprise", href: "https://selar.com/97plan?currency=USD", color: "text-[#FF36A6]", border: "border-[#292929]" },
+];
 
 export default function BillingPage() {
-  const plans = [
-    { name: "Starter", price: "$47", period: "/month", link: "https://selar.com/47plan?currency=USD", current: false },
-    { name: "Professional", price: "$57", period: "/month", link: "https://selar.com/57plan?currency=USD", current: true },
-    { name: "Enterprise", price: "$97", period: "/month", link: "https://selar.com/97plan?currency=USD", current: false },
-  ];
-
   return (
     <div className="p-6 lg:p-8">
       <div className="mb-8">
-        <h1 className="font-manrope font-bold text-2xl text-[#171717]">Billing and Subscription</h1>
-        <p className="font-inter text-sm text-[#777777] mt-1">Manage your WorkNest AI subscription</p>
+        <h1 className="font-sora font-bold text-2xl text-white mb-1">Billing and Subscription</h1>
+        <p className="text-[#929292] text-sm font-inter">Manage your subscription plan and payment history</p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#E8E8E8] p-6 mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-[#EAF3FF] rounded-xl flex items-center justify-center">
-            <CreditCard size={18} className="text-[#1677E8]" />
-          </div>
+      {/* Current plan */}
+      <div className="rounded-xl border border-[#D7FF00]/20 bg-[#111111] p-6 mb-8">
+        <div className="flex items-start justify-between">
           <div>
-            <p className="font-manrope font-semibold text-[#171717]">Current Plan: Professional</p>
-            <p className="font-inter text-xs text-[#777777]">$57/month. Renews December 1, 2026.</p>
+            <p className="text-[#929292] text-xs font-inter mb-1">Current Plan</p>
+            <p className="font-sora font-bold text-2xl text-white mb-1">Free Trial</p>
+            <p className="text-[#929292] text-sm font-inter">Upgrade to unlock full platform capabilities</p>
           </div>
-          <div className="ml-auto">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="font-inter text-sm text-green-600">Active</span>
-            </div>
+          <div className="flex items-center gap-1.5 bg-[#D7FF00]/10 border border-[#D7FF00]/20 px-3 py-1.5 rounded-lg">
+            <div className="w-2 h-2 bg-[#D7FF00] rounded-full" />
+            <span className="text-[#D7FF00] text-xs font-inter">Active</span>
           </div>
-        </div>
-        <div className="grid sm:grid-cols-3 gap-3">
-          {["All 5 AI agents", "Up to 20 team members", "50 GB document storage"].map(f => (
-            <div key={f} className="flex items-center gap-2">
-              <CheckCircle size={14} className="text-[#1677E8] flex-shrink-0" />
-              <span className="font-inter text-sm text-[#777777]">{f}</span>
-            </div>
-          ))}
         </div>
       </div>
 
-      <div className="mb-6">
-        <h2 className="font-manrope font-semibold text-[#171717] mb-4">Change Plan</h2>
-        <div className="grid sm:grid-cols-3 gap-4">
-          {plans.map(plan => (
-            <div key={plan.name} className={`bg-white rounded-2xl border p-5 ${plan.current ? "border-[#1677E8]" : "border-[#E8E8E8]"}`}>
-              {plan.current && (
-                <span className="inline-flex items-center bg-[#EAF3FF] text-[#1677E8] text-xs font-inter px-2.5 py-1 rounded-full mb-3">Current Plan</span>
-              )}
-              <p className="font-manrope font-bold text-lg text-[#171717]">{plan.name}</p>
-              <p className="font-manrope font-bold text-3xl text-[#171717] mt-1">{plan.price}<span className="text-sm font-normal text-[#777777]">{plan.period}</span></p>
-              {!plan.current && (
-                <a
-                  href={plan.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 w-full flex items-center justify-center gap-2 bg-[#1677E8] text-white font-inter font-medium text-sm py-2.5 rounded-lg hover:bg-[#1265CC] transition-colors"
-                >
-                  Switch Plan <ArrowRight size={14} />
-                </a>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="bg-[#FAFAFA] rounded-2xl border border-[#E8E8E8] p-5">
-        <p className="font-inter text-sm text-[#777777]">
-          Payments are processed securely through Selar. To cancel your subscription or request a refund, contact our support team.
+      {/* Disclaimer */}
+      <div className="flex items-start gap-3 bg-[#111111] border border-[#D7FF00]/20 rounded-xl p-4 mb-8">
+        <AlertCircle size={16} className="text-[#D7FF00] flex-shrink-0 mt-0.5" />
+        <p className="text-[#929292] text-sm font-inter">
+          Clicking Subscribe will redirect you to the Selar checkout page to complete your payment. Pricing and plan details are displayed on the checkout page. Access is granted upon verified payment completion.
         </p>
+      </div>
+
+      {/* Plan cards */}
+      <div className="grid md:grid-cols-3 gap-5 mb-8">
+        {plans.map((p) => (
+          <div key={p.id} className={`rounded-xl border ${p.border} bg-[#111111] p-6 ${p.popular ? "ring-1 ring-[#D7FF00]/20" : ""} relative`}>
+            {p.popular && (
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <span className="bg-[#D7FF00] text-black text-xs font-sora font-bold px-3 py-0.5 rounded-full">Popular</span>
+              </div>
+            )}
+            <p className={`font-sora font-semibold text-sm uppercase tracking-widest ${p.color} mb-4`}>{p.name}</p>
+            <p className="text-[#929292] text-xs font-inter mb-5">See pricing on checkout page</p>
+            <a
+              href={p.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`w-full inline-flex items-center justify-center gap-2 font-sora font-semibold px-4 py-2.5 rounded-lg text-sm transition-colors ${
+                p.popular ? "bg-[#D7FF00] text-black hover:bg-[#c8f000]" : "border border-[#292929] text-white hover:border-[#D7FF00]/40"
+              }`}
+            >
+              Subscribe <ArrowRight size={14} />
+            </a>
+          </div>
+        ))}
+      </div>
+
+      {/* Payment history placeholder */}
+      <div className="rounded-xl border border-[#292929] bg-[#111111] p-6">
+        <div className="flex items-center gap-3 mb-5">
+          <CreditCard size={18} className="text-[#929292]" />
+          <h2 className="font-sora font-semibold text-white">Payment History</h2>
+        </div>
+        <div className="text-center py-8">
+          <p className="text-[#929292] text-sm font-inter">No payments recorded yet.</p>
+          <p className="text-[#929292] text-xs font-inter mt-1">Your payment history will appear here after subscribing.</p>
+        </div>
       </div>
     </div>
   );

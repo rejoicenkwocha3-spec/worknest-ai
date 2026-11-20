@@ -1,150 +1,160 @@
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { CheckCircle, ArrowRight } from "lucide-react";
+import { CheckCircle, ArrowRight, AlertCircle } from "lucide-react";
 
 const plans = [
   {
+    id: "starter",
     name: "Starter",
-    price: "$47",
-    period: "per month",
-    desc: "For small teams getting started with an intelligent workspace.",
-    link: "https://selar.com/47plan?currency=USD",
-    featured: false,
+    checkoutUrl: "https://selar.com/47plan?currency=USD",
+    color: "text-[#00E5FF]",
+    border: "border-[#292929]",
+    buttonBg: "border border-[#292929] text-white hover:border-[#00E5FF]/40",
+    popular: false,
+    description: "Essential security monitoring for growing teams.",
     features: [
-      "Up to 5 team members",
-      "Unlimited projects and tasks",
-      "AI Q&A Agent",
-      "10 GB document storage",
-      "Knowledge base",
-      "Basic workflow automations",
+      "Email Security monitoring",
+      "Suspicious login detection",
+      "Up to 25 monitored users",
+      "Security alerts and notifications",
+      "Basic security dashboard",
       "Email support",
     ],
+    note: "Plan details to be confirmed with provider.",
   },
   {
+    id: "professional",
     name: "Professional",
-    price: "$57",
-    period: "per month",
-    desc: "For growing teams that need full AI agent capabilities.",
-    link: "https://selar.com/57plan?currency=USD",
-    featured: true,
+    checkoutUrl: "https://selar.com/57plan?currency=USD",
+    color: "text-[#D7FF00]",
+    border: "border-[#D7FF00]/40",
+    buttonBg: "bg-[#D7FF00] text-black hover:bg-[#c8f000]",
+    popular: true,
+    description: "Full platform coverage for professional security teams.",
     features: [
-      "Up to 20 team members",
       "Everything in Starter",
-      "All 5 AI agents",
-      "50 GB document storage",
-      "Advanced workflow automations",
-      "AI-generated reports",
-      "Teamspaces",
-      "Role-based permissions",
+      "Identity Security module",
+      "AI Security monitoring",
+      "Threat Intelligence",
+      "Up to 100 monitored users",
+      "Incident management",
+      "Automated response workflows",
+      "Security analytics dashboard",
       "Priority support",
     ],
+    note: "Plan details to be confirmed with provider.",
   },
   {
+    id: "enterprise",
     name: "Enterprise",
-    price: "$97",
-    period: "per month",
-    desc: "For organizations that need full control, compliance and scale.",
-    link: "https://selar.com/97plan?currency=USD",
-    featured: false,
+    checkoutUrl: "https://selar.com/97plan?currency=USD",
+    color: "text-[#FF36A6]",
+    border: "border-[#292929]",
+    buttonBg: "border border-[#292929] text-white hover:border-[#FF36A6]/40",
+    popular: false,
+    description: "Complete enterprise cybersecurity operations.",
     features: [
-      "Unlimited team members",
       "Everything in Professional",
-      "Custom AI agent configurations",
-      "Unlimited document storage",
-      "Advanced analytics",
-      "SSO and advanced security",
-      "Admin controls and audit logs",
-      "Dedicated account support",
-      "Custom integrations",
+      "Unlimited monitored users",
+      "Advanced AI behavioral analysis",
+      "Custom integration support",
+      "Security reporting suite",
+      "Team management and roles",
+      "Dedicated onboarding",
+      "Enterprise SLA",
+      "API access",
     ],
+    note: "Plan details to be confirmed with provider.",
   },
 ];
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#050505]">
       <Navbar />
 
-      <section className="pt-32 pb-20 bg-[#FAFAFA] px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-[#1677E8] font-inter font-medium text-sm uppercase tracking-widest mb-4">Pricing</p>
-          <h1 className="font-manrope font-bold text-5xl lg:text-6xl text-[#171717] mb-6">
-            Simple, transparent pricing
+      <section className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 grid-bg relative overflow-hidden">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-[#D7FF00]/5 rounded-full blur-[100px] pointer-events-none" />
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <p className="text-[#D7FF00] font-inter font-medium text-sm uppercase tracking-widest mb-4">Pricing</p>
+          <h1 className="font-sora font-bold text-5xl lg:text-6xl text-white leading-tight mb-6">
+            Enterprise Security at Every Scale
           </h1>
-          <p className="font-inter text-[#777777] text-xl max-w-2xl mx-auto leading-relaxed">
-            Every plan includes the core WorkNest AI workspace. Choose the tier that matches your team size and needs.
+          <p className="font-inter text-[#929292] text-xl leading-relaxed max-w-2xl mx-auto">
+            Three plans designed to meet the security needs of growing teams, mid-market companies and large enterprises.
           </p>
         </div>
       </section>
 
-      <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-6">
+      {/* Disclaimer */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex items-start gap-3 bg-[#111111] border border-[#D7FF00]/20 rounded-xl p-4">
+          <AlertCircle size={18} className="text-[#D7FF00] flex-shrink-0 mt-0.5" />
+          <p className="text-[#929292] text-sm font-inter">
+            Pricing details including plan names, billing intervals and exact features are sourced from the Selar checkout pages. Please verify current pricing on the checkout page before subscribing. Plan information marked with an asterisk is pending confirmation.
+          </p>
+        </div>
+      </div>
+
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 items-start">
             {plans.map((plan) => (
               <div
-                key={plan.name}
-                className={`rounded-2xl p-8 border ${plan.featured ? "border-[#1677E8] bg-[#1677E8]" : "border-[#E8E8E8] bg-white"}`}
+                key={plan.id}
+                className={`rounded-2xl border ${plan.border} bg-[#111111] p-8 relative ${plan.popular ? "ring-1 ring-[#D7FF00]/30" : ""}`}
               >
-                {plan.featured && (
-                  <div className="inline-flex items-center bg-white/20 text-white text-xs font-inter font-medium px-3 py-1 rounded-full mb-4">
-                    Most Popular
+                {plan.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <span className="bg-[#D7FF00] text-black text-xs font-sora font-bold px-4 py-1 rounded-full">Most Popular</span>
                   </div>
                 )}
-                <h2 className={`font-manrope font-bold text-xl mb-2 ${plan.featured ? "text-white" : "text-[#171717]"}`}>
-                  {plan.name}
-                </h2>
-                <div className="mb-2">
-                  <span className={`font-manrope font-bold text-5xl ${plan.featured ? "text-white" : "text-[#171717]"}`}>
-                    {plan.price}
-                  </span>
-                  <span className={`font-inter text-sm ml-1 ${plan.featured ? "text-white/70" : "text-[#777777]"}`}>
-                    {plan.period}
-                  </span>
+                <div className="mb-6">
+                  <p className={`font-sora font-semibold text-sm uppercase tracking-widest mb-2 ${plan.color}`}>{plan.name}</p>
+                  <div className="mb-3">
+                    <span className="text-[#929292] text-sm font-inter">See checkout for pricing*</span>
+                  </div>
+                  <p className="font-inter text-[#929292] text-sm leading-relaxed">{plan.description}</p>
                 </div>
-                <p className={`font-inter text-sm mb-6 leading-relaxed ${plan.featured ? "text-white/70" : "text-[#777777]"}`}>
-                  {plan.desc}
-                </p>
 
                 <a
-                  href={plan.link}
+                  href={plan.checkoutUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`w-full flex items-center justify-center gap-2 font-manrope font-semibold py-3 px-6 rounded-lg transition-colors mb-8 ${
-                    plan.featured
-                      ? "bg-white text-[#1677E8] hover:bg-white/90"
-                      : "bg-[#1677E8] text-white hover:bg-[#1265CC]"
-                  }`}
+                  className={`w-full font-sora font-semibold px-6 py-3 rounded-lg transition-colors inline-flex items-center justify-center gap-2 mb-8 ${plan.buttonBg}`}
                 >
-                  Get Started <ArrowRight size={16} />
+                  Subscribe <ArrowRight size={16} />
                 </a>
 
-                <ul className="space-y-3">
-                  {plan.features.map((feat) => (
-                    <li key={feat} className="flex items-start gap-3">
-                      <CheckCircle size={16} className={`flex-shrink-0 mt-0.5 ${plan.featured ? "text-white/80" : "text-[#1677E8]"}`} />
-                      <span className={`font-inter text-sm ${plan.featured ? "text-white/80" : "text-[#171717]"}`}>
-                        {feat}
-                      </span>
-                    </li>
+                <div className="space-y-3">
+                  {plan.features.map((f) => (
+                    <div key={f} className="flex items-start gap-3">
+                      <CheckCircle size={15} className={`${plan.color} flex-shrink-0 mt-0.5`} />
+                      <span className="font-inter text-[#F5F5F0] text-sm">{f}</span>
+                    </div>
                   ))}
-                </ul>
+                </div>
+
+                <p className="mt-6 text-[#929292] text-xs font-inter border-t border-[#292929] pt-4">
+                  *{plan.note}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-[#FAFAFA]">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h3 className="font-manrope font-bold text-2xl text-[#171717] mb-4">
-            Not sure which plan is right?
-          </h3>
-          <p className="font-inter text-[#777777] mb-6">
-            All plans are month-to-month. You can upgrade, downgrade or cancel at any time. Payment is processed securely through Selar.
+      {/* Enterprise contact */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="font-sora font-bold text-3xl text-white mb-4">Need a Custom Arrangement?</h2>
+          <p className="font-inter text-[#929292] text-lg mb-8">
+            For organizations with specific requirements, volume needs or enterprise security programs, contact us directly.
           </p>
-          <p className="font-inter text-[#777777] text-sm">
-            Need a custom arrangement for a large organization? Contact us to discuss your requirements.
-          </p>
+          <Link href="/contact" className="inline-flex items-center gap-2 border border-[#292929] text-white font-sora font-semibold px-8 py-4 rounded-lg hover:border-[#D7FF00]/40 transition-colors">
+            Contact Sales <ArrowRight size={18} />
+          </Link>
         </div>
       </section>
 
