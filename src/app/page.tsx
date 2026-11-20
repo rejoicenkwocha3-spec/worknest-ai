@@ -2,437 +2,242 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
-  BarChart3,
-  TrendingUp,
-  Brain,
-  ShoppingCart,
-  Factory,
-  Landmark,
-  Package,
-  Cpu,
-  Truck,
-  HeartPulse,
-  Radio,
-  ArrowRight,
-  CheckCircle2,
-  Layers,
-  Target,
-  Zap,
-  LineChart,
-  PieChart,
-  Activity,
+  Camera, BarChart3, Brain, Shield, Users, Bell,
+  ArrowRight, CheckCircle2, Building2, HardHat, Briefcase,
+  TrendingUp, FileText, Eye, Zap, MapPin, Clock
 } from "lucide-react";
 
-const capabilities = [
-  { icon: Landmark, label: "Finance and Financial Planning" },
-  { icon: TrendingUp, label: "Sales and Revenue Forecasting" },
-  { icon: Target, label: "Marketing Performance and Planning" },
-  { icon: Truck, label: "Supply Chain Management" },
-  { icon: Package, label: "Inventory and Demand Forecasting" },
-  { icon: BarChart3, label: "Business Performance Analytics" },
-  { icon: Brain, label: "AI Powered Decision Support" },
-  { icon: Activity, label: "Scenario Planning and Risk Management" },
+const stats = [
+  { value: "2,400+", label: "Active Construction Sites" },
+  { value: "98%", label: "Client Retention Rate" },
+  { value: "45min", label: "Avg. Time Saved Per Day" },
+  { value: "140+", label: "Countries Supported" },
 ];
 
-const solutions = [
+const howItWorks = [
   {
-    title: "Financial Planning",
-    desc: "Monitor budgets, financial performance, revenue and profitability with real time intelligence.",
-    icon: Landmark,
+    step: "01",
+    title: "Connect Your Sites",
+    desc: "Add your construction projects, invite your team and link your existing documentation in minutes.",
   },
   {
-    title: "Demand Planning",
-    desc: "Understand customer demand patterns and forecast future requirements with accuracy.",
-    icon: TrendingUp,
+    step: "02",
+    title: "Upload Site Media",
+    desc: "Capture and upload photos and videos from any device. RemoteSite organises everything by project, date and location.",
   },
   {
-    title: "Sales Planning",
-    desc: "Track sales performance, revenue opportunities and targets from a single connected view.",
-    icon: Target,
+    step: "03",
+    title: "Track and Analyse",
+    desc: "Monitor progress against your plan, identify issues early and let AI surface the insights that matter most.",
   },
   {
-    title: "Supply Chain Planning",
-    desc: "Improve operational visibility and coordinate your supply chain with intelligent planning.",
-    icon: Truck,
-  },
-  {
-    title: "Inventory Intelligence",
-    desc: "Monitor stock levels and identify potential shortages or excess inventory before they become problems.",
-    icon: Package,
-  },
-  {
-    title: "AI Decision Intelligence",
-    desc: "Use AI powered insights to support strategic decisions at every level of your organisation.",
-    icon: Brain,
+    step: "04",
+    title: "Report and Collaborate",
+    desc: "Generate professional reports, share updates with stakeholders and keep your entire team aligned.",
   },
 ];
 
 const features = [
-  { icon: Brain, title: "AI Business Assistant", desc: "An intelligent assistant that understands your business context and delivers actionable insights on demand." },
-  { icon: LineChart, title: "Revenue Forecasting", desc: "Predict revenue outcomes with AI models that learn from your historical performance and market signals." },
-  { icon: BarChart3, title: "Intelligent Analytics", desc: "Transform raw business data into clear, visual intelligence that drives better decision making." },
-  { icon: Layers, title: "Connected Dashboards", desc: "Customisable dashboards that bring every department's data together in one coherent view." },
-  { icon: Activity, title: "Scenario Modelling", desc: "Compare business outcomes before committing. Model risk, opportunity and growth scenarios with confidence." },
-  { icon: PieChart, title: "Automated Reporting", desc: "Eliminate manual reporting. Scheduled, automated reports delivered to the right people at the right time." },
+  {
+    icon: Eye,
+    title: "Remote Site Visibility",
+    desc: "Monitor every construction project from a single, unified dashboard. Know what is happening on site without being there.",
+  },
+  {
+    icon: Brain,
+    title: "AI Construction Intelligence",
+    desc: "Ask questions about your projects in plain language. Get instant answers, progress summaries and risk alerts.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Progress Tracking",
+    desc: "Compare planned milestones against actual progress with visual timelines and percentage completion indicators.",
+  },
+  {
+    icon: Camera,
+    title: "Visual Documentation",
+    desc: "Build a complete visual history of every site with organised photo and video uploads linked to dates and locations.",
+  },
+  {
+    icon: Shield,
+    title: "Issue and Defect Tracking",
+    desc: "Log construction issues, assign them to team members, set priorities and track resolution status in real time.",
+  },
+  {
+    icon: FileText,
+    title: "Automated Reports",
+    desc: "Generate professional project reports with a single click. Export to PDF and share with clients and stakeholders.",
+  },
+  {
+    icon: Users,
+    title: "Team Collaboration",
+    desc: "Invite contractors, engineers and project managers. Assign roles, control access and keep everyone informed.",
+  },
+  {
+    icon: Bell,
+    title: "Notifications and Alerts",
+    desc: "Receive instant notifications about site updates, milestone completions and issues that require your attention.",
+  },
 ];
 
-const industries = [
-  { icon: ShoppingCart, label: "Retail and eCommerce" },
-  { icon: Factory, label: "Manufacturing" },
-  { icon: Landmark, label: "Financial Services" },
-  { icon: Package, label: "Consumer Goods" },
-  { icon: Cpu, label: "Technology and SaaS" },
-  { icon: Truck, label: "Logistics and Distribution" },
-  { icon: HeartPulse, label: "Healthcare" },
-  { icon: Radio, label: "Telecommunications" },
+const solutions = [
+  { icon: Building2, label: "Construction Companies" },
+  { icon: HardHat, label: "General Contractors" },
+  { icon: Briefcase, label: "Project Managers" },
+  { icon: BarChart3, label: "Property Developers" },
+  { icon: MapPin, label: "Civil Engineers" },
+  { icon: Clock, label: "Real Estate Investors" },
 ];
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#050505]">
+    <div style={{ background: "#F7F8FA", minHeight: "100vh" }}>
       <Navbar />
 
       {/* Hero */}
-      <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#2D7EFF]/5 rounded-full blur-3xl" />
-          <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-[#0ECFCF]/4 rounded-full blur-3xl" />
-        </div>
-        <div className="max-w-7xl mx-auto relative">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-[#1C1C1C] border border-[#2A2A2A] rounded-full px-4 py-1.5 mb-8">
-              <span className="w-2 h-2 rounded-full bg-[#2ECC71]" />
-              <span className="text-[#BDBDBD] text-xs font-inter tracking-wide">AI Powered Business Intelligence Platform</span>
-            </div>
-            <h1 className="font-manrope font-extrabold text-5xl sm:text-6xl lg:text-7xl text-white leading-[1.05] tracking-tight mb-6">
-              Business Intelligence.<br />
-              Smarter Planning.<br />
-              <span className="text-gradient-blue">Better Decisions.</span>
-            </h1>
-            <p className="text-[#BDBDBD] text-lg sm:text-xl font-inter leading-relaxed max-w-2xl mx-auto mb-10">
-              PLAN9 AI connects your business data, planning and intelligence into one powerful platform. Make confident decisions, anticipate opportunities and turn business insights into measurable outcomes.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/platform"
-                className="bg-[#2D7EFF] text-white font-manrope font-semibold text-base px-8 py-4 rounded-lg hover:bg-[#1A6AE8] transition-colors inline-flex items-center justify-center gap-2"
-              >
-                Explore the Platform
-                <ArrowRight size={18} />
-              </Link>
-              <Link
-                href="/signup"
-                className="bg-[#1C1C1C] text-white font-manrope font-semibold text-base px-8 py-4 rounded-lg hover:bg-[#2A2A2A] transition-colors border border-[#2A2A2A] inline-flex items-center justify-center"
-              >
-                Get Started
-              </Link>
-            </div>
+      <section
+        style={{
+          background: "linear-gradient(160deg, #101828 0%, #1a2a4a 60%, #101828 100%)",
+          padding: "5rem 0 6rem",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Background grid */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "radial-gradient(circle at 1px 1px, rgba(0,57,255,0.12) 1px, transparent 0)",
+          backgroundSize: "40px 40px",
+          pointerEvents: "none",
+        }} />
+
+        <div className="container-rs" style={{ position: "relative", textAlign: "center" }}>
+          <div className="badge" style={{ marginBottom: "1.5rem", display: "inline-flex" }}>
+            <Zap size={13} />
+            AI-Powered Construction Intelligence
           </div>
 
-          {/* Dashboard preview */}
-          <div className="mt-20 relative">
-            <div className="bg-[#111111] border border-[#2A2A2A] rounded-2xl overflow-hidden card-glow">
-              <div className="bg-[#1C1C1C] border-b border-[#2A2A2A] px-6 py-3 flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#FF5F5F]" />
-                <div className="w-3 h-3 rounded-full bg-[#FFBE2E]" />
-                <div className="w-3 h-3 rounded-full bg-[#2ECC71]" />
-                <span className="ml-4 text-[#777777] text-xs font-inter">PLAN9 AI — Business Intelligence Dashboard</span>
-              </div>
-              <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-                {[
-                  { label: "Revenue YTD", value: "$4.2M", change: "+12.4%", color: "#2ECC71" },
-                  { label: "Forecast Accuracy", value: "94.7%", change: "+2.1%", color: "#2D7EFF" },
-                  { label: "Cost Efficiency", value: "87.3%", change: "+5.6%", color: "#0ECFCF" },
-                  { label: "AI Decisions", value: "1,284", change: "This month", color: "#A78BFA" },
-                ].map((kpi) => (
-                  <div key={kpi.label} className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-xl p-4">
-                    <p className="text-[#777777] text-xs font-inter mb-2">{kpi.label}</p>
-                    <p className="text-white font-manrope font-bold text-2xl mb-1">{kpi.value}</p>
-                    <p className="text-xs font-inter" style={{ color: kpi.color }}>{kpi.change}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="px-6 pb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-2 bg-[#1C1C1C] border border-[#2A2A2A] rounded-xl p-4">
-                  <p className="text-[#BDBDBD] text-sm font-manrope font-semibold mb-4">Revenue Forecast vs Actual</p>
-                  <div className="flex items-end gap-1 h-24">
-                    {[65, 72, 68, 80, 75, 88, 92, 86, 94, 90, 96, 100].map((h, i) => (
-                      <div key={i} className="flex-1 flex flex-col gap-0.5">
-                        <div
-                          className="rounded-sm"
-                          style={{ height: `${h * 0.9}%`, background: i < 9 ? '#2D7EFF' : '#0ECFCF', opacity: i < 9 ? 0.9 : 0.6 }}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex gap-4 mt-3">
-                    <span className="flex items-center gap-1.5 text-xs text-[#777777]"><span className="w-3 h-1.5 rounded bg-[#2D7EFF] block" />Actual</span>
-                    <span className="flex items-center gap-1.5 text-xs text-[#777777]"><span className="w-3 h-1.5 rounded bg-[#0ECFCF] block" />Forecast</span>
-                  </div>
-                </div>
-                <div className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-xl p-4">
-                  <p className="text-[#BDBDBD] text-sm font-manrope font-semibold mb-4">AI Insights</p>
-                  <div className="space-y-3">
-                    {[
-                      { text: "Q4 demand up 18% in Northeast region", color: "#2ECC71" },
-                      { text: "Supply chain delay risk: 3 SKUs flagged", color: "#FFBE2E" },
-                      { text: "Marketing ROI exceeds target by 2.3x", color: "#2D7EFF" },
-                    ].map((insight) => (
-                      <div key={insight.text} className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0" style={{ background: insight.color }} />
-                        <p className="text-[#BDBDBD] text-xs font-inter leading-relaxed">{insight.text}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+          <h1 style={{
+            fontFamily: "var(--font-manrope)",
+            fontWeight: 900,
+            fontSize: "clamp(2.25rem, 5vw, 3.75rem)",
+            lineHeight: 1.1,
+            color: "#FFFFFF",
+            maxWidth: "900px",
+            margin: "0 auto 1.5rem",
+          }}>
+            See Every Site. Understand Every Detail. Manage Everything Remotely.
+          </h1>
 
-      {/* Business intelligence section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="font-manrope font-extrabold text-4xl sm:text-5xl text-[#050505] leading-tight mb-6">
-                One connected platform for every business decision
-              </h2>
-              <p className="text-[#555555] font-inter text-lg leading-relaxed mb-8">
-                Most businesses operate with fragmented tools, disconnected data and manual reporting processes that slow decision making. PLAN9 AI brings your financial, operational and commercial intelligence together in one platform so your teams can act with confidence.
-              </p>
-              <div className="space-y-4">
-                {[
-                  "Replace spreadsheets with real time intelligence",
-                  "Connect data from every department in one platform",
-                  "Move from reactive reporting to proactive planning",
-                  "Forecast with AI instead of guessing with historical data",
-                ].map((point) => (
-                  <div key={point} className="flex items-start gap-3">
-                    <CheckCircle2 size={20} className="text-[#2D7EFF] flex-shrink-0 mt-0.5" />
-                    <p className="text-[#333333] font-inter text-sm leading-relaxed">{point}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-10">
-                <Link
-                  href="/platform"
-                  className="bg-[#050505] text-white font-manrope font-semibold text-sm px-7 py-3.5 rounded-lg hover:bg-[#1C1C1C] transition-colors inline-flex items-center gap-2"
-                >
-                  Explore the Platform
-                  <ArrowRight size={16} />
-                </Link>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              {capabilities.map(({ icon: Icon, label }) => (
-                <div key={label} className="bg-[#F8F8F8] border border-[#EBEBEB] rounded-xl p-5">
-                  <div className="w-9 h-9 rounded-lg bg-[#EBF3FF] flex items-center justify-center mb-3">
-                    <Icon size={18} className="text-[#2D7EFF]" />
-                  </div>
-                  <p className="text-[#111111] font-manrope font-semibold text-sm leading-snug">{label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+          <p style={{
+            fontSize: "clamp(1rem, 2vw, 1.1875rem)",
+            color: "rgba(255,255,255,0.72)",
+            maxWidth: "640px",
+            margin: "0 auto 2.5rem",
+            lineHeight: 1.7,
+          }}>
+            RemoteSite gives construction teams complete visibility into their projects with AI-powered site monitoring, progress tracking and intelligent reporting.
+          </p>
 
-      {/* Platform overview */}
-      <section className="py-24 bg-[#050505]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-manrope font-extrabold text-4xl sm:text-5xl text-white leading-tight mb-5">
-              The PLAN9 AI connected ecosystem
-            </h2>
-            <p className="text-[#BDBDBD] font-inter text-lg leading-relaxed">
-              A single platform where every business department shares the same data, the same forecasts and the same understanding of performance.
-            </p>
-          </div>
-          <div className="relative bg-[#111111] border border-[#2A2A2A] rounded-2xl p-8 overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-[#2D7EFF]/5 rounded-full blur-2xl" />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-              {[
-                {
-                  title: "Data Layer",
-                  desc: "Connect your existing systems, spreadsheets and data sources into a unified business intelligence foundation.",
-                  items: ["ERP and CRM integration", "Spreadsheet migration", "Real time data sync"],
-                  color: "#2D7EFF",
-                },
-                {
-                  title: "Intelligence Layer",
-                  desc: "AI models analyse your connected data to surface patterns, forecast outcomes and identify opportunities automatically.",
-                  items: ["Predictive forecasting", "Anomaly detection", "Trend identification"],
-                  color: "#0ECFCF",
-                },
-                {
-                  title: "Decision Layer",
-                  desc: "Translate intelligence into action with dashboards, reports and AI recommendations built for every role in your business.",
-                  items: ["Executive dashboards", "Departmental views", "Actionable recommendations"],
-                  color: "#2ECC71",
-                },
-              ].map((layer) => (
-                <div key={layer.title} className="relative">
-                  <div className="w-10 h-10 rounded-lg flex items-center justify-center mb-4" style={{ background: `${layer.color}18` }}>
-                    <div className="w-4 h-4 rounded" style={{ background: layer.color }} />
-                  </div>
-                  <h3 className="font-manrope font-bold text-white text-xl mb-3">{layer.title}</h3>
-                  <p className="text-[#BDBDBD] font-inter text-sm leading-relaxed mb-5">{layer.desc}</p>
-                  <ul className="space-y-2">
-                    {layer.items.map((item) => (
-                      <li key={item} className="flex items-center gap-2 text-[#777777] text-sm font-inter">
-                        <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: layer.color }} />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Solutions */}
-      <section className="py-24 bg-[#0D0D0D]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-manrope font-extrabold text-4xl sm:text-5xl text-white leading-tight mb-5">
-              Built for the problems that matter most
-            </h2>
-            <p className="text-[#BDBDBD] font-inter text-lg leading-relaxed">
-              PLAN9 AI addresses the core planning and performance challenges that every growing business faces.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {solutions.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-6 hover:border-[#2D7EFF]/40 transition-colors group">
-                <div className="w-10 h-10 rounded-lg bg-[#2D7EFF]/10 flex items-center justify-center mb-5">
-                  <Icon size={20} className="text-[#2D7EFF]" />
-                </div>
-                <h3 className="font-manrope font-bold text-white text-lg mb-3">{title}</h3>
-                <p className="text-[#BDBDBD] font-inter text-sm leading-relaxed">{desc}</p>
-              </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link
-              href="/solutions"
-              className="inline-flex items-center gap-2 text-[#2D7EFF] font-manrope font-semibold text-sm hover:text-[#0ECFCF] transition-colors"
-            >
-              View all solutions
-              <ArrowRight size={16} />
+          <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/signup" className="btn-primary" style={{ fontSize: "1rem", padding: "0.875rem 2rem" }}>
+              Get Started <ArrowRight size={18} />
+            </Link>
+            <Link href="/platform" className="btn-secondary" style={{ fontSize: "1rem", padding: "0.875rem 2rem", color: "#FFFFFF", borderColor: "rgba(255,255,255,0.25)", backgroundColor: "rgba(255,255,255,0.08)" }}>
+              Explore Platform
             </Link>
           </div>
-        </div>
-      </section>
 
-      {/* Features */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-manrope font-extrabold text-4xl sm:text-5xl text-[#050505] leading-tight mb-5">
-              Every capability your business needs
-            </h2>
-            <p className="text-[#555555] font-inter text-lg leading-relaxed">
-              A complete set of tools for planning, forecasting, analytics and AI driven business intelligence.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-[#F8F8F8] border border-[#EBEBEB] rounded-xl p-6">
-                <div className="w-10 h-10 rounded-lg bg-[#EBF3FF] flex items-center justify-center mb-5">
-                  <Icon size={20} className="text-[#2D7EFF]" />
-                </div>
-                <h3 className="font-manrope font-bold text-[#111111] text-lg mb-3">{title}</h3>
-                <p className="text-[#555555] font-inter text-sm leading-relaxed">{desc}</p>
+          {/* Dashboard preview mockup */}
+          <div style={{
+            marginTop: "4rem",
+            background: "#FFFFFF",
+            borderRadius: "1rem",
+            border: "1px solid #E2E6F0",
+            boxShadow: "0 24px 80px rgba(0,0,0,0.3)",
+            overflow: "hidden",
+            maxWidth: "900px",
+            margin: "4rem auto 0",
+          }}>
+            {/* Browser chrome */}
+            <div style={{ background: "#F7F8FA", borderBottom: "1px solid #E2E6F0", padding: "0.75rem 1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <div style={{ display: "flex", gap: "0.375rem" }}>
+                <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#EF4444" }} />
+                <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#F59E0B" }} />
+                <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#10B981" }} />
               </div>
-            ))}
-          </div>
-          <div className="text-center mt-10">
-            <Link
-              href="/features"
-              className="inline-flex items-center gap-2 text-[#2D7EFF] font-manrope font-semibold text-sm hover:text-[#1A6AE8] transition-colors"
-            >
-              See all features
-              <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* AI intelligence section */}
-      <section className="py-24 bg-[#050505]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="font-manrope font-extrabold text-4xl sm:text-5xl text-white leading-tight mb-6">
-                AI that works like a senior analyst for your entire business
-              </h2>
-              <p className="text-[#BDBDBD] font-inter text-lg leading-relaxed mb-8">
-                PLAN9 AI continuously analyses your business data, identifies trends and delivers clear recommendations before problems become crises or opportunities pass you by.
-              </p>
-              <div className="space-y-5">
-                {[
-                  { title: "Trend Identification", desc: "Detect performance shifts across departments before they appear in monthly reports.", color: "#2D7EFF" },
-                  { title: "Predictive Forecasting", desc: "AI models forecast revenue, demand and risk using real time data, not static assumptions.", color: "#0ECFCF" },
-                  { title: "Decision Confidence", desc: "Every recommendation is backed by data, giving your leadership team the confidence to act.", color: "#2ECC71" },
-                ].map((item) => (
-                  <div key={item.title} className="flex items-start gap-4">
-                    <div className="w-1 h-12 rounded-full flex-shrink-0 mt-1" style={{ background: item.color }} />
-                    <div>
-                      <p className="font-manrope font-semibold text-white text-base mb-1">{item.title}</p>
-                      <p className="text-[#BDBDBD] font-inter text-sm leading-relaxed">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
+              <div style={{ flex: 1, background: "#E2E6F0", borderRadius: "0.25rem", height: "24px", maxWidth: "280px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ fontSize: "0.75rem", color: "#6B7280" }}>app.remotesite.io/dashboard</span>
               </div>
             </div>
-            <div className="bg-[#111111] border border-[#2A2A2A] rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-8 h-8 rounded-lg bg-[#2D7EFF]/15 flex items-center justify-center">
-                  <Brain size={16} className="text-[#2D7EFF]" />
+
+            {/* Dashboard content */}
+            <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", minHeight: "380px" }}>
+              {/* Sidebar */}
+              <div style={{ background: "#101828", padding: "1.25rem 0.75rem", borderRight: "1px solid rgba(255,255,255,0.08)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0 0.5rem 1rem", marginBottom: "0.5rem", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                  <div style={{ width: 24, height: 24, borderRadius: "6px", background: "#0039FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ color: "#fff", fontSize: "0.6875rem", fontWeight: 800 }}>RS</span>
+                  </div>
+                  <span style={{ color: "#FFFFFF", fontWeight: 700, fontSize: "0.8125rem" }}>RemoteSite</span>
                 </div>
-                <div>
-                  <p className="text-white font-manrope font-semibold text-sm">AI Intelligence Summary</p>
-                  <p className="text-[#777777] font-inter text-xs">Updated in real time</p>
-                </div>
-              </div>
-              <div className="space-y-4">
-                {[
-                  { label: "Revenue Forecast Confidence", value: 94, color: "#2ECC71" },
-                  { label: "Demand Forecast Accuracy", value: 91, color: "#2D7EFF" },
-                  { label: "Supply Chain Risk Score", value: 23, color: "#FFBE2E", invert: true },
-                  { label: "AI Decision Coverage", value: 78, color: "#0ECFCF" },
-                ].map((metric) => (
-                  <div key={metric.label}>
-                    <div className="flex justify-between mb-1.5">
-                      <span className="text-[#BDBDBD] font-inter text-xs">{metric.label}</span>
-                      <span className="font-manrope font-semibold text-sm" style={{ color: metric.color }}>{metric.value}%</span>
-                    </div>
-                    <div className="w-full h-1.5 bg-[#2A2A2A] rounded-full overflow-hidden">
-                      <div
-                        className="h-full rounded-full"
-                        style={{ width: `${metric.value}%`, background: metric.color }}
-                      />
-                    </div>
+                {["Overview", "My Projects", "Site Monitoring", "AI Insights", "Reports", "Team"].map((item, i) => (
+                  <div key={item} style={{
+                    padding: "0.5rem 0.75rem",
+                    borderRadius: "0.375rem",
+                    color: i === 0 ? "#FFFFFF" : "rgba(255,255,255,0.5)",
+                    background: i === 0 ? "rgba(0,57,255,0.3)" : "transparent",
+                    fontSize: "0.8125rem",
+                    marginBottom: "0.125rem",
+                    fontWeight: i === 0 ? 600 : 400,
+                  }}>
+                    {item}
                   </div>
                 ))}
               </div>
-              <div className="mt-6 pt-5 border-t border-[#2A2A2A]">
-                <p className="text-[#777777] font-inter text-xs mb-3">Latest AI insights</p>
-                <div className="space-y-2">
+
+              {/* Main area */}
+              <div style={{ background: "#F7F8FA", padding: "1.25rem" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: "1rem", color: "#101828", fontFamily: "var(--font-manrope)" }}>Project Overview</div>
+                    <div style={{ fontSize: "0.75rem", color: "#6B7280" }}>November 2026</div>
+                  </div>
+                  <div style={{ background: "#0039FF", color: "#fff", fontSize: "0.6875rem", padding: "0.25rem 0.625rem", borderRadius: "0.375rem", fontWeight: 600 }}>+ New Project</div>
+                </div>
+
+                {/* Stats row */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "0.625rem", marginBottom: "1rem" }}>
                   {[
-                    "Northeast region demand 18% above forecast",
-                    "3 supplier delivery risks detected this week",
-                    "Marketing channel ROI up 2.3x quarter on quarter",
-                  ].map((insight, i) => (
-                    <div key={i} className="flex items-start gap-2">
-                      <Zap size={12} className="text-[#2D7EFF] flex-shrink-0 mt-0.5" />
-                      <p className="text-[#BDBDBD] font-inter text-xs leading-relaxed">{insight}</p>
+                    { label: "Total Projects", val: "12" },
+                    { label: "Active Sites", val: "8" },
+                    { label: "On Track", val: "6" },
+                    { label: "At Risk", val: "2" },
+                  ].map((s) => (
+                    <div key={s.label} style={{ background: "#FFFFFF", borderRadius: "0.5rem", padding: "0.625rem 0.75rem", border: "1px solid #E2E6F0" }}>
+                      <div style={{ fontSize: "1.25rem", fontWeight: 800, color: "#101828", fontFamily: "var(--font-manrope)" }}>{s.val}</div>
+                      <div style={{ fontSize: "0.625rem", color: "#6B7280" }}>{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Project list preview */}
+                <div style={{ background: "#FFFFFF", borderRadius: "0.5rem", border: "1px solid #E2E6F0", overflow: "hidden" }}>
+                  {[
+                    { name: "Riverside Tower", pct: 72, status: "On Track" },
+                    { name: "Harbour View Residences", pct: 45, status: "At Risk" },
+                    { name: "Central Business Hub", pct: 91, status: "On Track" },
+                  ].map((p) => (
+                    <div key={p.name} style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "0.625rem 0.875rem", borderBottom: "1px solid #F3F4F6" }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: "0.75rem", fontWeight: 600, color: "#101828" }}>{p.name}</div>
+                        <div style={{ background: "#E2E6F0", borderRadius: "9999px", height: "4px", marginTop: "0.25rem", overflow: "hidden" }}>
+                          <div style={{ width: `${p.pct}%`, height: "100%", background: "#0039FF", borderRadius: "9999px" }} />
+                        </div>
+                      </div>
+                      <div style={{ fontSize: "0.625rem", fontWeight: 600, color: p.status === "On Track" ? "#065F46" : "#92400E", background: p.status === "On Track" ? "#D1FAE5" : "#FEF3C7", padding: "0.125rem 0.375rem", borderRadius: "9999px" }}>
+                        {p.status}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -442,50 +247,237 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Industries */}
-      <section className="py-24 bg-[#0D0D0D]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="font-manrope font-extrabold text-4xl sm:text-5xl text-white leading-tight mb-5">
-              Built for your industry
-            </h2>
-            <p className="text-[#BDBDBD] font-inter text-lg leading-relaxed">
-              PLAN9 AI supports businesses across a wide range of industries with tailored planning and intelligence capabilities.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {industries.map(({ icon: Icon, label }) => (
-              <div key={label} className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-6 text-center hover:border-[#2D7EFF]/40 transition-colors">
-                <Icon size={28} className="text-[#2D7EFF] mx-auto mb-3" />
-                <p className="text-[#BDBDBD] font-manrope font-semibold text-sm">{label}</p>
+      {/* Stats */}
+      <section style={{ background: "#FFFFFF", padding: "3rem 0", borderBottom: "1px solid #E2E6F0" }}>
+        <div className="container-rs">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "2rem", textAlign: "center" }}>
+            {stats.map((s) => (
+              <div key={s.label}>
+                <div style={{ fontFamily: "var(--font-manrope)", fontWeight: 900, fontSize: "2rem", color: "#0039FF" }}>{s.value}</div>
+                <div style={{ fontSize: "0.875rem", color: "#6B7280", marginTop: "0.25rem" }}>{s.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Final CTA */}
-      <section className="py-24 bg-[#050505]">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-[#111111] border border-[#2A2A2A] rounded-2xl p-12 relative overflow-hidden">
-            <div className="absolute inset-0 pointer-events-none">
-              <div className="absolute inset-0 bg-gradient-to-br from-[#2D7EFF]/5 to-[#0ECFCF]/5" />
-            </div>
-            <div className="relative">
-              <h2 className="font-manrope font-extrabold text-4xl sm:text-5xl text-white leading-tight mb-5">
-                Your next business decision starts with better intelligence.
+      {/* How it works */}
+      <section className="section-padding">
+        <div className="container-rs">
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
+            <div className="badge" style={{ marginBottom: "1rem", display: "inline-flex" }}>How RemoteSite Works</div>
+            <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", margin: "0 0 1rem" }}>
+              From site upload to AI insight<br />in four steps
+            </h2>
+            <p style={{ color: "#6B7280", fontSize: "1.0625rem", maxWidth: "520px", margin: "0 auto" }}>
+              RemoteSite turns raw site data into structured, actionable project intelligence.
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.5rem" }}>
+            {howItWorks.map((s) => (
+              <div key={s.step} className="card card-hover">
+                <div style={{ fontFamily: "var(--font-manrope)", fontWeight: 900, fontSize: "2.5rem", color: "#EAF0FF", lineHeight: 1 }}>
+                  {s.step}
+                </div>
+                <h3 style={{ fontSize: "1.0625rem", margin: "0.75rem 0 0.5rem", color: "#101828" }}>{s.title}</h3>
+                <p style={{ fontSize: "0.9375rem", color: "#6B7280", margin: 0, lineHeight: 1.6 }}>{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features */}
+      <section className="section-padding" style={{ background: "#FFFFFF" }}>
+        <div className="container-rs">
+          <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
+            <div className="badge" style={{ marginBottom: "1rem", display: "inline-flex" }}>Platform Capabilities</div>
+            <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", margin: "0 0 1rem" }}>
+              Everything you need to manage<br />construction projects remotely
+            </h2>
+            <p style={{ color: "#6B7280", fontSize: "1.0625rem", maxWidth: "520px", margin: "0 auto" }}>
+              RemoteSite combines monitoring, intelligence and collaboration in one unified platform.
+            </p>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.25rem" }}>
+            {features.map((f) => {
+              const Icon = f.icon;
+              return (
+                <div key={f.title} className="card card-hover" style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: "10px",
+                    background: "#EAF0FF",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <Icon size={22} color="#0039FF" />
+                  </div>
+                  <h3 style={{ fontSize: "1rem", margin: 0, color: "#101828" }}>{f.title}</h3>
+                  <p style={{ fontSize: "0.9rem", color: "#6B7280", margin: 0, lineHeight: 1.6 }}>{f.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
+            <Link href="/features" className="btn-secondary">
+              See all features <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* AI Section */}
+      <section className="section-padding" style={{ background: "linear-gradient(135deg, #101828 0%, #1a2a4a 100%)" }}>
+        <div className="container-rs">
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }}>
+            <div>
+              <div className="badge" style={{ marginBottom: "1.25rem", display: "inline-flex", background: "rgba(0,57,255,0.2)", borderColor: "rgba(0,57,255,0.4)", color: "#7ba7ff" }}>
+                <Brain size={13} />
+                AI Construction Assistant
+              </div>
+              <h2 style={{ color: "#FFFFFF", fontSize: "clamp(1.75rem, 3vw, 2.25rem)", margin: "0 0 1.25rem", lineHeight: 1.2 }}>
+                Ask questions about your projects. Get instant answers.
               </h2>
-              <p className="text-[#BDBDBD] font-inter text-lg leading-relaxed mb-10 max-w-2xl mx-auto">
-                Join businesses that have moved from disconnected data to confident, AI powered decisions. PLAN9 AI is ready to transform how your organisation plans and performs.
+              <p style={{ color: "rgba(255,255,255,0.65)", fontSize: "1.0625rem", lineHeight: 1.7, marginBottom: "2rem" }}>
+                The RemoteSite AI assistant understands your actual project data. Ask it which sites are behind schedule, what issues were reported this week or what needs attention right now.
               </p>
-              <Link
-                href="/signup"
-                className="bg-[#2D7EFF] text-white font-manrope font-bold text-base px-10 py-4 rounded-lg hover:bg-[#1A6AE8] transition-colors inline-flex items-center gap-2"
-              >
-                Get Started With PLAN9 AI
-                <ArrowRight size={18} />
-              </Link>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                {[
+                  "Which projects are falling behind schedule?",
+                  "Summarise the latest site updates across all projects.",
+                  "Generate a weekly construction report for Riverside Tower.",
+                  "What issues need immediate attention?",
+                ].map((q) => (
+                  <div key={q} style={{
+                    display: "flex", alignItems: "center", gap: "0.75rem",
+                    background: "rgba(255,255,255,0.06)", borderRadius: "0.5rem",
+                    padding: "0.75rem 1rem", border: "1px solid rgba(255,255,255,0.1)",
+                  }}>
+                    <CheckCircle2 size={16} color="#0039FF" style={{ flexShrink: 0 }} />
+                    <span style={{ color: "rgba(255,255,255,0.8)", fontSize: "0.9375rem" }}>{q}</span>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Chat preview */}
+            <div style={{
+              background: "rgba(255,255,255,0.05)", borderRadius: "1rem",
+              border: "1px solid rgba(255,255,255,0.1)", padding: "1.25rem",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem", paddingBottom: "0.75rem", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                <Brain size={18} color="#0039FF" />
+                <span style={{ color: "#FFFFFF", fontWeight: 600, fontSize: "0.9375rem" }}>AI Assistant</span>
+                <div style={{ marginLeft: "auto", width: 8, height: 8, borderRadius: "50%", background: "#10B981" }} />
+              </div>
+              {[
+                { role: "user", text: "Which projects are behind schedule?" },
+                { role: "ai", text: "Based on your current data, 2 of your 8 active projects are behind schedule:\n\n• Harbour View Residences: 12 days behind, 45% complete vs 58% planned\n• Westfield Extension: 7 days behind, 23% complete vs 31% planned\n\nWould you like me to generate a detailed report for either project?" },
+              ].map((m, i) => (
+                <div key={i} style={{ marginBottom: "0.875rem", display: "flex", justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
+                  <div style={{
+                    background: m.role === "user" ? "#0039FF" : "rgba(255,255,255,0.08)",
+                    borderRadius: m.role === "user" ? "1rem 1rem 0 1rem" : "1rem 1rem 1rem 0",
+                    padding: "0.75rem 1rem",
+                    maxWidth: "88%",
+                    color: "#FFFFFF",
+                    fontSize: "0.875rem",
+                    lineHeight: 1.6,
+                    whiteSpace: "pre-line",
+                  }}>
+                    {m.text}
+                  </div>
+                </div>
+              ))}
+              <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}>
+                <input disabled placeholder="Ask about your projects..." style={{
+                  flex: 1, padding: "0.625rem 0.875rem", borderRadius: "0.5rem",
+                  background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
+                  color: "rgba(255,255,255,0.5)", fontSize: "0.875rem", cursor: "not-allowed",
+                }} />
+                <div style={{ background: "#0039FF", borderRadius: "0.5rem", width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <ArrowRight size={16} color="white" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <style>{`
+            @media (max-width: 768px) {
+              .ai-grid { grid-template-columns: 1fr !important; }
+            }
+          `}</style>
+        </div>
+      </section>
+
+      {/* Solutions */}
+      <section className="section-padding">
+        <div className="container-rs">
+          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+            <div className="badge" style={{ marginBottom: "1rem", display: "inline-flex" }}>Solutions</div>
+            <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", margin: "0 0 1rem" }}>
+              Built for every construction professional
+            </h2>
+            <p style={{ color: "#6B7280", fontSize: "1.0625rem", maxWidth: "480px", margin: "0 auto" }}>
+              From developers to investors, RemoteSite gives your team the visibility they need.
+            </p>
+          </div>
+          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", justifyContent: "center" }}>
+            {solutions.map((s) => {
+              const Icon = s.icon;
+              return (
+                <div key={s.label} style={{
+                  display: "flex", alignItems: "center", gap: "0.625rem",
+                  background: "#FFFFFF", border: "1px solid #E2E6F0",
+                  borderRadius: "0.625rem", padding: "0.75rem 1.25rem",
+                  fontSize: "0.9375rem", fontWeight: 500, color: "#252B36",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
+                }}>
+                  <Icon size={18} color="#0039FF" />
+                  {s.label}
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ textAlign: "center", marginTop: "2rem" }}>
+            <Link href="/solutions" className="btn-ghost" style={{ color: "#0039FF" }}>
+              View all solutions <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section style={{ background: "#0039FF", padding: "5rem 0" }}>
+        <div className="container-rs" style={{ textAlign: "center" }}>
+          <h2 style={{ color: "#FFFFFF", fontSize: "clamp(1.75rem, 3vw, 2.75rem)", margin: "0 0 1.25rem", fontFamily: "var(--font-manrope)", fontWeight: 800 }}>
+            Ready to see your sites from anywhere?
+          </h2>
+          <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1.0625rem", maxWidth: "480px", margin: "0 auto 2.5rem" }}>
+            Join thousands of construction professionals who use RemoteSite to monitor projects, track progress and generate reports remotely.
+          </p>
+          <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
+            <Link href="/signup" style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              background: "#FFFFFF", color: "#0039FF",
+              fontWeight: 700, fontSize: "1rem",
+              padding: "0.9375rem 2rem", borderRadius: "0.5rem",
+              textDecoration: "none", transition: "opacity 0.15s",
+            }}>
+              Get Started Free <ArrowRight size={18} />
+            </Link>
+            <Link href="/pricing" style={{
+              display: "inline-flex", alignItems: "center", gap: "0.5rem",
+              background: "rgba(255,255,255,0.12)", color: "#FFFFFF",
+              fontWeight: 600, fontSize: "1rem",
+              padding: "0.9375rem 2rem", borderRadius: "0.5rem",
+              border: "1.5px solid rgba(255,255,255,0.3)",
+              textDecoration: "none",
+            }}>
+              View Pricing
+            </Link>
           </div>
         </div>
       </section>

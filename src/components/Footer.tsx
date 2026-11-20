@@ -1,9 +1,16 @@
 export default function Footer() {
   return (
-    <footer className="bg-[#050505] border-t border-[#2A2A2A] py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <p className="text-[#777777] font-inter text-sm">© 2026 PLAN9 AI</p>
-      </div>
+    <footer
+      style={{
+        borderTop: "1px solid #E2E6F0",
+        background: "#FFFFFF",
+        padding: "1.5rem",
+        textAlign: "center",
+      }}
+    >
+      <p style={{ fontSize: "0.875rem", color: "#6B7280", margin: 0 }}>
+        &copy; 2026 RemoteSite
+      </p>
     </footer>
   );
 }

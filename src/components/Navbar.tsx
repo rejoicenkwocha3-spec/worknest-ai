@@ -1,67 +1,132 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import Plan9Logo from "./Plan9Logo";
+import RemoteSiteLogo from "./RemoteSiteLogo";
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#050505]/95 backdrop-blur-sm border-b border-[#2A2A2A]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2.5">
-            <Plan9Logo size={34} />
-            <span className="font-manrope font-bold text-white text-xl tracking-tight">PLAN9 AI</span>
-          </Link>
+    <nav
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        background: "rgba(255,255,255,0.97)",
+        borderBottom: "1px solid #E2E6F0",
+        backdropFilter: "blur(8px)",
+      }}
+    >
+      <div className="container-rs" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "68px" }}>
+        {/* Logo */}
+        <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.625rem", textDecoration: "none" }}>
+          <RemoteSiteLogo size={36} />
+          <span style={{ fontFamily: "var(--font-manrope)", fontWeight: 800, fontSize: "1.125rem", color: "#101828" }}>
+            RemoteSite
+          </span>
+        </Link>
 
-          <div className="hidden md:flex items-center gap-8">
-            <Link href="/platform" className="text-[#BDBDBD] hover:text-white font-inter text-sm transition-colors">Platform</Link>
-            <Link href="/solutions" className="text-[#BDBDBD] hover:text-white font-inter text-sm transition-colors">Solutions</Link>
-            <Link href="/features" className="text-[#BDBDBD] hover:text-white font-inter text-sm transition-colors">Features</Link>
-            <Link href="/pricing" className="text-[#BDBDBD] hover:text-white font-inter text-sm transition-colors">Pricing</Link>
-          </div>
-
-          <div className="hidden md:flex items-center gap-4">
-            <Link href="/login" className="text-[#BDBDBD] hover:text-white font-inter text-sm transition-colors">Login</Link>
-            <Link
-              href="/signup"
-              className="bg-[#2D7EFF] text-white font-manrope font-semibold text-sm px-5 py-2.5 rounded-lg hover:bg-[#1A6AE8] transition-colors"
-            >
-              Get Started
-            </Link>
-          </div>
-
-          <button
-            className="md:hidden text-white p-2"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+        {/* Desktop Nav */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }} className="hidden-mobile">
+          <NavLink href="/platform">Platform</NavLink>
+          <NavLink href="/solutions">Solutions</NavLink>
+          <NavLink href="/features">Features</NavLink>
+          <NavLink href="/pricing">Pricing</NavLink>
         </div>
+
+        {/* Desktop CTA */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }} className="hidden-mobile">
+          <Link href="/login" className="btn-ghost" style={{ padding: "0.5rem 1rem", fontSize: "0.9375rem" }}>
+            Log in
+          </Link>
+          <Link href="/signup" className="btn-primary" style={{ padding: "0.5rem 1.25rem", fontSize: "0.9375rem" }}>
+            Get Started
+          </Link>
+        </div>
+
+        {/* Mobile hamburger */}
+        <button
+          onClick={() => setOpen(!open)}
+          style={{ background: "none", border: "none", cursor: "pointer", color: "#101828", padding: "0.25rem" }}
+          className="show-mobile"
+        >
+          {open ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
 
-      {mobileOpen && (
-        <div className="md:hidden bg-[#0D0D0D] border-t border-[#2A2A2A] px-4 py-6 space-y-4">
-          <Link href="/platform" className="block text-[#BDBDBD] hover:text-white font-inter text-sm py-2" onClick={() => setMobileOpen(false)}>Platform</Link>
-          <Link href="/solutions" className="block text-[#BDBDBD] hover:text-white font-inter text-sm py-2" onClick={() => setMobileOpen(false)}>Solutions</Link>
-          <Link href="/features" className="block text-[#BDBDBD] hover:text-white font-inter text-sm py-2" onClick={() => setMobileOpen(false)}>Features</Link>
-          <Link href="/pricing" className="block text-[#BDBDBD] hover:text-white font-inter text-sm py-2" onClick={() => setMobileOpen(false)}>Pricing</Link>
-          <div className="pt-4 border-t border-[#2A2A2A] flex flex-col gap-3">
-            <Link href="/login" className="block text-[#BDBDBD] hover:text-white font-inter text-sm py-2" onClick={() => setMobileOpen(false)}>Login</Link>
-            <Link
-              href="/signup"
-              className="block bg-[#2D7EFF] text-white font-manrope font-semibold text-sm px-5 py-2.5 rounded-lg hover:bg-[#1A6AE8] transition-colors text-center"
-              onClick={() => setMobileOpen(false)}
-            >
+      {/* Mobile menu */}
+      {open && (
+        <div style={{ background: "#FFFFFF", borderTop: "1px solid #E2E6F0", padding: "1rem 1.5rem 1.5rem" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+            <MobileLink href="/platform" onClick={() => setOpen(false)}>Platform</MobileLink>
+            <MobileLink href="/solutions" onClick={() => setOpen(false)}>Solutions</MobileLink>
+            <MobileLink href="/features" onClick={() => setOpen(false)}>Features</MobileLink>
+            <MobileLink href="/pricing" onClick={() => setOpen(false)}>Pricing</MobileLink>
+            <div style={{ height: "1px", background: "#E2E6F0", margin: "0.5rem 0" }} />
+            <MobileLink href="/login" onClick={() => setOpen(false)}>Log in</MobileLink>
+            <Link href="/signup" className="btn-primary" style={{ marginTop: "0.5rem", justifyContent: "center" }} onClick={() => setOpen(false)}>
               Get Started
             </Link>
           </div>
         </div>
       )}
+
+      <style>{`
+        .hidden-mobile { display: flex; }
+        .show-mobile { display: none; }
+        @media (max-width: 768px) {
+          .hidden-mobile { display: none !important; }
+          .show-mobile { display: flex !important; }
+        }
+      `}</style>
     </nav>
+  );
+}
+
+function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      style={{
+        padding: "0.5rem 0.75rem",
+        borderRadius: "0.5rem",
+        fontSize: "0.9375rem",
+        fontWeight: 500,
+        color: "#252B36",
+        textDecoration: "none",
+        transition: "background-color 0.15s, color 0.15s",
+      }}
+      onMouseEnter={(e) => {
+        (e.target as HTMLAnchorElement).style.backgroundColor = "#EAF0FF";
+        (e.target as HTMLAnchorElement).style.color = "#0039FF";
+      }}
+      onMouseLeave={(e) => {
+        (e.target as HTMLAnchorElement).style.backgroundColor = "transparent";
+        (e.target as HTMLAnchorElement).style.color = "#252B36";
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
+
+function MobileLink({ href, children, onClick }: { href: string; children: React.ReactNode; onClick: () => void }) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      style={{
+        padding: "0.75rem 0.5rem",
+        fontSize: "1rem",
+        fontWeight: 500,
+        color: "#252B36",
+        textDecoration: "none",
+        display: "block",
+      }}
+    >
+      {children}
+    </Link>
   );
 }

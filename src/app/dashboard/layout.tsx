@@ -1,23 +1,16 @@
-export const dynamic = "force-dynamic";
-
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 import DashboardSidebar from "@/components/DashboardSidebar";
+import DashboardHeader from "@/components/DashboardHeader";
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
-
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-[#050505]">
+    <div style={{ display: "flex", minHeight: "100vh", background: "#F7F8FA" }}>
       <DashboardSidebar />
-      <main className="flex-1 overflow-auto lg:ml-60 mt-14 lg:mt-0">
-        {children}
-      </main>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+        <DashboardHeader />
+        <main style={{ flex: 1, padding: "1.75rem 2rem", overflowY: "auto" }}>
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

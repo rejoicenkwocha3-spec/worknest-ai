@@ -1,148 +1,278 @@
 "use client";
 
-import { useState } from "react";
-import { FolderKanban, Plus, Users, Clock, MoreHorizontal, CheckCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Plus, Pencil, Trash2, Loader2, X, MapPin, Calendar, TrendingUp } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 
-const projects = [
-  { id: "1", name: "Q4 Marketing Campaign", desc: "Plan and execute Q4 campaign across all channels", tasks: 12, completed: 8, members: 4, due: "Dec 31, 2026", status: "In Progress", color: "bg-[#1677E8]" },
-  { id: "2", name: "Product Roadmap 2026", desc: "Define and track product features for the year", tasks: 20, completed: 8, members: 6, due: "Dec 31, 2026", status: "In Progress", color: "bg-[#9652E8]" },
-  { id: "3", name: "Customer Onboarding Flow", desc: "Redesign and improve the onboarding experience", tasks: 7, completed: 6, members: 3, due: "Nov 30, 2026", status: "In Review", color: "bg-green-500" },
-  { id: "4", name: "Team Knowledge Base", desc: "Build comprehensive internal documentation", tasks: 15, completed: 3, members: 5, due: "Jan 15, 2027", status: "In Progress", color: "bg-orange-500" },
-  { id: "5", name: "Sales Pipeline Optimization", desc: "Improve sales process and reduce cycle time", tasks: 9, completed: 1, members: 3, due: "Jan 31, 2027", status: "To Do", color: "bg-pink-500" },
-  { id: "6", name: "Platform Security Audit", desc: "Conduct comprehensive security review", tasks: 11, completed: 11, members: 2, due: "Nov 15, 2026", status: "Completed", color: "bg-teal-500" },
-];
+interface Project {
+  id: string;
+  name: string;
+  description: string | null;
+  location: string | null;
+  status: string;
+  completion_pct: number;
+  start_date: string | null;
+  end_date: string | null;
+  budget: number | null;
+  created_at: string;
+}
 
-const statusColors: Record<string, string> = {
-  "In Progress": "bg-[#EAF3FF] text-[#1677E8]",
-  "In Review": "bg-yellow-50 text-yellow-700",
-  "Completed": "bg-green-50 text-green-700",
-  "To Do": "bg-[#FAFAFA] text-[#777777]",
-};
+const STATUS_OPTIONS = ["active", "on_track", "at_risk", "delayed", "paused", "completed"];
 
-export default function ProjectsPage() {
-  const [showNew, setShowNew] = useState(false);
-  const [name, setName] = useState("");
-  const [desc, setDesc] = useState("");
-  const [localProjects, setLocalProjects] = useState(projects);
+function ProjectModal({ project, onClose, onSave }: {
+  project: Partial<Project> | null;
+  onClose: () => void;
+  onSave: () => void;
+}) {
+  const isEdit = !!project?.id;
+  const [form, setForm] = useState({
+    name: project?.name || "",
+    description: project?.description || "",
+    location: project?.location || "",
+    status: project?.status || "active",
+    completion_pct: project?.completion_pct ?? 0,
+    start_date: project?.start_date || "",
+    end_date: project?.end_date || "",
+    budget: project?.budget?.toString() || "",
+  });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
-  function addProject() {
-    if (!name.trim()) return;
-    setLocalProjects([
-      {
-        id: String(Date.now()),
-        name,
-        desc,
-        tasks: 0,
-        completed: 0,
-        members: 1,
-        due: "TBD",
-        status: "To Do",
-        color: "bg-[#1677E8]",
-      },
-      ...localProjects,
-    ]);
-    setName("");
-    setDesc("");
-    setShowNew(false);
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setError("");
+
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { setError("Not authenticated."); setSaving(false); return; }
+
+    const payload = {
+      name: form.name,
+      description: form.description || null,
+      location: form.location || null,
+      status: form.status,
+      completion_pct: Number(form.completion_pct),
+      start_date: form.start_date || null,
+      end_date: form.end_date || null,
+      budget: form.budget ? Number(form.budget) : null,
+      user_id: user.id,
+    };
+
+    if (isEdit) {
+      const { error: err } = await supabase.from("projects").update(payload).eq("id", project!.id!);
+      if (err) { setError(err.message); setSaving(false); return; }
+    } else {
+      const { error: err } = await supabase.from("projects").insert(payload);
+      if (err) { setError(err.message); setSaving(false); return; }
+    }
+
+    setSaving(false);
+    onSave();
   }
 
   return (
-    <div className="p-6 lg:p-8">
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="font-manrope font-bold text-2xl text-[#171717]">Projects</h1>
-          <p className="font-inter text-sm text-[#777777] mt-1">Manage and track all your team projects</p>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: "1rem" }}>
+      <div className="card" style={{ width: "100%", maxWidth: "520px", padding: "2rem", maxHeight: "90vh", overflowY: "auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+          <h2 style={{ margin: 0, fontSize: "1.25rem" }}>{isEdit ? "Edit Project" : "New Project"}</h2>
+          <button onClick={onClose} style={{ background: "none", border: "none", cursor: "pointer", color: "#6B7280" }}><X size={20} /></button>
         </div>
-        <button
-          onClick={() => setShowNew(true)}
-          className="flex items-center gap-2 bg-[#1677E8] text-white font-inter font-medium text-sm px-4 py-2.5 rounded-lg hover:bg-[#1265CC] transition-colors"
-        >
+
+        {error && <div style={{ background: "#FEE2E2", border: "1px solid #FECACA", borderRadius: "0.5rem", padding: "0.75rem", marginBottom: "1rem", fontSize: "0.875rem", color: "#991B1B" }}>{error}</div>}
+
+        <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <div>
+            <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.375rem" }}>Project name *</label>
+            <input className="input-field" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="e.g. Riverside Tower" required />
+          </div>
+          <div>
+            <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.375rem" }}>Description</label>
+            <textarea className="input-field" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Project overview..." rows={3} style={{ resize: "vertical" }} />
+          </div>
+          <div>
+            <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.375rem" }}>Site location</label>
+            <input className="input-field" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="e.g. 123 Main St, London" />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.375rem" }}>Start date</label>
+              <input type="date" className="input-field" value={form.start_date} onChange={(e) => setForm({ ...form, start_date: e.target.value })} />
+            </div>
+            <div>
+              <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.375rem" }}>Target completion</label>
+              <input type="date" className="input-field" value={form.end_date} onChange={(e) => setForm({ ...form, end_date: e.target.value })} />
+            </div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.375rem" }}>Status</label>
+              <select className="input-field" value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}>
+                {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{s.replace("_", " ")}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.375rem" }}>Completion %</label>
+              <input type="number" className="input-field" value={form.completion_pct} onChange={(e) => setForm({ ...form, completion_pct: Number(e.target.value) })} min={0} max={100} />
+            </div>
+          </div>
+          <div>
+            <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.375rem" }}>Budget (USD)</label>
+            <input type="number" className="input-field" value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })} placeholder="0" />
+          </div>
+
+          <div style={{ display: "flex", gap: "0.75rem", marginTop: "0.5rem" }}>
+            <button type="button" onClick={onClose} className="btn-secondary" style={{ flex: 1, justifyContent: "center" }}>Cancel</button>
+            <button type="submit" disabled={saving} className="btn-primary" style={{ flex: 1, justifyContent: "center", opacity: saving ? 0.7 : 1 }}>
+              {saving ? <Loader2 size={16} className="spin" /> : null}
+              {saving ? "Saving..." : isEdit ? "Save changes" : "Create project"}
+            </button>
+          </div>
+        </form>
+        <style>{`@keyframes spin{to{transform:rotate(360deg)}}.spin{animation:spin 1s linear infinite}`}</style>
+      </div>
+    </div>
+  );
+}
+
+export default function ProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editProject, setEditProject] = useState<Partial<Project> | null>(null);
+
+  async function loadProjects() {
+    const supabase = createClient();
+    const { data } = await supabase
+      .from("projects")
+      .select("*")
+      .order("created_at", { ascending: false });
+    setProjects(data || []);
+    setLoading(false);
+  }
+
+  useEffect(() => { loadProjects(); }, []);
+
+  async function handleDelete(id: string) {
+    if (!confirm("Delete this project? This action cannot be undone.")) return;
+    const supabase = createClient();
+    await supabase.from("projects").delete().eq("id", id);
+    loadProjects();
+  }
+
+  const statusColors: Record<string, string> = {
+    active: "status-on-track",
+    on_track: "status-on-track",
+    at_risk: "status-at-risk",
+    delayed: "status-delayed",
+    completed: "status-completed",
+    paused: "status-at-risk",
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.75rem", flexWrap: "wrap", gap: "1rem" }}>
+        <div>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#101828", margin: "0 0 0.25rem" }}>My Projects</h1>
+          <p style={{ color: "#6B7280", fontSize: "0.9375rem", margin: 0 }}>{projects.length} project{projects.length !== 1 ? "s" : ""} in your portfolio</p>
+        </div>
+        <button className="btn-primary" style={{ fontSize: "0.9rem" }} onClick={() => { setEditProject({}); setModalOpen(true); }}>
           <Plus size={16} /> New Project
         </button>
       </div>
 
-      {showNew && (
-        <div className="bg-white rounded-2xl border border-[#1677E8]/30 p-6 mb-6 shadow-sm">
-          <h3 className="font-manrope font-semibold text-[#171717] mb-4">Create New Project</h3>
-          <div className="grid sm:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block font-inter text-sm font-medium text-[#171717] mb-1.5">Project Name</label>
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-2.5 border border-[#E8E8E8] rounded-xl font-inter text-sm focus:outline-none focus:border-[#1677E8]"
-                placeholder="Enter project name"
-              />
-            </div>
-            <div>
-              <label className="block font-inter text-sm font-medium text-[#171717] mb-1.5">Description</label>
-              <input
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
-                className="w-full px-4 py-2.5 border border-[#E8E8E8] rounded-xl font-inter text-sm focus:outline-none focus:border-[#1677E8]"
-                placeholder="Brief description"
-              />
-            </div>
+      {loading ? (
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#9CA3AF" }}><Loader2 size={18} className="spin" /> Loading projects...</div>
+      ) : projects.length === 0 ? (
+        <div className="card" style={{ textAlign: "center", padding: "4rem 2rem" }}>
+          <div style={{ width: 60, height: 60, borderRadius: "50%", background: "#EAF0FF", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.25rem" }}>
+            <TrendingUp size={28} color="#0039FF" />
           </div>
-          <div className="flex gap-3">
-            <button
-              onClick={addProject}
-              className="bg-[#1677E8] text-white font-inter font-medium text-sm px-5 py-2.5 rounded-lg hover:bg-[#1265CC] transition-colors"
-            >
-              Create Project
-            </button>
-            <button
-              onClick={() => setShowNew(false)}
-              className="bg-[#FAFAFA] text-[#777777] font-inter font-medium text-sm px-5 py-2.5 rounded-lg border border-[#E8E8E8] hover:bg-white transition-colors"
-            >
-              Cancel
-            </button>
-          </div>
+          <h3 style={{ fontSize: "1.125rem", margin: "0 0 0.5rem" }}>No projects yet</h3>
+          <p style={{ color: "#6B7280", fontSize: "0.9375rem", margin: "0 0 1.5rem" }}>Create your first construction project to get started.</p>
+          <button className="btn-primary" onClick={() => { setEditProject({}); setModalOpen(true); }}>
+            <Plus size={16} /> Create Project
+          </button>
+        </div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.25rem" }}>
+          {projects.map((p) => (
+            <div key={p.id} className="card card-hover" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <h3 style={{ fontSize: "1rem", fontWeight: 700, margin: "0 0 0.25rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</h3>
+                  {p.location && (
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", color: "#9CA3AF", fontSize: "0.8125rem" }}>
+                      <MapPin size={12} /> {p.location}
+                    </div>
+                  )}
+                </div>
+                <span className={`status-badge ${statusColors[p.status] || "status-at-risk"}`} style={{ marginLeft: "0.5rem", flexShrink: 0 }}>
+                  {p.status.replace("_", " ")}
+                </span>
+              </div>
+
+              {p.description && (
+                <p style={{ fontSize: "0.875rem", color: "#6B7280", margin: 0, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                  {p.description}
+                </p>
+              )}
+
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8125rem", color: "#6B7280", marginBottom: "0.375rem" }}>
+                  <span>Completion</span>
+                  <span style={{ fontWeight: 600, color: "#101828" }}>{p.completion_pct || 0}%</span>
+                </div>
+                <div className="progress-bar">
+                  <div className="progress-fill" style={{ width: `${p.completion_pct || 0}%` }} />
+                </div>
+              </div>
+
+              <div style={{ display: "flex", gap: "0.5rem", fontSize: "0.8125rem", color: "#9CA3AF" }}>
+                {p.start_date && (
+                  <span style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}><Calendar size={12} /> {new Date(p.start_date).toLocaleDateString()}</span>
+                )}
+                {p.end_date && (
+                  <span style={{ display: "flex", alignItems: "center", gap: "0.25rem", marginLeft: "auto" }}><Calendar size={12} /> Due {new Date(p.end_date).toLocaleDateString()}</span>
+                )}
+              </div>
+
+              <div style={{ display: "flex", gap: "0.625rem", borderTop: "1px solid #E2E6F0", paddingTop: "0.875rem" }}>
+                <Link
+                  href={`/dashboard/projects/${p.id}`}
+                  className="btn-secondary"
+                  style={{ flex: 1, justifyContent: "center", padding: "0.5rem", fontSize: "0.8125rem" }}
+                >
+                  Open Project
+                </Link>
+                <button
+                  onClick={() => { setEditProject(p); setModalOpen(true); }}
+                  style={{ width: 34, height: 34, borderRadius: "0.5rem", background: "#F7F8FA", border: "1px solid #E2E6F0", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#6B7280" }}
+                >
+                  <Pencil size={15} />
+                </button>
+                <button
+                  onClick={() => handleDelete(p.id)}
+                  style={{ width: 34, height: 34, borderRadius: "0.5rem", background: "#FEF2F2", border: "1px solid #FECACA", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#EF4444" }}
+                >
+                  <Trash2 size={15} />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-        {localProjects.map((project) => {
-          const pct = project.tasks > 0 ? Math.round((project.completed / project.tasks) * 100) : 0;
-          return (
-            <div key={project.id} className="bg-white rounded-2xl border border-[#E8E8E8] p-5 hover:border-[#1677E8]/30 transition-colors">
-              <div className="flex items-start justify-between mb-3">
-                <div className={`w-3 h-3 rounded-full ${project.color} mt-1 flex-shrink-0`}></div>
-                <span className={`text-xs font-inter px-2.5 py-1 rounded-full ${statusColors[project.status]}`}>
-                  {project.status}
-                </span>
-              </div>
-              <h3 className="font-manrope font-semibold text-[#171717] mb-1.5">{project.name}</h3>
-              <p className="font-inter text-xs text-[#777777] mb-4 leading-relaxed">{project.desc}</p>
+      {modalOpen && (
+        <ProjectModal
+          project={editProject}
+          onClose={() => { setModalOpen(false); setEditProject(null); }}
+          onSave={() => { setModalOpen(false); setEditProject(null); loadProjects(); }}
+        />
+      )}
 
-              <div className="mb-3">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-xs font-inter text-[#777777]">{project.completed}/{project.tasks} tasks</span>
-                  <span className="text-xs font-inter text-[#777777]">{pct}%</span>
-                </div>
-                <div className="h-1.5 bg-[#FAFAFA] rounded-full">
-                  <div
-                    className={`h-1.5 ${project.color} rounded-full`}
-                    style={{ width: `${pct}%` }}
-                  ></div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <Users size={12} className="text-[#777777]" />
-                  <span className="text-xs font-inter text-[#777777]">{project.members} members</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock size={12} className="text-[#777777]" />
-                  <span className="text-xs font-inter text-[#777777]">{project.due}</span>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}.spin{animation:spin 1s linear infinite}`}</style>
     </div>
   );
 }

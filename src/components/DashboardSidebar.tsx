@@ -1,173 +1,127 @@
 "use client";
 
-import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard,
-  TrendingUp,
-  Landmark,
-  Target,
-  Truck,
-  Package,
-  BarChart3,
-  Activity,
-  Brain,
-  Settings,
-  LogOut,
-  Menu,
-  X,
-  FileText,
+  LayoutDashboard, FolderOpen, Camera, TrendingUp,
+  Brain, FileText, FileStack, Users, Bell, Settings, CreditCard, LogOut
 } from "lucide-react";
-import Plan9Logo from "./Plan9Logo";
+import RemoteSiteLogo from "./RemoteSiteLogo";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 
-type NavItem = {
-  href: string;
-  label: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
-  exact?: boolean;
-};
+const navItems = [
+  { href: "/dashboard/overview", icon: LayoutDashboard, label: "Overview" },
+  { href: "/dashboard/projects", icon: FolderOpen, label: "My Projects" },
+  { href: "/dashboard/monitoring", icon: Camera, label: "Site Monitoring" },
+  { href: "/dashboard/progress", icon: TrendingUp, label: "Progress Tracking" },
+  { href: "/dashboard/ai-insights", icon: Brain, label: "AI Insights" },
+  { href: "/dashboard/reports", icon: FileText, label: "Reports" },
+  { href: "/dashboard/documents", icon: FileStack, label: "Documents" },
+  { href: "/dashboard/team", icon: Users, label: "Team" },
+  { href: "/dashboard/notifications", icon: Bell, label: "Notifications" },
+];
 
-type NavSection = {
-  label: string | null;
-  items: NavItem[];
-};
-
-const navSections: NavSection[] = [
-  {
-    label: null,
-    items: [
-      { href: "/dashboard", label: "Overview", icon: LayoutDashboard, exact: true },
-    ],
-  },
-  {
-    label: "BUSINESS PLANNING",
-    items: [
-      { href: "/dashboard/financial", label: "Financial Planning", icon: Landmark },
-      { href: "/dashboard/sales", label: "Sales Planning", icon: Target },
-      { href: "/dashboard/demand", label: "Demand Planning", icon: TrendingUp },
-      { href: "/dashboard/supply-chain", label: "Supply Chain", icon: Truck },
-      { href: "/dashboard/inventory", label: "Inventory", icon: Package },
-    ],
-  },
-  {
-    label: "INTELLIGENCE",
-    items: [
-      { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
-      { href: "/dashboard/forecasting", label: "Forecasting", icon: Activity },
-      { href: "/dashboard/ai-insights", label: "AI Insights", icon: Brain },
-      { href: "/dashboard/scenarios", label: "Scenarios", icon: Activity },
-    ],
-  },
-  {
-    label: "REPORTING",
-    items: [
-      { href: "/dashboard/reports", label: "Reports", icon: FileText },
-    ],
-  },
-  {
-    label: "ACCOUNT",
-    items: [
-      { href: "/dashboard/settings", label: "Settings", icon: Settings },
-    ],
-  },
+const bottomItems = [
+  { href: "/dashboard/settings", icon: Settings, label: "Settings" },
+  { href: "/dashboard/billing", icon: CreditCard, label: "Billing" },
 ];
 
 export default function DashboardSidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const supabase = createClient();
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const isActive = (href: string, exact?: boolean) => {
-    if (exact) return pathname === href;
-    return pathname === href || pathname.startsWith(href + "/");
-  };
 
   async function handleLogout() {
+    const supabase = createClient();
     await supabase.auth.signOut();
-    router.push("/");
+    router.push("/login");
     router.refresh();
   }
 
-  const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-[#0D0D0D] border-r border-[#2A2A2A]">
-      <div className="p-5 border-b border-[#2A2A2A]">
-        <Link href="/" className="flex items-center gap-2.5">
-          <Plan9Logo size={30} />
-          <span className="font-manrope font-bold text-white text-base tracking-tight">PLAN9 AI</span>
-        </Link>
-      </div>
-      <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
-        {navSections.map((section, si) => (
-          <div key={si}>
-            {section.label && (
-              <p className="text-[#444444] font-inter text-xs tracking-widest uppercase px-3 mb-2">{section.label}</p>
-            )}
-            <div className="space-y-0.5">
-              {section.items.map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item.href, item.exact);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setMobileOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-inter transition-colors ${
-                      active
-                        ? 'bg-[#2D7EFF]/10 text-[#2D7EFF]'
-                        : 'text-[#777777] hover:text-white hover:bg-[#1C1C1C]'
-                    }`}
-                  >
-                    <Icon size={16} className={active ? 'text-[#2D7EFF]' : ''} />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+  return (
+    <aside style={{
+      width: "240px",
+      minWidth: "240px",
+      background: "#101828",
+      display: "flex",
+      flexDirection: "column",
+      padding: "1.25rem 0.75rem",
+      borderRight: "1px solid rgba(255,255,255,0.06)",
+    }}>
+      {/* Logo */}
+      <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.625rem", textDecoration: "none", padding: "0 0.5rem 1.25rem", marginBottom: "0.25rem", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <RemoteSiteLogo size={30} />
+        <span style={{ fontFamily: "var(--font-manrope)", fontWeight: 800, fontSize: "1rem", color: "#FFFFFF" }}>RemoteSite</span>
+      </Link>
+
+      {/* Navigation */}
+      <nav style={{ flex: 1, display: "flex", flexDirection: "column", gap: "2px", marginTop: "0.75rem" }}>
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const active = pathname === item.href || pathname.startsWith(item.href + "/");
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              style={{
+                display: "flex", alignItems: "center", gap: "0.75rem",
+                padding: "0.5625rem 0.75rem",
+                borderRadius: "0.5rem",
+                textDecoration: "none",
+                fontSize: "0.875rem",
+                fontWeight: active ? 600 : 400,
+                color: active ? "#FFFFFF" : "rgba(255,255,255,0.5)",
+                background: active ? "rgba(0,57,255,0.3)" : "transparent",
+                transition: "background-color 0.15s, color 0.15s",
+              }}
+            >
+              <Icon size={17} style={{ flexShrink: 0 }} />
+              {item.label}
+            </Link>
+          );
+        })}
       </nav>
-      <div className="p-3 border-t border-[#2A2A2A]">
+
+      {/* Bottom nav */}
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "0.75rem", marginTop: "0.5rem", display: "flex", flexDirection: "column", gap: "2px" }}>
+        {bottomItems.map((item) => {
+          const Icon = item.icon;
+          const active = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              style={{
+                display: "flex", alignItems: "center", gap: "0.75rem",
+                padding: "0.5625rem 0.75rem",
+                borderRadius: "0.5rem",
+                textDecoration: "none",
+                fontSize: "0.875rem",
+                fontWeight: active ? 600 : 400,
+                color: active ? "#FFFFFF" : "rgba(255,255,255,0.5)",
+                background: active ? "rgba(0,57,255,0.3)" : "transparent",
+              }}
+            >
+              <Icon size={17} style={{ flexShrink: 0 }} />
+              {item.label}
+            </Link>
+          );
+        })}
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2.5 w-full rounded-lg text-[#777777] hover:text-white hover:bg-[#1C1C1C] font-inter text-sm transition-colors"
+          style={{
+            display: "flex", alignItems: "center", gap: "0.75rem",
+            padding: "0.5625rem 0.75rem", borderRadius: "0.5rem",
+            fontSize: "0.875rem", fontWeight: 400,
+            color: "rgba(255,255,255,0.4)",
+            background: "none", border: "none", cursor: "pointer", width: "100%",
+            transition: "color 0.15s",
+          }}
         >
-          <LogOut size={16} />
-          Sign Out
+          <LogOut size={17} style={{ flexShrink: 0 }} />
+          Log out
         </button>
       </div>
-    </div>
-  );
-
-  return (
-    <>
-      {/* Desktop sidebar */}
-      <div className="hidden lg:flex lg:w-60 lg:flex-col lg:fixed lg:inset-y-0 z-30">
-        <SidebarContent />
-      </div>
-
-      {/* Mobile header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-30 bg-[#0D0D0D] border-b border-[#2A2A2A] h-14 flex items-center px-4 justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <Plan9Logo size={28} />
-          <span className="font-manrope font-bold text-white text-base">PLAN9 AI</span>
-        </Link>
-        <button onClick={() => setMobileOpen(!mobileOpen)} className="text-white p-1">
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
-      </div>
-
-      {/* Mobile drawer */}
-      {mobileOpen && (
-        <div className="lg:hidden fixed inset-0 z-20 pt-14">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setMobileOpen(false)} />
-          <div className="relative w-60 h-full">
-            <SidebarContent />
-          </div>
-        </div>
-      )}
-    </>
+    </aside>
   );
 }

@@ -1,89 +1,199 @@
-export const dynamic = "force-dynamic";
+"use client";
 
-import { FileText, Download, Clock, BarChart3 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { FileText, Plus, Download, Loader2, X } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
-const reports = [
-  { name: "Monthly Business Performance Summary", type: "Performance", frequency: "Monthly", lastRun: "Nov 1, 2026", status: "Ready" },
-  { name: "Financial Planning: Budget vs Actual", type: "Financial", frequency: "Weekly", lastRun: "Nov 15, 2026", status: "Ready" },
-  { name: "Sales Performance and Pipeline Report", type: "Sales", frequency: "Weekly", lastRun: "Nov 15, 2026", status: "Ready" },
-  { name: "Demand Forecast Accuracy Report", type: "Demand", frequency: "Monthly", lastRun: "Nov 1, 2026", status: "Ready" },
-  { name: "Supply Chain Risk Assessment", type: "Operations", frequency: "Weekly", lastRun: "Nov 15, 2026", status: "Ready" },
-  { name: "AI Intelligence Monthly Digest", type: "AI Insights", frequency: "Monthly", lastRun: "Nov 1, 2026", status: "Ready" },
-  { name: "Executive Leadership Briefing", type: "Executive", frequency: "Monthly", lastRun: "Nov 1, 2026", status: "Ready" },
-  { name: "Inventory Position and Health Report", type: "Operations", frequency: "Weekly", lastRun: "Nov 15, 2026", status: "Ready" },
-];
+interface Report {
+  id: string;
+  title: string;
+  project_id: string | null;
+  created_at: string;
+  content: string | null;
+  projects?: { name: string };
+}
 
-const typeColors: Record<string, string> = {
-  Performance: "#2D7EFF",
-  Financial: "#2ECC71",
-  Sales: "#0ECFCF",
-  Demand: "#F59E0B",
-  Operations: "#A78BFA",
-  "AI Insights": "#FF6B6B",
-  Executive: "#FFBE2E",
-};
+interface Project { id: string; name: string; }
 
 export default function ReportsPage() {
+  const [reports, setReports] = useState<Report[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
+  const [selectedProject, setSelectedProject] = useState("");
+  const [viewReport, setViewReport] = useState<Report | null>(null);
+
+  async function loadData() {
+    const supabase = createClient();
+    const [{ data: rp }, { data: pr }] = await Promise.all([
+      supabase.from("reports").select("*, projects(name)").order("created_at", { ascending: false }),
+      supabase.from("projects").select("id, name").order("name"),
+    ]);
+    setReports(rp || []);
+    setProjects(pr || []);
+    setLoading(false);
+  }
+
+  useEffect(() => { loadData(); }, []);
+
+  async function generateReport() {
+    if (!selectedProject) { alert("Please select a project to generate a report."); return; }
+    setGenerating(true);
+
+    const supabase = createClient();
+    const project = projects.find((p) => p.id === selectedProject);
+
+    const [{ data: milestones }, { data: issues }, { data: media }] = await Promise.all([
+      supabase.from("milestones").select("*").eq("project_id", selectedProject),
+      supabase.from("issues").select("*").eq("project_id", selectedProject),
+      supabase.from("site_media").select("*").eq("project_id", selectedProject),
+    ]);
+
+    const content = generateReportContent(project?.name || "Unknown", milestones || [], issues || [], media || []);
+
+    const { data: { user } } = await supabase.auth.getUser();
+    await supabase.from("reports").insert({
+      title: `${project?.name} - Progress Report`,
+      project_id: selectedProject,
+      content,
+      user_id: user?.id,
+    });
+
+    setGenerating(false);
+    loadData();
+  }
+
+  function generateReportContent(
+    projectName: string,
+    milestones: { title: string; status: string; completion_pct: number; planned_date: string | null }[],
+    issues: { title: string; priority: string; status: string }[],
+    media: { uploaded_at: string }[]
+  ) {
+    const date = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    const completed = milestones.filter((m) => m.status === "completed").length;
+    const delayed = milestones.filter((m) => m.status === "delayed").length;
+    const openIssues = issues.filter((i) => i.status === "open" || i.status === "in_progress").length;
+
+    return `# ${projectName}: Progress Report
+Generated: ${date}
+
+## Project Overview
+This report provides a summary of construction progress, milestone status and outstanding issues for ${projectName}.
+
+## Milestone Summary
+Total milestones: ${milestones.length}
+Completed: ${completed}
+Delayed: ${delayed}
+In progress: ${milestones.filter((m) => m.status === "in_progress").length}
+
+${milestones.length > 0 ? "### Milestones\n" + milestones.map((m) => `- ${m.title}: ${m.status} (${m.completion_pct}%)${m.planned_date ? " — planned " + new Date(m.planned_date).toLocaleDateString() : ""}`).join("\n") : "No milestones recorded."}
+
+## Issue Summary
+Total issues: ${issues.length}
+Open: ${openIssues}
+Resolved: ${issues.filter((i) => i.status === "resolved" || i.status === "closed").length}
+
+${issues.length > 0 ? "### Issues\n" + issues.map((i) => `- ${i.title}: ${i.priority} priority, ${i.status}`).join("\n") : "No issues recorded."}
+
+## Site Documentation
+Total media files uploaded: ${media.length}
+
+## Recommendations
+${openIssues > 0 ? `- ${openIssues} open issue(s) require attention and resolution.` : "- No critical open issues at this time."}
+${delayed > 0 ? `- ${delayed} milestone(s) are delayed. Review schedule and resource allocation.` : "- Milestone progress is on track."}
+- Continue regular site media uploads to maintain documentation quality.
+
+---
+Report generated by RemoteSite AI`;
+  }
+
+  function downloadReport(report: Report) {
+    const blob = new Blob([report.content || ""], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${report.title}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
-      <div className="flex items-start gap-3">
-        <div className="w-9 h-9 rounded-lg bg-[#2D7EFF]/10 flex items-center justify-center">
-          <FileText size={18} className="text-[#2D7EFF]" />
-        </div>
-        <div>
-          <h1 className="font-manrope font-extrabold text-2xl text-white mb-1">Reports</h1>
-          <p className="text-[#777777] font-inter text-sm">Automated business reports — Demo reports shown for illustration</p>
-        </div>
+    <div>
+      <div style={{ marginBottom: "1.75rem" }}>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#101828", margin: "0 0 0.25rem" }}>Reports</h1>
+        <p style={{ color: "#6B7280", fontSize: "0.9375rem", margin: 0 }}>Generate and manage project progress reports.</p>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        {[
-          { label: "Reports available", value: "8", icon: FileText, color: "#2D7EFF" },
-          { label: "Auto-generated this month", value: "24", icon: BarChart3, color: "#0ECFCF" },
-          { label: "Next scheduled run", value: "Monday", icon: Clock, color: "#2ECC71" },
-        ].map((s) => {
-          const Icon = s.icon;
-          return (
-            <div key={s.label} className="bg-[#111111] border border-[#2A2A2A] rounded-xl p-5">
-              <Icon size={16} className="mb-3" style={{ color: s.color }} />
-              <p className="font-manrope font-bold text-white text-2xl mb-1">{s.value}</p>
-              <p className="text-[#777777] font-inter text-xs">{s.label}</p>
-            </div>
-          );
-        })}
+      {/* Generate */}
+      <div className="card" style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+        <div style={{ flex: 1, minWidth: "200px" }}>
+          <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.375rem" }}>Generate report for project</label>
+          <select className="input-field" value={selectedProject} onChange={(e) => setSelectedProject(e.target.value)}>
+            <option value="">Select a project</option>
+            {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+          </select>
+        </div>
+        <button className="btn-primary" onClick={generateReport} disabled={generating} style={{ alignSelf: "flex-end", opacity: generating ? 0.7 : 1 }}>
+          {generating ? <Loader2 size={16} className="spin" /> : <Plus size={16} />}
+          {generating ? "Generating..." : "Generate Report"}
+        </button>
       </div>
 
-      <div className="bg-[#111111] border border-[#2A2A2A] rounded-xl overflow-hidden">
-        <div className="p-5 border-b border-[#2A2A2A]">
-          <p className="text-white font-manrope font-semibold text-sm">Available Reports</p>
+      {/* Reports list */}
+      {loading ? (
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", color: "#9CA3AF" }}><Loader2 size={18} className="spin" /> Loading reports...</div>
+      ) : reports.length === 0 ? (
+        <div className="card" style={{ textAlign: "center", padding: "4rem 2rem" }}>
+          <FileText size={40} color="#D1D5DB" style={{ margin: "0 auto 1rem" }} />
+          <h3 style={{ fontSize: "1.125rem", margin: "0 0 0.5rem" }}>No reports yet</h3>
+          <p style={{ color: "#6B7280", fontSize: "0.9375rem", margin: 0 }}>Select a project and generate your first progress report.</p>
         </div>
-        <div className="divide-y divide-[#2A2A2A]">
-          {reports.map((report) => {
-            const color = typeColors[report.type] || "#2D7EFF";
-            return (
-              <div key={report.name} className="flex items-center gap-4 px-5 py-4 hover:bg-[#1C1C1C] transition-colors">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `${color}18` }}>
-                  <FileText size={14} style={{ color }} />
-                </div>
-                <div className="flex-1">
-                  <p className="text-white font-inter text-sm mb-0.5">{report.name}</p>
-                  <div className="flex items-center gap-3">
-                    <span className="font-inter text-xs px-1.5 py-0.5 rounded" style={{ background: `${color}18`, color }}>{report.type}</span>
-                    <span className="text-[#555555] font-inter text-xs">{report.frequency}</span>
-                    <span className="text-[#555555] font-inter text-xs">Last: {report.lastRun}</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="bg-[#2ECC71]/10 text-[#2ECC71] font-inter text-xs px-2 py-1 rounded-full">{report.status}</span>
-                  <button className="text-[#777777] hover:text-[#2D7EFF] transition-colors p-1.5 rounded hover:bg-[#2D7EFF]/10">
-                    <Download size={15} />
-                  </button>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+          {reports.map((r) => (
+            <div key={r.id} className="card" style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <div style={{ width: 40, height: 40, borderRadius: "10px", background: "#EAF0FF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                <FileText size={20} color="#0039FF" />
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, fontSize: "0.9375rem", color: "#101828" }}>{r.title}</div>
+                <div style={{ fontSize: "0.8125rem", color: "#9CA3AF", marginTop: "0.125rem" }}>
+                  {r.projects?.name || "Unknown project"} · {new Date(r.created_at).toLocaleDateString()}
                 </div>
               </div>
-            );
-          })}
+              <div style={{ display: "flex", gap: "0.5rem" }}>
+                <button onClick={() => setViewReport(r)} className="btn-secondary" style={{ padding: "0.5rem 0.875rem", fontSize: "0.8125rem" }}>View</button>
+                <button onClick={() => downloadReport(r)} className="btn-secondary" style={{ padding: "0.5rem 0.875rem", fontSize: "0.8125rem", display: "flex", alignItems: "center", gap: "0.375rem" }}>
+                  <Download size={14} /> Export
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
+      )}
+
+      {/* View modal */}
+      {viewReport && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: "1rem" }}>
+          <div className="card" style={{ width: "100%", maxWidth: "680px", maxHeight: "85vh", display: "flex", flexDirection: "column", padding: "2rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem" }}>
+              <h2 style={{ margin: 0, fontSize: "1.125rem" }}>{viewReport.title}</h2>
+              <button onClick={() => setViewReport(null)} style={{ background: "none", border: "none", cursor: "pointer" }}><X size={20} /></button>
+            </div>
+            <div style={{ flex: 1, overflowY: "auto", background: "#F7F8FA", borderRadius: "0.5rem", padding: "1.25rem", fontSize: "0.875rem", lineHeight: 1.7, color: "#252B36", whiteSpace: "pre-wrap", fontFamily: "var(--font-inter)" }}>
+              {viewReport.content}
+            </div>
+            <div style={{ display: "flex", gap: "0.75rem", marginTop: "1.25rem" }}>
+              <button onClick={() => setViewReport(null)} className="btn-secondary" style={{ flex: 1, justifyContent: "center" }}>Close</button>
+              <button onClick={() => downloadReport(viewReport)} className="btn-primary" style={{ flex: 1, justifyContent: "center" }}>
+                <Download size={16} /> Download
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`@keyframes spin{to{transform:rotate(360deg)}}.spin{animation:spin 1s linear infinite}`}</style>
     </div>
   );
 }

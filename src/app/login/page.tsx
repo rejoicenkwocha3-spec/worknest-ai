@@ -1,20 +1,17 @@
 "use client";
-export const dynamic = "force-dynamic";
 
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import RemoteSiteLogo from "@/components/RemoteSiteLogo";
 import { createClient } from "@/lib/supabase/client";
-import { Eye, EyeOff, ArrowRight } from "lucide-react";
-import Plan9Logo from "@/components/Plan9Logo";
 
 export default function LoginPage() {
   const router = useRouter();
-  const supabase = createClient();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPw, setShowPw] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -23,134 +20,111 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const supabase = createClient();
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      setError(error.message);
+    if (signInError) {
+      setError(signInError.message);
       setLoading(false);
-    } else {
-      router.push("/dashboard");
-      router.refresh();
+      return;
     }
+
+    router.push("/dashboard/overview");
+    router.refresh();
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] flex">
-      {/* Left branding panel */}
-      <div className="hidden lg:flex lg:w-1/2 bg-[#0D0D0D] border-r border-[#2A2A2A] flex-col justify-between p-12 relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#2D7EFF]/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-72 h-72 bg-[#0ECFCF]/4 rounded-full blur-3xl" />
-        </div>
-        <div className="relative">
-          <Link href="/" className="flex items-center gap-2.5">
-            <Plan9Logo size={36} />
-            <span className="font-manrope font-bold text-white text-xl tracking-tight">PLAN9 AI</span>
+    <div style={{ minHeight: "100vh", background: "#F7F8FA", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem 1rem" }}>
+      <div style={{ width: "100%", maxWidth: "420px" }}>
+        {/* Logo */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}>
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.625rem", textDecoration: "none" }}>
+            <RemoteSiteLogo size={40} />
+            <span style={{ fontFamily: "var(--font-manrope)", fontWeight: 800, fontSize: "1.25rem", color: "#101828" }}>RemoteSite</span>
           </Link>
         </div>
-        <div className="relative">
-          <h2 className="font-manrope font-extrabold text-4xl text-white leading-tight mb-4">
-            Business intelligence that works as hard as you do.
-          </h2>
-          <p className="text-[#BDBDBD] font-inter text-base leading-relaxed mb-10">
-            Connect your data, understand your performance and make confident decisions from one powerful platform.
+
+        <div className="card" style={{ padding: "2.5rem" }}>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 800, margin: "0 0 0.5rem", color: "#101828", textAlign: "center" }}>
+            Welcome back
+          </h1>
+          <p style={{ textAlign: "center", color: "#6B7280", fontSize: "0.9375rem", margin: "0 0 2rem" }}>
+            Log in to your RemoteSite account
           </p>
-          <div className="grid grid-cols-2 gap-4">
-            {[
-              { label: "Forecast Accuracy", value: "96%" },
-              { label: "Time Saved Weekly", value: "12hrs" },
-              { label: "Faster Decisions", value: "3x" },
-              { label: "Data Sources Connected", value: "100+" },
-            ].map((stat) => (
-              <div key={stat.label} className="bg-[#1C1C1C] border border-[#2A2A2A] rounded-xl p-4">
-                <p className="font-manrope font-extrabold text-2xl text-[#2D7EFF] mb-1">{stat.value}</p>
-                <p className="text-[#777777] font-inter text-xs">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="relative">
-          <p className="text-[#777777] font-inter text-xs">© 2026 PLAN9 AI</p>
-        </div>
-      </div>
 
-      {/* Right login form */}
-      <div className="flex-1 flex flex-col justify-center px-6 sm:px-12 lg:px-16 py-12">
-        <div className="max-w-md w-full mx-auto">
-          <div className="lg:hidden mb-10">
-            <Link href="/" className="flex items-center gap-2.5">
-              <Plan9Logo size={32} />
-              <span className="font-manrope font-bold text-white text-lg">PLAN9 AI</span>
-            </Link>
-          </div>
-          <div className="mb-10">
-            <h1 className="font-manrope font-extrabold text-3xl text-white mb-2">Welcome back</h1>
-            <p className="text-[#BDBDBD] font-inter text-sm">Sign in to your PLAN9 AI dashboard</p>
-          </div>
+          {error && (
+            <div style={{ background: "#FEE2E2", border: "1px solid #FECACA", borderRadius: "0.5rem", padding: "0.75rem 1rem", marginBottom: "1.25rem", fontSize: "0.9rem", color: "#991B1B" }}>
+              {error}
+            </div>
+          )}
 
-          <form onSubmit={handleLogin} className="space-y-5">
-            {error && (
-              <div className="bg-red-500/10 border border-red-500/30 text-red-400 font-inter text-sm px-4 py-3 rounded-lg">
-                {error}
-              </div>
-            )}
+          <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             <div>
-              <label className="block text-[#BDBDBD] font-inter text-sm mb-2">Email address</label>
+              <label style={{ display: "block", fontSize: "0.875rem", fontWeight: 600, color: "#101828", marginBottom: "0.375rem" }}>
+                Email address
+              </label>
               <input
                 type="email"
+                className="input-field"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
                 placeholder="you@company.com"
-                className="w-full bg-[#1C1C1C] border border-[#2A2A2A] text-white font-inter text-sm px-4 py-3 rounded-lg focus:outline-none focus:border-[#2D7EFF] placeholder:text-[#555555] transition-colors"
+                required
+                autoComplete="email"
               />
             </div>
+
             <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-[#BDBDBD] font-inter text-sm">Password</label>
-                <Link href="/forgot-password" className="text-[#2D7EFF] font-inter text-sm hover:text-[#0ECFCF] transition-colors">
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.375rem" }}>
+                <label style={{ fontSize: "0.875rem", fontWeight: 600, color: "#101828" }}>Password</label>
+                <Link href="/forgot-password" style={{ fontSize: "0.8125rem", color: "#0039FF", textDecoration: "none" }}>
                   Forgot password?
                 </Link>
               </div>
-              <div className="relative">
+              <div style={{ position: "relative" }}>
                 <input
-                  type={showPw ? "text" : "password"}
+                  type={showPassword ? "text" : "password"}
+                  className="input-field"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
                   required
-                  placeholder="Your password"
-                  className="w-full bg-[#1C1C1C] border border-[#2A2A2A] text-white font-inter text-sm px-4 py-3 pr-12 rounded-lg focus:outline-none focus:border-[#2D7EFF] placeholder:text-[#555555] transition-colors"
+                  autoComplete="current-password"
+                  style={{ paddingRight: "2.75rem" }}
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPw(!showPw)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#777777] hover:text-white transition-colors"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: "absolute", right: "0.75rem", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "#9CA3AF" }}
                 >
-                  {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
+
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#2D7EFF] text-white font-manrope font-semibold text-sm px-6 py-3.5 rounded-lg hover:bg-[#1A6AE8] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-2"
+              className="btn-primary"
+              style={{ width: "100%", justifyContent: "center", padding: "0.8125rem", marginTop: "0.5rem", opacity: loading ? 0.7 : 1 }}
             >
-              {loading ? "Signing in..." : (
-                <>
-                  Sign In
-                  <ArrowRight size={16} />
-                </>
-              )}
+              {loading ? <Loader2 size={18} className="spin" /> : null}
+              {loading ? "Logging in..." : "Log in"}
             </button>
           </form>
 
-          <p className="mt-8 text-center text-[#777777] font-inter text-sm">
-            New to PLAN9 AI?{" "}
-            <Link href="/signup" className="text-[#2D7EFF] hover:text-[#0ECFCF] transition-colors font-semibold">
-              Create an account
+          <p style={{ textAlign: "center", fontSize: "0.9rem", color: "#6B7280", margin: "1.5rem 0 0" }}>
+            Don&apos;t have an account?{" "}
+            <Link href="/signup" style={{ color: "#0039FF", fontWeight: 600, textDecoration: "none" }}>
+              Sign up free
             </Link>
           </p>
         </div>
+
+        <style>{`
+          @keyframes spin { to { transform: rotate(360deg); } }
+          .spin { animation: spin 1s linear infinite; }
+        `}</style>
       </div>
     </div>
   );

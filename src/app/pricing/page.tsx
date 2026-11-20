@@ -1,187 +1,238 @@
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { CheckCircle2, ArrowRight, Star, Zap } from "lucide-react";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 
 const plans = [
   {
     name: "Starter",
     price: "$47",
-    period: "USD",
-    tagline: "Intelligent planning for growing businesses",
-    highlight: false,
-    cta: "Get Started",
-    href: "https://selar.com/47plan?currency=USD",
-    color: "#2D7EFF",
+    period: "per month",
+    desc: "For independent professionals monitoring a small number of construction projects.",
+    checkoutUrl: "https://selar.com/47plan?currency=USD",
     features: [
-      "PLAN9 AI business intelligence platform",
-      "Connected business data foundation",
-      "AI powered analytics and insights",
-      "Revenue and demand forecasting",
-      "Business performance dashboards",
-      "Automated reporting tools",
-      "Scenario planning capabilities",
-      "Standard user management",
+      "Up to 3 active projects",
+      "Site photo and video uploads",
+      "Basic progress tracking",
+      "Issue tracking",
+      "AI construction assistant",
+      "2 team members",
+      "PDF report export",
+      "Email support",
     ],
+    highlighted: false,
+    cta: "Get Started",
   },
   {
     name: "Professional",
     price: "$57",
-    period: "USD",
-    tagline: "Advanced intelligence for scaling organisations",
-    highlight: true,
-    cta: "Get Professional",
-    href: "https://selar.com/57plan?currency=USD",
-    color: "#2D7EFF",
-    badge: "Most Popular",
+    period: "per month",
+    desc: "For growing construction teams managing multiple active sites with full platform access.",
+    checkoutUrl: "https://selar.com/57plan?currency=USD",
     features: [
-      "Everything in Starter",
-      "Advanced AI decision intelligence",
-      "Multi department collaboration tools",
-      "Customisable dashboard environments",
-      "Scenario modelling and comparison",
-      "Predictive insights and early warnings",
-      "Financial performance monitoring",
-      "Priority platform support",
+      "Up to 10 active projects",
+      "Unlimited media uploads",
+      "Advanced progress tracking",
+      "Full issue and defect tracking",
+      "AI construction assistant",
+      "Up to 10 team members",
+      "Automated reports",
+      "Document management",
+      "Portfolio dashboard",
+      "Priority email support",
     ],
+    highlighted: true,
+    cta: "Get Started",
   },
   {
     name: "Enterprise",
     price: "$97",
-    period: "USD",
-    tagline: "Full platform power for complex enterprises",
-    highlight: false,
-    cta: "Get Enterprise",
-    href: "https://selar.com/97plan?currency=USD",
-    color: "#0ECFCF",
+    period: "per month",
+    desc: "For large construction companies and consultants managing complex project portfolios.",
+    checkoutUrl: "https://selar.com/97plan?currency=USD",
     features: [
-      "Everything in Professional",
-      "Full AI business assistant access",
-      "Enterprise grade security controls",
-      "Role based access and audit trails",
-      "Advanced scenario planning tools",
-      "Custom reporting templates",
-      "API access and integrations",
-      "Dedicated onboarding support",
+      "Unlimited active projects",
+      "Unlimited media storage",
+      "Full progress and milestone tracking",
+      "Advanced issue management",
+      "AI construction assistant",
+      "Unlimited team members",
+      "Custom report templates",
+      "Full document management",
+      "Portfolio analytics",
+      "Role-based permissions",
+      "Dedicated account support",
     ],
+    highlighted: false,
+    cta: "Get Started",
+  },
+];
+
+const faqs = [
+  {
+    q: "Can I change plans after signing up?",
+    a: "Yes, you can upgrade or downgrade your plan at any time. Changes take effect at the start of your next billing period.",
+  },
+  {
+    q: "Is there a free trial available?",
+    a: "We offer a 14-day free trial on the Professional plan. No credit card is required to start.",
+  },
+  {
+    q: "How is the subscription managed?",
+    a: "Subscriptions are processed through Selar. After completing your checkout, you will receive confirmation and access instructions by email.",
+  },
+  {
+    q: "What happens to my data if I cancel?",
+    a: "Your data remains accessible for 30 days after cancellation. During this period you can export all your project data, media and reports.",
+  },
+  {
+    q: "Do you offer discounts for annual billing?",
+    a: "Annual billing options with a discount are available. Contact us at support@remotesite.io to discuss annual pricing.",
   },
 ];
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-[#050505]">
+    <div style={{ background: "#F7F8FA", minHeight: "100vh" }}>
       <Navbar />
 
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-[#1C1C1C] border border-[#2A2A2A] rounded-full px-4 py-1.5 mb-8">
-            <Zap size={12} className="text-[#2D7EFF]" />
-            <span className="text-[#BDBDBD] text-xs font-inter">Simple, transparent pricing</span>
+      {/* Hero */}
+      <section style={{ background: "linear-gradient(160deg, #101828 0%, #1a2a4a 100%)", padding: "5rem 0 4rem" }}>
+        <div className="container-rs" style={{ textAlign: "center" }}>
+          <div className="badge" style={{ marginBottom: "1.25rem", display: "inline-flex", background: "rgba(0,57,255,0.2)", borderColor: "rgba(0,57,255,0.4)", color: "#7ba7ff" }}>
+            Simple, Transparent Pricing
           </div>
-          <h1 className="font-manrope font-extrabold text-5xl sm:text-6xl text-white leading-tight mb-6 max-w-4xl mx-auto">
-            Pricing built for business outcomes
+          <h1 style={{ color: "#FFFFFF", fontSize: "clamp(2rem, 4vw, 3rem)", margin: "0 0 1.25rem", fontFamily: "var(--font-manrope)", fontWeight: 900, lineHeight: 1.1 }}>
+            Choose the plan that fits your team
           </h1>
-          <p className="text-[#BDBDBD] font-inter text-xl leading-relaxed max-w-2xl mx-auto">
-            Three plans designed around the intelligence and planning needs of different types of organisations. No hidden fees. No feature restrictions.
+          <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "1.1rem", maxWidth: "520px", margin: "0 auto", lineHeight: 1.7 }}>
+            All plans include the core RemoteSite platform. Scale up as your project portfolio grows.
           </p>
         </div>
       </section>
 
-      <section className="pb-24 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+      {/* Pricing cards */}
+      <section className="section-padding">
+        <div className="container-rs">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.5rem", alignItems: "start" }}>
             {plans.map((plan) => (
               <div
                 key={plan.name}
-                className={`relative rounded-2xl overflow-hidden ${
-                  plan.highlight
-                    ? 'border-2 border-[#2D7EFF] bg-[#0D1A30]'
-                    : 'border border-[#2A2A2A] bg-[#111111]'
-                }`}
+                style={{
+                  background: plan.highlighted ? "#101828" : "#FFFFFF",
+                  border: plan.highlighted ? "2px solid #0039FF" : "1px solid #E2E6F0",
+                  borderRadius: "1rem",
+                  padding: "2rem",
+                  boxShadow: plan.highlighted ? "0 20px 60px rgba(0,57,255,0.2)" : "0 1px 3px rgba(0,0,0,0.04)",
+                  position: "relative",
+                  transform: plan.highlighted ? "scale(1.02)" : "none",
+                }}
               >
-                {plan.highlight && (
-                  <div className="bg-[#2D7EFF] text-white text-xs font-manrope font-bold tracking-wide text-center py-2 flex items-center justify-center gap-1.5">
-                    <Star size={12} fill="white" />
-                    {plan.badge}
+                {plan.highlighted && (
+                  <div style={{
+                    position: "absolute", top: "-14px", left: "50%", transform: "translateX(-50%)",
+                    background: "#0039FF", color: "#FFFFFF",
+                    fontSize: "0.75rem", fontWeight: 700,
+                    padding: "0.3125rem 1rem", borderRadius: "9999px",
+                    whiteSpace: "nowrap",
+                  }}>
+                    Most Popular
                   </div>
                 )}
-                <div className="p-8">
-                  <h3 className="font-manrope font-bold text-white text-xl mb-1">{plan.name}</h3>
-                  <p className="text-[#BDBDBD] font-inter text-sm mb-6">{plan.tagline}</p>
-                  <div className="flex items-baseline gap-1 mb-8">
-                    <span className="font-manrope font-extrabold text-5xl text-white">{plan.price}</span>
-                    <span className="text-[#777777] font-inter text-sm">{plan.period}</span>
+
+                <div style={{ marginBottom: "1.5rem" }}>
+                  <h3 style={{
+                    fontSize: "1.125rem", fontWeight: 700, margin: "0 0 0.375rem",
+                    color: plan.highlighted ? "#FFFFFF" : "#101828",
+                  }}>
+                    {plan.name}
+                  </h3>
+                  <p style={{ fontSize: "0.9rem", color: plan.highlighted ? "rgba(255,255,255,0.6)" : "#6B7280", margin: "0 0 1.25rem" }}>
+                    {plan.desc}
+                  </p>
+                  <div style={{ display: "flex", alignItems: "baseline", gap: "0.375rem" }}>
+                    <span style={{ fontFamily: "var(--font-manrope)", fontWeight: 900, fontSize: "2.75rem", color: plan.highlighted ? "#FFFFFF" : "#101828" }}>
+                      {plan.price}
+                    </span>
+                    <span style={{ color: plan.highlighted ? "rgba(255,255,255,0.5)" : "#9CA3AF", fontSize: "0.9375rem" }}>
+                      {plan.period}
+                    </span>
                   </div>
-                  <a
-                    href={plan.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-lg font-manrope font-semibold text-sm transition-colors mb-8 ${
-                      plan.highlight
-                        ? 'bg-[#2D7EFF] text-white hover:bg-[#1A6AE8]'
-                        : 'bg-[#1C1C1C] text-white hover:bg-[#2A2A2A] border border-[#2A2A2A]'
-                    }`}
-                  >
-                    {plan.cta}
-                    <ArrowRight size={15} />
-                  </a>
-                  <div className="border-t border-[#2A2A2A] pt-6">
-                    <p className="text-[#777777] font-inter text-xs uppercase tracking-widest mb-4">What is included</p>
-                    <ul className="space-y-3">
-                      {plan.features.map((feature) => (
-                        <li key={feature} className="flex items-start gap-3">
-                          <CheckCircle2
-                            size={16}
-                            className="flex-shrink-0 mt-0.5"
-                            style={{ color: plan.highlight ? '#2D7EFF' : '#777777' }}
-                          />
-                          <span className="text-[#BDBDBD] font-inter text-sm leading-relaxed">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+                </div>
+
+                <a
+                  href={plan.checkoutUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
+                    background: plan.highlighted ? "#0039FF" : "transparent",
+                    color: plan.highlighted ? "#FFFFFF" : "#0039FF",
+                    fontWeight: 700, fontSize: "0.9375rem",
+                    padding: "0.8125rem 1.5rem", borderRadius: "0.5rem",
+                    border: plan.highlighted ? "none" : "1.5px solid #0039FF",
+                    textDecoration: "none",
+                    marginBottom: "1.75rem",
+                    transition: "opacity 0.15s",
+                    width: "100%",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {plan.cta} <ArrowRight size={16} />
+                </a>
+
+                <div style={{ borderTop: `1px solid ${plan.highlighted ? "rgba(255,255,255,0.1)" : "#E2E6F0"}`, paddingTop: "1.5rem" }}>
+                  <div style={{ fontSize: "0.75rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: plan.highlighted ? "rgba(255,255,255,0.4)" : "#9CA3AF", marginBottom: "0.875rem" }}>
+                    Included in this plan
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
+                    {plan.features.map((f) => (
+                      <div key={f} style={{ display: "flex", gap: "0.625rem", alignItems: "flex-start" }}>
+                        <CheckCircle2 size={16} color={plan.highlighted ? "#7ba7ff" : "#0039FF"} style={{ flexShrink: 0, marginTop: "1px" }} />
+                        <span style={{ fontSize: "0.9rem", color: plan.highlighted ? "rgba(255,255,255,0.8)" : "#252B36" }}>{f}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-10 bg-[#111111] border border-[#2A2A2A] rounded-xl p-6 text-center">
-            <p className="text-[#777777] font-inter text-sm leading-relaxed">
-              All plans are processed securely through Selar. Plan features and inclusions are subject to the details confirmed on the checkout page. Exact usage terms, limits and subscription conditions are defined at the point of purchase.
-            </p>
+          <p style={{ textAlign: "center", color: "#6B7280", fontSize: "0.875rem", marginTop: "2rem" }}>
+            Payments are processed securely through Selar. Subscription access is activated after payment confirmation.
+          </p>
+        </div>
+      </section>
+
+      {/* FAQs */}
+      <section className="section-padding" style={{ background: "#FFFFFF" }}>
+        <div className="container-rs" style={{ maxWidth: "720px" }}>
+          <h2 style={{ fontSize: "clamp(1.5rem, 2.5vw, 2rem)", textAlign: "center", margin: "0 0 2.5rem" }}>
+            Frequently asked questions
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+            {faqs.map((faq) => (
+              <div key={faq.q} style={{ borderBottom: "1px solid #E2E6F0", paddingBottom: "1.25rem" }}>
+                <div style={{ fontWeight: 700, fontSize: "1rem", color: "#101828", marginBottom: "0.5rem" }}>{faq.q}</div>
+                <div style={{ fontSize: "0.9375rem", color: "#6B7280", lineHeight: 1.65 }}>{faq.a}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ */}
-      <section className="py-24 bg-white px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="font-manrope font-extrabold text-4xl text-[#050505] text-center mb-12">Common questions</h2>
-          <div className="space-y-6">
-            {[
-              {
-                q: "What does the payment process look like?",
-                a: "Each pricing plan is processed through Selar, a secure digital commerce platform. Clicking the plan CTA will take you to the Selar checkout where you can complete your purchase safely.",
-              },
-              {
-                q: "Can I move between plans?",
-                a: "Upgrade and plan management options are available through your account settings. Contact the PLAN9 AI team for assistance with plan changes.",
-              },
-              {
-                q: "Is my business data secure?",
-                a: "PLAN9 AI is built with enterprise grade security at every layer. Your business data is encrypted at rest and in transit, with role based access controls and full audit trail capabilities.",
-              },
-              {
-                q: "How quickly can I get started?",
-                a: "Most customers are connected and seeing initial insights within hours of completing their purchase. The platform is designed for fast onboarding with minimal technical complexity.",
-              },
-            ].map((item) => (
-              <div key={item.q} className="border-b border-[#EBEBEB] pb-6">
-                <h3 className="font-manrope font-semibold text-[#111111] text-base mb-2">{item.q}</h3>
-                <p className="text-[#555555] font-inter text-sm leading-relaxed">{item.a}</p>
-              </div>
-            ))}
-          </div>
+      {/* CTA */}
+      <section style={{ background: "#0039FF", padding: "4rem 0" }}>
+        <div className="container-rs" style={{ textAlign: "center" }}>
+          <h2 style={{ color: "#FFFFFF", fontSize: "clamp(1.5rem, 3vw, 2.5rem)", margin: "0 0 1rem", fontFamily: "var(--font-manrope)" }}>
+            Still have questions?
+          </h2>
+          <p style={{ color: "rgba(255,255,255,0.75)", fontSize: "1.0625rem", marginBottom: "2rem" }}>
+            Our team is happy to help. Contact us at support@remotesite.io
+          </p>
+          <Link href="/signup" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: "#FFFFFF", color: "#0039FF", fontWeight: 700, fontSize: "1rem", padding: "0.9375rem 2rem", borderRadius: "0.5rem", textDecoration: "none" }}>
+            Start Free Trial <ArrowRight size={18} />
+          </Link>
         </div>
       </section>
 

@@ -1,74 +1,90 @@
-import { CreditCard, CheckCircle, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { CreditCard, ArrowRight, CheckCircle2 } from "lucide-react";
+
+const plans = [
+  {
+    name: "Starter",
+    price: "$47/mo",
+    url: "https://selar.com/47plan?currency=USD",
+    features: ["Up to 3 projects", "2 team members", "AI assistant", "PDF reports"],
+  },
+  {
+    name: "Professional",
+    price: "$57/mo",
+    url: "https://selar.com/57plan?currency=USD",
+    features: ["Up to 10 projects", "10 team members", "Advanced AI", "Automated reports"],
+    popular: true,
+  },
+  {
+    name: "Enterprise",
+    price: "$97/mo",
+    url: "https://selar.com/97plan?currency=USD",
+    features: ["Unlimited projects", "Unlimited team", "Custom reports", "Priority support"],
+  },
+];
 
 export default function BillingPage() {
-  const plans = [
-    { name: "Starter", price: "$47", period: "/month", link: "https://selar.com/47plan?currency=USD", current: false },
-    { name: "Professional", price: "$57", period: "/month", link: "https://selar.com/57plan?currency=USD", current: true },
-    { name: "Enterprise", price: "$97", period: "/month", link: "https://selar.com/97plan?currency=USD", current: false },
-  ];
-
   return (
-    <div className="p-6 lg:p-8">
-      <div className="mb-8">
-        <h1 className="font-manrope font-bold text-2xl text-[#171717]">Billing and Subscription</h1>
-        <p className="font-inter text-sm text-[#777777] mt-1">Manage your WorkNest AI subscription</p>
+    <div>
+      <div style={{ marginBottom: "1.75rem" }}>
+        <h1 style={{ fontSize: "1.5rem", fontWeight: 800, color: "#101828", margin: "0 0 0.25rem" }}>Billing</h1>
+        <p style={{ color: "#6B7280", fontSize: "0.9375rem", margin: 0 }}>Manage your subscription and billing preferences.</p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#E8E8E8] p-6 mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-[#EAF3FF] rounded-xl flex items-center justify-center">
-            <CreditCard size={18} className="text-[#1677E8]" />
-          </div>
-          <div>
-            <p className="font-manrope font-semibold text-[#171717]">Current Plan: Professional</p>
-            <p className="font-inter text-xs text-[#777777]">$57/month. Renews December 1, 2026.</p>
-          </div>
-          <div className="ml-auto">
-            <div className="flex items-center gap-1.5">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="font-inter text-sm text-green-600">Active</span>
-            </div>
-          </div>
+      {/* Current plan info */}
+      <div className="card" style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "1rem" }}>
+        <div style={{ width: 44, height: 44, borderRadius: "10px", background: "#EAF0FF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <CreditCard size={22} color="#0039FF" />
         </div>
-        <div className="grid sm:grid-cols-3 gap-3">
-          {["All 5 AI agents", "Up to 20 team members", "50 GB document storage"].map(f => (
-            <div key={f} className="flex items-center gap-2">
-              <CheckCircle size={14} className="text-[#1677E8] flex-shrink-0" />
-              <span className="font-inter text-sm text-[#777777]">{f}</span>
-            </div>
-          ))}
+        <div>
+          <div style={{ fontWeight: 700, fontSize: "1rem", color: "#101828" }}>Subscription status</div>
+          <div style={{ fontSize: "0.875rem", color: "#6B7280" }}>Payments are processed securely through Selar. Select a plan below to subscribe.</div>
         </div>
       </div>
 
-      <div className="mb-6">
-        <h2 className="font-manrope font-semibold text-[#171717] mb-4">Change Plan</h2>
-        <div className="grid sm:grid-cols-3 gap-4">
-          {plans.map(plan => (
-            <div key={plan.name} className={`bg-white rounded-2xl border p-5 ${plan.current ? "border-[#1677E8]" : "border-[#E8E8E8]"}`}>
-              {plan.current && (
-                <span className="inline-flex items-center bg-[#EAF3FF] text-[#1677E8] text-xs font-inter px-2.5 py-1 rounded-full mb-3">Current Plan</span>
-              )}
-              <p className="font-manrope font-bold text-lg text-[#171717]">{plan.name}</p>
-              <p className="font-manrope font-bold text-3xl text-[#171717] mt-1">{plan.price}<span className="text-sm font-normal text-[#777777]">{plan.period}</span></p>
-              {!plan.current && (
-                <a
-                  href={plan.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 w-full flex items-center justify-center gap-2 bg-[#1677E8] text-white font-inter font-medium text-sm py-2.5 rounded-lg hover:bg-[#1265CC] transition-colors"
-                >
-                  Switch Plan <ArrowRight size={14} />
-                </a>
-              )}
+      {/* Plans */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.25rem" }}>
+        {plans.map((plan) => (
+          <div
+            key={plan.name}
+            className="card"
+            style={{
+              border: plan.popular ? "2px solid #0039FF" : "1px solid #E2E6F0",
+              position: "relative",
+            }}
+          >
+            {plan.popular && (
+              <div style={{ position: "absolute", top: "-12px", left: "50%", transform: "translateX(-50%)", background: "#0039FF", color: "#FFFFFF", fontSize: "0.6875rem", fontWeight: 700, padding: "0.25rem 0.75rem", borderRadius: "9999px", whiteSpace: "nowrap" }}>
+                Most Popular
+              </div>
+            )}
+            <h3 style={{ fontSize: "1.125rem", fontWeight: 700, margin: "0 0 0.25rem" }}>{plan.name}</h3>
+            <div style={{ fontFamily: "var(--font-manrope)", fontWeight: 900, fontSize: "2rem", color: "#0039FF", margin: "0.5rem 0 1rem" }}>{plan.price}</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", marginBottom: "1.5rem" }}>
+              {plan.features.map((f) => (
+                <div key={f} style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                  <CheckCircle2 size={15} color="#10B981" />
+                  <span style={{ fontSize: "0.875rem", color: "#252B36" }}>{f}</span>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+            <a
+              href={plan.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={plan.popular ? "btn-primary" : "btn-secondary"}
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem", width: "100%", boxSizing: "border-box" }}
+            >
+              Subscribe <ArrowRight size={16} />
+            </a>
+          </div>
+        ))}
       </div>
 
-      <div className="bg-[#FAFAFA] rounded-2xl border border-[#E8E8E8] p-5">
-        <p className="font-inter text-sm text-[#777777]">
-          Payments are processed securely through Selar. To cancel your subscription or request a refund, contact our support team.
+      <div style={{ marginTop: "1.5rem" }}>
+        <p style={{ fontSize: "0.875rem", color: "#9CA3AF" }}>
+          Need help with billing? Contact us at{" "}
+          <a href="mailto:support@remotesite.io" style={{ color: "#0039FF" }}>support@remotesite.io</a>
         </p>
       </div>
     </div>
