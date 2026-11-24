@@ -26,3 +26,4 @@ Starter $47, Growth $57, Scale $97, monthly, linking to `47plan`, `57plan`, `97p
 
 ## Testing performed
 Unit tests cover the revenue engine, deal health, forecasting, agents, assistant tools and Selar verification (12 passing). The SQL migration was run twice on PostgreSQL and role based policies were checked (representatives cannot create others' deals or set targets, outsiders see nothing, credentials are unreadable, closed won deals book revenue). `next build`, type checking and lint pass. Not tested end to end: live Supabase email flows, real OAuth connections and Anthropic calls, which need your credentials.
+
